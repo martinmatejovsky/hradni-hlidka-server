@@ -4,6 +4,7 @@
   "description": "Node backend server pro hru Hradní Hlídka",
   "main": "index.js",
   "scripts": {
+    "serve": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
