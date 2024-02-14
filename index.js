@@ -6,15 +6,16 @@ const app = express();
 const port = 3000;
 const server = createServer(app);
 const io = new Server(server);
-
-app.use(express.static(path.join(__dirname, "../hradni-hlidka/dist")));
 const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
 
+// Middleware
+app.use(express.static(path.join(__dirname, "../hradni-hlidka/dist")));
+app.use(express.json());
 app.use('/api/game-locations', gameLocationsRouter);
 app.use('/api/game', gameRouter);
 
-io.on('connection', (socket) => {
+io.on('connection', () => {
     console.log('a user connected');
 });
 
