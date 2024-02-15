@@ -11,6 +11,7 @@ const gameRouter = require('./routes/game');
 
 // Middleware
 app.use(express.static(path.join(__dirname, "../hradni-hlidka/dist")));
+app.use(cors());
 app.use(express.json());
 app.use('/api/game-locations', gameLocationsRouter);
 app.use('/api/game', gameRouter);
