@@ -1,11 +1,12 @@
 const express = require("express");
-const { createServer } = require('node:http');
-const path = require("path");
-const { Server } = require('socket.io');
 const app = express();
-const port = 3000;
-const server = createServer(app);
+const http = require("http");
+const { Server } = require("socket.io");
+const server = http.createServer(app); // Create an HTTP server using Express
 const io = new Server(server);
+const cors = require('cors'); // Import the cors middleware
+const path = require("path");
+const port = 4000;
 const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
 
