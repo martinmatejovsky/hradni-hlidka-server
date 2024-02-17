@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.createNewGameInstance = (req, res) => {
-    if (!req.body.gameLocation || !req.body.hostingPlayer) {
+    if (!req.body.gameLocation) {
         return res.status(400).json({ message: 'Missing properties in request body' });
     }
 
