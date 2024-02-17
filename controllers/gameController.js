@@ -7,12 +7,13 @@ exports.createNewGameInstance = (req, res) => {
     }
 
     // create new object based on data from chosen Game Area and Hosting Player
-    let gameInstance = req.body.gameLocation;
+    let gameInstance = {};
+    gameInstance.gameLocation = Object.assign(req.body.gameLocation);
     gameInstance.battleZones = [];
     gameInstance.players = Array(req.body.hostingPlayer);
     gameInstance.gameState = 'ready';
     gameInstance.id = gameInstance.key + Date.now().toString();
-    let polygonsInGameArea = gameInstance.polygons
+    let polygonsInGameArea = gameInstance.gameLocation.polygons
 
     polygonsInGameArea.forEach((polygon) => {
         if (polygon.polygonType === 'battleZone') {
