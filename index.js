@@ -17,8 +17,16 @@ app.use(express.json());
 app.use('/api/game-locations', gameLocationsRouter);
 app.use('/api/game', gameRouter);
 
-io.on('connection', () => {
-    console.log('a user connected');
+io.on('connection', (client) => {
+    const gameId = client.handshake.query.gameId;
+    const player = client.handshake.query.player;
+    console.log(gameId);
+
+    io.on('createGame', () => {
+        client.join(gameId);
+    });
+
+    io.to(gameId).emit('newPlayerJoined', player);
 });
 
 server.listen(port, () => {
