@@ -3,8 +3,9 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app); // Create an HTTP server using Express
-const io = new Server(server);
-const cors = require('cors'); // Import the cors middleware
+const io = new Server(
+    server, { cors: { origin: "http://localhost:3000" } });
+const cors = require('cors');
 const path = require("path");
 const port = 4000;
 const gameLocationsRouter = require('./routes/game-locations');
@@ -18,15 +19,11 @@ app.use('/api/game-locations', gameLocationsRouter);
 app.use('/api/game', gameRouter);
 
 io.on('connection', (client) => {
-    const gameId = client.handshake.query.gameId;
-    const player = client.handshake.query.player;
-    console.log(gameId);
+    client.on('joinGame', (payload) => {
+        client.join(payload.gameId);
 
-    io.on('createGame', () => {
-        client.join(gameId);
+        io.to(payload.gameId).emit('newPlayerJoined', payload.player)
     });
-
-    io.to(gameId).emit('newPlayerJoined', player);
 });
 
 server.listen(port, () => {
