@@ -5,6 +5,7 @@ module.exports.testGameInstance = (req, res) => {
     return res.status(200).json({ ...gameInstance });
 }
 
-module.exports.joinNewPlayer = (req) => {
-    gameInstance.players.push(req.body.player);
+module.exports.joinNewPlayer = (player) => {
+    gameInstance.players.push(player);
+    return gameInstance;
 }

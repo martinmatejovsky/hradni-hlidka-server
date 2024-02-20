@@ -3,7 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const gameController = require('../controllers/gameController');
-const testGameController = require('../controllers/testGameController');
+const testGameController = require('../controllers/testGameController-1');
 
 router.post("/", gameController.createNewGameInstance);
 router.get("/1", testGameController.testGameInstance);
