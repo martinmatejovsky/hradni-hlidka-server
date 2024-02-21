@@ -6,7 +6,7 @@ const gameController = require('../controllers/gameController');
 const testGameController = require('../controllers/testGameController-1');
 
 router.post("/", gameController.createNewGameInstance);
-router.get("/1", testGameController.testGameInstance);
+router.get("/1", testGameController.getGameInstance);
 router.get("/:gameInstanceId", (req, res) => {
     const gameInstanceId = req.params.gameInstanceId;
     const gameInstanceFilePath = path.join(__dirname, `../game-instances/${gameInstanceId}.js`);

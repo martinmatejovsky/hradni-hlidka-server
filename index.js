@@ -10,7 +10,6 @@ const path = require("path");
 const port = 4000;
 const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
-const fs = require('fs'); // Import the fs module
 
 // Middleware
 app.use(express.static(path.join(__dirname, "../hradni-hlidka/dist")));
@@ -19,21 +18,25 @@ app.use(express.json());
 app.use('/api/game-locations', gameLocationsRouter);
 app.use('/api/game', gameRouter);
 
-io.on('connection', (client) => {
-    client.on('joinGame', (payload) => {
-        client.join(payload.gameId);
-
+// SOCKET
+io.on('connection', (socket) => {
+    socket.on('joinGame', (payload) => {
+        socket.join(payload.gameId);
+        console.log('User joined room', payload.gameId);
         const controllerFile = `./controllers/testGameController-${payload.gameId}.js`;
 
-        if (fs.existsSync(controllerFile)) {
-            const { joinNewPlayer } = require(controllerFile);
-            const gameWitNewPlayer = joinNewPlayer(payload.player);
+        const { joinNewPlayer } = require(controllerFile);
+        const gameWithNewPlayer = joinNewPlayer(payload.player);
+        io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer)
+    });
 
-            io.to(payload.gameId).emit('newPlayerJoined', gameWitNewPlayer)
-        } else {
-            console.error(`Controller file for gameId ${payload.gameId} does not exist`);
-        }
+    socket.on('leaveGame', (payload) => {
+        const controllerFile = `./controllers/testGameController-${payload.gameId}.js`;
+        const { removePlayer } = require(controllerFile);
 
+        const gameWithoutPlayer = removePlayer(payload.player);
+        io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
+        console.log('User removed from room');
     });
 });
 
