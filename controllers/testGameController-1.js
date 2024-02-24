@@ -13,6 +13,6 @@ module.exports.joinNewPlayer = (player) => {
 }
 
 module.exports.removePlayer = (player) => {
-    gameInstance.players = gameInstance.players.filter((item) => item.id !== player.id);
+    gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
     return gameInstance;
 }

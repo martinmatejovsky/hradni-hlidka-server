@@ -30,13 +30,16 @@ io.on('connection', (socket) => {
         io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer)
     });
 
-    socket.on('leaveGame', (payload) => {
+    socket.on('leaveGame', (payload, callback) => {
+        console.log('User removed from room');
         const controllerFile = `./controllers/testGameController-${payload.gameId}.js`;
         const { removePlayer } = require(controllerFile);
 
         const gameWithoutPlayer = removePlayer(payload.player);
         io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
-        console.log('User removed from room');
+        socket.leave(payload.gameId);
+
+        callback(); // This will trigger the resolve in the client's promise
     });
 });
 
