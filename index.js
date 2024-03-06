@@ -10,9 +10,10 @@ const path = require("path");
 const port = 4000;
 const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
+const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
 
 // Middleware
-app.use(express.static(path.join(__dirname, "../hradni-hlidka/dist")));
+app.use(express.static(path.join(__dirname, frontendPath)));
 app.use(cors());
 app.use(express.json());
 app.use('/api/game-locations', gameLocationsRouter);
@@ -44,5 +45,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(port, () => {
-    console.log("Listen on the port" + port + "...");
+    console.log("Listen on the port", port, "...");
 });
