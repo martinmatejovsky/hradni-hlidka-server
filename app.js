@@ -7,7 +7,7 @@ const io = new Server(
     server, { cors: { origin: "http://localhost:3000" } });
 const cors = require('cors');
 const path = require("path");
-const port = 4000;
+const port = 8080;
 const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
 const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
