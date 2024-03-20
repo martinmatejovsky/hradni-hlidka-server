@@ -11,7 +11,10 @@ const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
 const initializeSocket = require('./controllers/socketIo');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+        origin: 'http://localhost:3000',
+    }
+));
 app.use(express.json());
 initializeSocket(server);
 app.use('/api/game-locations', gameLocationsRouter);
