@@ -18,7 +18,10 @@ app.use(cors({
 app.use(express.json());
 initializeSocket(server);
 app.use('/api/game-locations', gameLocationsRouter);
-app.use('/api/game', gameRouter);
+app.use('/api/game', (req, res, next) => {
+    req.app.set('io', server.io);
+    gameRouter(req, res, next);
+});
 app.use(express.static(path.join(__dirname, frontendPath)));
 
 server.listen(port, () => {

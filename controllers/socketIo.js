@@ -8,7 +8,7 @@ function initializeSocket(server) {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
             console.log('User joined room', payload.gameId);
-            const controllerFile = `./controllers/testGameController-${payload.gameId}.js`;
+            const controllerFile = `./testGameController-${payload.gameId}.js`;
 
             const {joinNewPlayer} = require(controllerFile);
             const gameWithNewPlayer = joinNewPlayer(payload.player);
@@ -17,7 +17,7 @@ function initializeSocket(server) {
 
         socket.on('leaveGame', (payload, callback) => {
             console.log('User removed from room');
-            const controllerFile = `./controllers/testGameController-${payload.gameId}.js`;
+            const controllerFile = `./testGameController-${payload.gameId}.js`;
             const {removePlayer} = require(controllerFile);
 
             const gameWithoutPlayer = removePlayer(payload.player);
@@ -27,6 +27,9 @@ function initializeSocket(server) {
             callback(); // This will trigger the resolve in the client's promise
         });
     });
+
+    // Store io instance in server.io
+    server.io = io;
 }
 
 module.exports = initializeSocket;
