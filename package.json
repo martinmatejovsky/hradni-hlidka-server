@@ -2,16 +2,21 @@
   "name": "hradni-hlidka-server",
   "version": "1.0.0",
   "description": "Node backend server pro hru Hradní Hlídka",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "serve": "nodemon index.js",
+    "start": "node app.js",
+    "serve": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/express": "^4.17.21",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "socket.io": "^4.7.4"
+    "serverless-http": "^3.2.0",
+    "socket.io": "^4.7.4",
+    "vite-plugin-vuetify": "^2.0.3"
   }
 }
