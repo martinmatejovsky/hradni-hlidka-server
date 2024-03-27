@@ -9,6 +9,7 @@ const gameLocationsRouter = require('./routes/game-locations');
 const gameRouter = require('./routes/game');
 const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
 const initializeSocket = require('./controllers/socketIo');
+import { Request, Response, NextFunction } from 'express';
 
 // Middleware
 app.use(cors({
@@ -18,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 initializeSocket(server);
 app.use('/api/game-locations', gameLocationsRouter);
-app.use('/api/game', (req: any, res: any, next: any) => {
+app.use('/api/game', (req: Request, res: Response, next: NextFunction) => {
     req.app.set('io', server.io);
     gameRouter(req, res, next);
 });
