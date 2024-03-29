@@ -53,18 +53,7 @@ exports.mockGameInstance = {
         "conquered": false,
         "guardians": [],
         "assembledInvaders": [],
-        "assaultLadder": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        ]
+        "assaultLadder": []
     }
 ],
     "players": [],

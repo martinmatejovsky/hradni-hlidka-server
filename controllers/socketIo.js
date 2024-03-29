@@ -8,7 +8,7 @@ function initializeSocket(server) {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
             console.log('User joined room', payload.gameId);
-            const controllerFile = `./testGameController-${payload.gameId}.js`;
+            const controllerFile = `./testGameController-${payload.gameId}.ts`;
 
             const {joinNewPlayer} = require(controllerFile);
             const gameWithNewPlayer = joinNewPlayer(payload.player);
@@ -17,7 +17,7 @@ function initializeSocket(server) {
 
         socket.on('leaveGame', (payload, callback) => {
             console.log('User removed from room');
-            const controllerFile = `./testGameController-${payload.gameId}.js`;
+            const controllerFile = `./testGameController-${payload.gameId}.ts`;
             const {removePlayer} = require(controllerFile);
 
             const gameWithoutPlayer = removePlayer(payload.player);
