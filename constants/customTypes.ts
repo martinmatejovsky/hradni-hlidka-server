@@ -7,6 +7,7 @@ export type PlayerData = {
     name: string,
     key: string,
     location: PlayerCoordinates,
+    insideZone: string,
 }
 export type GameState = "ready" | "running" | "won" | "lost"
 type PolygonType = "battleZone" | "smithy" | "barracks"

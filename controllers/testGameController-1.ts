@@ -6,6 +6,7 @@ const { assembleInvaders } = require("../utils/assembleInvaders");
 import {runAttack} from "../utils/runAttack";
 let gameInstance: GameInstance = {...mockGameInstance}
 import {GAME_UPDATE_INTERVAL, GAME_TEMPO} from '../constants/projectConstants';
+import {updateGuardians} from "../utils/updateGuardians";
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
 
@@ -15,10 +16,13 @@ module.exports.getGameInstance = (req: Request, res: Response): Response => {
 
 module.exports.joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
+    updateGuardians(player, gameInstance.battleZones);
+
     return gameInstance;
 }
 
 module.exports.removePlayer = (player: PlayerData): GameInstance => {
+    updateGuardians(player, gameInstance.battleZones);
     gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
     if (gameInstance.players.length === 0) {
         if (gameUpdateIntervalId) clearInterval(gameUpdateIntervalId);

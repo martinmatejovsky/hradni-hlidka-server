@@ -6,12 +6,7 @@ import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
 export const runAttack = (gameInstance: GameInstance) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
-    console.log('assaultLadder');
-    battleZones.forEach((area: BattleZone): void => {
-        area.assaultLadder.forEach((ladderField: Invader | null) => console.log(ladderField));
-    });
-
-    // evaluate winning conditions - no attacker left or in assembly area
+    // evaluate winning conditions - no attacker left on ladders or in assembly area
     if (battleZones.every((area: BattleZone): boolean => area.assembledInvaders.length === 0
         && area.assaultLadder.every((ladderField: Invader | null) => ladderField === null)
     )) {
