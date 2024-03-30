@@ -26,6 +26,15 @@ function initializeSocket(server) {
 
             callback(); // This will trigger the resolve in the client's promise
         });
+
+        socket.on('playerRelocated', (payload) => {
+            console.log('Player relocated');
+            const controllerFile = `./testGameController-${payload.gameId}.ts`;
+            const {relocatePlayer} = require(controllerFile);
+
+            const gameWithRelocatedPlayers = relocatePlayer(payload.player);
+            io.to(payload.gameId).emit('gameUpdated', gameWithRelocatedPlayers)
+        });
     });
 
     // Store io instance in server.io

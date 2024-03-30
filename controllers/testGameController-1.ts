@@ -42,6 +42,12 @@ module.exports.startGame = (req: Request, io: Server): void => {
     updateGame(gameId, io);
 }
 
+module.exports.relocatePlayer = (player: PlayerData): GameInstance => {
+    updateGuardians(player, gameInstance.battleZones);
+
+    return gameInstance;
+}
+
 function updateGame(gameId: string, io: Server) {
     if (gameUpdateIntervalId !== null && gameCalculationId !== null) {
         clearInterval(gameUpdateIntervalId);
