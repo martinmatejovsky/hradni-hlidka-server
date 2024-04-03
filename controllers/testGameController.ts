@@ -1,17 +1,20 @@
 import type { GameInstance, PlayerData, GameState } from "../constants/customTypes";
-import {Request, Response} from "express";
+import {Request} from "express";
 import { Server } from 'socket.io';
-const { mockGameInstance } = require('../mock-data/gameInstance');
-const { assembleInvaders } = require("../utils/assembleInvaders");
-import {runAttack} from "../utils/runAttack";
-let gameInstance: GameInstance = {...mockGameInstance}
 import {GAME_UPDATE_INTERVAL, GAME_TEMPO} from '../constants/projectConstants';
 import {updateGuardians} from "../utils/updateGuardians";
+const { assembleInvaders } = require("../utils/assembleInvaders");
+import {runAttack} from "../utils/runAttack";
+
+let gameInstance: GameInstance
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
 
-module.exports.getGameInstance = (req: Request, res: Response): Response => {
-    return res.status(200).json({ ...gameInstance });
+module.exports.supplyGameInstance = (gameInstanceData: GameInstance): void => {
+    gameInstance = gameInstanceData;
+}
+module.exports.getGameInstance = () => {
+    return gameInstance;
 }
 
 module.exports.joinNewPlayer = (player: PlayerData): GameInstance => {
