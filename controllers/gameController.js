@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {LADDER_POSITIONS} = require("../constants/projectConstants");
 
 exports.createNewGameInstance = async (req, res) => {
@@ -28,28 +26,7 @@ exports.createNewGameInstance = async (req, res) => {
                 assaultLadder: new Array(LADDER_POSITIONS).fill(null),
             })
         }
-    })
+    });
 
-    // Read the template TypeScript file content
-    const templateFilePath = path.join(__dirname, 'testGameController.ts');
-    const templateContent = fs.readFileSync(templateFilePath, 'utf-8');
-
-    // create a folder and new file for the game instance
-    const gameInstancesFolderPath = path.join(__dirname, '../game-instances');
-    if (!fs.existsSync(gameInstancesFolderPath)) {
-        fs.mkdirSync(gameInstancesFolderPath);
-    }
-    const gameInstanceFilePath = path.join(gameInstancesFolderPath, `${gameInstance.id}.ts`);
-
-    await fs.writeFileSync(gameInstanceFilePath, templateContent);
-
-    import(gameInstanceFilePath)
-        .then((module) => {
-            module.supplyGameInstance(gameInstance);
-        })
-        .catch((error) => {
-            console.error('Error importing game instance file:', error);
-        });
-
-    return res.status(200).json({ id: gameInstance.id });
+    return res.status(200).json({ gameInstance });
 }
