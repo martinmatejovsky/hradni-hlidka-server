@@ -9,7 +9,7 @@ export type PlayerData = {
     location: PlayerCoordinates,
     insideZone: string,
 }
-export type GameState = "ready" | "running" | "won" | "lost"
+export type GameState = "none" | "ready" | "running" | "won" | "lost"
 type PolygonType = "battleZone" | "smithy" | "barracks"
 export interface BasePolygon {
     polygonName: string,
