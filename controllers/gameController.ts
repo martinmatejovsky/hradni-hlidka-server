@@ -7,7 +7,7 @@ import {Server} from "socket.io";
 import {assembleInvaders} from "../utils/assembleInvaders";
 import {runAttack} from "../utils/runAttack";
 import {GAME_TEMPO, GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
-let gameInstance: GameInstance = EMPTY_GAME_INSTANCE
+let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
@@ -70,10 +70,12 @@ exports.startGame = (req: Request, io: Server): void => {
 exports.removePlayer = (player: PlayerData): GameInstance => {
     updateGuardians(player, gameInstance.battleZones);
     gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
+
     if (gameInstance.players.length === 0) {
-        if (gameUpdateIntervalId) clearInterval(gameUpdateIntervalId);
-        // TODO: in real app it should delete whole javascript file, not just set state "ready"
-        gameInstance = EMPTY_GAME_INSTANCE;
+        clearIntervals();
+
+        // TODO: in real app it should delete whole javascript file, not just reset state
+        gameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
     }
     return gameInstance;
 }
@@ -89,11 +91,15 @@ exports.relocatePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
-function updateGame(gameId: string, io: Server) {
+function clearIntervals() {
     if (gameUpdateIntervalId !== null && gameCalculationId !== null) {
         clearInterval(gameUpdateIntervalId);
         clearInterval(gameCalculationId);
     }
+}
+
+function updateGame(gameId: string, io: Server) {
+    clearIntervals();
 
     gameCalculationId = setInterval(() => {
         runAttack(gameInstance);
