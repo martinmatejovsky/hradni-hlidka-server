@@ -1,10 +1,11 @@
-import type { BattleZone, InvaderType, Invader } from "../constants/customTypes";
-import {LADDER_POSITIONS} from "../constants/projectConstants";
+import type {BattleZone, InvaderType, Invader, GameInstance} from "../constants/customTypes";
 
-export const assembleInvaders = (battleZones: BattleZone[]): BattleZone[] => {
+export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
+    let battleZones: BattleZone[] = gameInstance.battleZones;
+
     for (let i = 0; i < battleZones.length; i++) {
         // create ladders
-        battleZones[i].assaultLadder = new Array(LADDER_POSITIONS).fill(null);
+        battleZones[i].assaultLadder = new Array(gameInstance.ladderLength).fill(null);
 
         // create waiting invaders
         if (battleZones[i].assembledInvaders.length === 0) {

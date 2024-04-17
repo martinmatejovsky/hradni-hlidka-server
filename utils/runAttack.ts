@@ -18,7 +18,7 @@ export const runAttack = (gameInstance: GameInstance) => {
     wipeLadderInvaders(battleZones);
 
     // move attackers up the ladder
-    moveInvadersOnLadder(battleZones);
+    moveInvadersOnLadder(gameInstance);
 
     // check if any attacker reached the top
     checkAnyAreaConquered(gameInstance);

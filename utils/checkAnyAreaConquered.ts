@@ -1,11 +1,10 @@
 import type {BattleZone, GameInstance, GameState} from "../constants/customTypes";
-import {LADDER_POSITIONS} from "../constants/projectConstants";
 
 export const checkAnyAreaConquered = (gameInstance: GameInstance): void => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     battleZones.forEach((zone: BattleZone): void => {
-        if (zone.assaultLadder[LADDER_POSITIONS - 1] !== null) {
+        if (zone.assaultLadder[gameInstance.ladderLength - 1] !== null) {
             zone.conquered = true;
             gameInstance.gameState = 'lost' as GameState;
         }

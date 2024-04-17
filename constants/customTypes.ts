@@ -21,6 +21,8 @@ export interface GameLocation {
     locationName: string,
     key: string,
     polygons: BasePolygon[],
+    speedChoices: number[],
+    ladderLengthChoices: number[],
 }
 export interface BattleZone {
     zoneName: string,
@@ -37,6 +39,8 @@ export interface GameInstance {
     gameLocation: GameLocation,
     battleZones: BattleZone[],
     players: PlayerData[],
+    gameTempo: number,
+    ladderLength: number,
 }
 export type InvaderType = "normal"
 export type Invader = {

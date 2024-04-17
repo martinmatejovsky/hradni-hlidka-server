@@ -1,20 +1,21 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
-const {LADDER_POSITIONS} = require("../constants/projectConstants");
 import {Request ,Response} from "express";
 import type {GameInstance, GameState, PlayerData} from "../constants/customTypes";
 import {Server} from "socket.io";
 import {assembleInvaders} from "../utils/assembleInvaders";
 import {runAttack} from "../utils/runAttack";
-import {GAME_TEMPO, GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
+import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+let gameTempo: number;
+let ladderLength: number;
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
 
 exports.createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
-        if (!req.body.gameLocation) {
+        if (![req.body.gameLocation, req.body.gameTempo, req.body.ladderLength].every(Boolean)) {
             return res.status(400).json({ message: 'Missing properties in request body' });
         }
 
@@ -24,6 +25,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
         gameInstance.players = [];
+        gameInstance.gameTempo = req.body.gameTempo * 1000;
         let polygonsInGameArea = gameInstance.gameLocation.polygons
 
         polygonsInGameArea.forEach((polygon) => {
@@ -35,7 +37,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     conquered: false,
                     guardians: [],
                     assembledInvaders: [],
-                    assaultLadder: new Array(LADDER_POSITIONS).fill(null),
+                    assaultLadder: new Array(ladderLength).fill(null),
                 })
             }
         });
@@ -57,14 +59,16 @@ exports.joinNewPlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
-exports.startGame = (req: Request, io: Server): void => {
+exports.startGame = (req: Request, res: Response) => {
+    const io = req.app.get('io')
     const gameId = req.body.gameId;
 
     gameInstance.gameState = 'running' as GameState;
-    gameInstance.battleZones = assembleInvaders(gameInstance.battleZones);
+    gameInstance.battleZones = assembleInvaders(gameInstance);
 
     io.to(gameId).emit('gameStarted', gameInstance);
     updateGame(gameId, io);
+    return res.status(204);
 }
 
 exports.removePlayer = (player: PlayerData): GameInstance => {
@@ -102,6 +106,8 @@ function updateGame(gameId: string, io: Server) {
     clearIntervals();
 
     gameCalculationId = setInterval(() => {
+        console.log('Update game');
+
         runAttack(gameInstance);
 
         // Check winning/losing condition
@@ -112,7 +118,7 @@ function updateGame(gameId: string, io: Server) {
             gameInstance.gameState = 'ready';
             return;
         }
-    }, GAME_TEMPO);
+    }, gameTempo);
 
     gameUpdateIntervalId = setInterval(() => {
         io.to(gameId).emit('gameUpdated', gameInstance);

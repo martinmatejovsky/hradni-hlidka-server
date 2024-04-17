@@ -1,11 +1,12 @@
-import type {BattleZone} from "../constants/customTypes";
-import {GAME_TEMPO, LADDER_POSITIONS} from "../constants/projectConstants";
+import type {BattleZone, GameInstance} from "../constants/customTypes";
 
-const delayBetweenIterations = Math.floor(GAME_TEMPO / (LADDER_POSITIONS * 2));
+export const moveInvadersOnLadder = (gameInstance: GameInstance): void => {
+    const zones = gameInstance.battleZones;
+    const ladderLength = gameInstance.ladderLength;
+    const delayBetweenIterations = Math.floor(gameInstance.gameTempo / (ladderLength * 2));
 
-export const moveInvadersOnLadder = (zones: BattleZone[]): void => {
     zones.forEach((area: BattleZone): void => {
-        for (let i = LADDER_POSITIONS - 1; i >= 0; i--) {
+        for (let i = ladderLength - 1; i >= 0; i--) {
             // Adjust the delay based on the iteration index
             setTimeout(() => {
                 if (i > 0) {
@@ -18,7 +19,7 @@ export const moveInvadersOnLadder = (zones: BattleZone[]): void => {
                     // After the last iteration, update the first position in assaultLadder
                     area.assaultLadder[0] = area.assembledInvaders.pop() || null;
                 }
-            }, (LADDER_POSITIONS - i) * delayBetweenIterations);
+            }, (ladderLength - i) * delayBetweenIterations);
         }
     });
 };
