@@ -13,6 +13,6 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     },
     battleZones: [],
     players: [],
-    gameTempo: 10,
+    gameTempo: 5000,
     ladderLength: 10,
 };

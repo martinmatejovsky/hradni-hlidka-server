@@ -8,18 +8,16 @@ function initializeSocket(server) {
     io.on('connection', (socket) => {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
-            console.log('User joined room', payload.gameId);
 
             const gameWithNewPlayer = gameController.joinNewPlayer(payload.player);
             io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer)
         });
 
         socket.on('leaveGame', (payload, callback) => {
-            console.log('User removed from room');
 
             const gameWithoutPlayer = gameController.removePlayer(payload.player);
-            io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
             socket.leave(payload.gameId);
+            io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
 
             callback(); // This will trigger the resolve in the client's promise
         });

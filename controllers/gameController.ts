@@ -7,8 +7,6 @@ import {assembleInvaders} from "../utils/assembleInvaders";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
-let gameTempo: number;
-let ladderLength: number;
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
@@ -25,7 +23,8 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
         gameInstance.players = [];
-        gameInstance.gameTempo = req.body.gameTempo * 1000;
+        gameInstance.gameTempo = req.body.gameTempo;
+        gameInstance.ladderLength = req.body.ladderLength;
         let polygonsInGameArea = gameInstance.gameLocation.polygons
 
         polygonsInGameArea.forEach((polygon) => {
@@ -37,7 +36,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     conquered: false,
                     guardians: [],
                     assembledInvaders: [],
-                    assaultLadder: new Array(ladderLength).fill(null),
+                    assaultLadder: new Array(gameInstance.ladderLength).fill(null),
                 })
             }
         });
@@ -68,7 +67,7 @@ exports.startGame = (req: Request, res: Response) => {
 
     io.to(gameId).emit('gameStarted', gameInstance);
     updateGame(gameId, io);
-    return res.status(204);
+    return res.status(200).json({ message: 'Game started', statusCode: 200 });
 }
 
 exports.removePlayer = (player: PlayerData): GameInstance => {
@@ -106,8 +105,6 @@ function updateGame(gameId: string, io: Server) {
     clearIntervals();
 
     gameCalculationId = setInterval(() => {
-        console.log('Update game');
-
         runAttack(gameInstance);
 
         // Check winning/losing condition
@@ -118,7 +115,7 @@ function updateGame(gameId: string, io: Server) {
             gameInstance.gameState = 'ready';
             return;
         }
-    }, gameTempo);
+    }, gameInstance.gameTempo);
 
     gameUpdateIntervalId = setInterval(() => {
         io.to(gameId).emit('gameUpdated', gameInstance);
