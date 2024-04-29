@@ -27,7 +27,9 @@ exports.getGameLocations = (req, res) => {
                             {latitude: 50.1908497, longitude: 12.7447314},
                         ]
                     },
-                ]
+                ],
+                speedChoices: [1000, 5000, 10000, 15000, 20000, 25000, 30000],
+                ladderLengthChoices: [10, 20, 30],
             },
             {
                 locationName: 'Česko',
@@ -44,7 +46,9 @@ exports.getGameLocations = (req, res) => {
                             {latitude: 51.1704517, longitude: 17.7346081},
                         ],
                     }
-                ]
+                ],
+                speedChoices: [1000, 5000, 10000, 15000, 20000, 25000, 30000],
+                ladderLengthChoices: [10, 20, 30],
             }
         ]
     );

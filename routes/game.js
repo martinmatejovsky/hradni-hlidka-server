@@ -1,26 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const gameController = require('../controllers/gameController');
-const testGameController = require('../controllers/testGameController-1');
 
-router.post("/", gameController.createNewGameInstance);
-router.get("/1", testGameController.getGameInstance);
-router.post("/1/start", (req, res) => {
-    testGameController.startGame(req, res, req.app.get('io')); // Pass io instance to the controller method
-});
-router.get("/:gameInstanceId", (req, res) => {
-    const gameInstanceId = req.params.gameInstanceId;
-    const gameInstanceFilePath = path.join(__dirname, `../game-instances/${gameInstanceId}.js`);
-
-    if (!fs.existsSync(gameInstanceFilePath)) {
-        return res.status(404).json({ message: 'Game instance not found' });
-    }
-
-    const gameInstance = require(gameInstanceFilePath);
-
-    return res.status(200).json({ ...gameInstance });
-});
+router.get("/", gameController.getGameInstance);
+router.post("/createGame", gameController.createNewGameInstance);
+router.get("/checkGameStatus", gameController.checkGameStatus);
+router.post("/start", gameController.startGame); // Pass io instance to the controller method
 
 module.exports = router;
