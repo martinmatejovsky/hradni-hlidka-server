@@ -22,10 +22,9 @@ function initializeSocket(server) {
             callback(); // This will trigger the resolve in the client's promise
         });
 
-        socket.on('playerRelocated', (payload) => {
-            console.log('Player relocated');
-
+        socket.on('playerRelocatedToZone', (payload) => {
             const gameWithRelocatedPlayers = gameController.relocatePlayer(payload.player);
+
             io.to(payload.gameId).emit('gameUpdated', gameWithRelocatedPlayers)
         });
     });
