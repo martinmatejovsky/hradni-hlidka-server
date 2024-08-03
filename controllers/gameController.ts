@@ -36,7 +36,10 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     conquered: false,
                     guardians: [],
                     assembledInvaders: [],
-                    assaultLadder: new Array(gameInstance.ladderLength).fill(null),
+                    assaultLadder: {
+                        content: new Array(gameInstance.ladderLength).fill(null),
+                        location: polygon.assaultLadder.location
+                    },
                 })
             }
         });

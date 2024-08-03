@@ -5,7 +5,7 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
 
     for (let i = 0; i < battleZones.length; i++) {
         // create ladders
-        battleZones[i].assaultLadder = new Array(gameInstance.ladderLength).fill(null);
+        battleZones[i].assaultLadder.content = new Array(gameInstance.ladderLength).fill(null);
 
         // create waiting invaders
         if (battleZones[i].assembledInvaders.length === 0) {

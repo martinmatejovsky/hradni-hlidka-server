@@ -8,7 +8,7 @@ export const runAttack = (gameInstance: GameInstance) => {
 
     // evaluate winning conditions - no attacker left on ladders or in assembly area
     if (battleZones.every((area: BattleZone): boolean => area.assembledInvaders.length === 0
-        && area.assaultLadder.every((ladderField: Invader | null) => ladderField === null)
+        && area.assaultLadder.content.every((ladderField: Invader | null) => ladderField === null)
     )) {
         gameInstance.gameState = 'won';
         return
