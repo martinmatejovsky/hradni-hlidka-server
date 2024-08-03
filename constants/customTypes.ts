@@ -38,6 +38,7 @@ export interface BattleZone {
     cornerCoordinates: Coordinates[],
     conquered: boolean,
     guardians: PlayerData[],
+    invaders: Invader[],
     assembledInvaders: Invader[],
     assaultLadder: AssaultLadder,
 }
@@ -54,5 +55,6 @@ export type InvaderType = "normal"
 export type Invader = {
     type: InvaderType,
     health: number,
+    assembleArea: number|null,
     ladderStep: number|null,
 }

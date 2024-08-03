@@ -7,18 +7,20 @@ export const runAttack = (gameInstance: GameInstance) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     // evaluate winning conditions - no attacker left on ladders or in assembly area
-    if (battleZones.every((area: BattleZone): boolean => area.assembledInvaders.length === 0
-        && area.assaultLadder.content.every((ladderField: Invader | null) => ladderField === null)
-    )) {
-        gameInstance.gameState = 'won';
-        return
-    }
+    // if (battleZones.every((area: BattleZone): boolean => area.assembledInvaders.length === 0
+    //     && area.assaultLadder.content.every((ladderField: Invader | null) => ladderField === null)
+    // )) {
+    //     gameInstance.gameState = 'won';
+    //     return
+    // }
 
     // calculate damage done by guardians and remove attackers from ladders
     wipeLadderInvaders(battleZones);
 
     // move attackers up the ladder
     moveInvadersOnLadder(gameInstance);
+
+    console.table(battleZones[0].invaders)
 
     // check if any attacker reached the top
     checkAnyAreaConquered(gameInstance);

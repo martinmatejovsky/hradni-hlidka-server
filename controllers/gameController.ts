@@ -35,6 +35,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     cornerCoordinates: polygon.cornerCoordinates,
                     conquered: false,
                     guardians: [],
+                    invaders: [],
                     assembledInvaders: [],
                     assaultLadder: {
                         content: new Array(gameInstance.ladderLength).fill(null),
