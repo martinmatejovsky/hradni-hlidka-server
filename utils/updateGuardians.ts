@@ -1,6 +1,14 @@
 import type { BattleZone, PlayerData } from "../constants/customTypes";
 
 export const updateGuardians = (currentPlayer: PlayerData, battleZones: BattleZone[]) => {
+    // odstraníme hráče z jakékoliv předchozí zóny
+    battleZones.forEach((zone: BattleZone) => {
+        const index = zone.guardians.findIndex(g => g.key === currentPlayer.key);
+        if (index !== -1) {
+            zone.guardians.splice(index, 1);
+        }
+    });
+
     if (currentPlayer.insideZone?.length > 0) {
         battleZones.forEach((zone: BattleZone) => {
             if (zone.key === currentPlayer.insideZone) {
