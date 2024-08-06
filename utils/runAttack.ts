@@ -1,4 +1,4 @@
-import type {BattleZone, GameInstance, Invader} from "../constants/customTypes";
+import type {BattleZone, GameInstance} from "../constants/customTypes";
 import {wipeLadderInvaders} from "./wipeLadderInvaders";
 import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
 import {checkAnyAreaConquered} from "./checkAnyAreaConquered";

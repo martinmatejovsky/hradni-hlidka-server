@@ -114,6 +114,9 @@ function clearIntervals() {
 function updateGame(gameId: string, io: Server) {
     clearIntervals();
 
+    // calculate game data on server in regular intervals (gameTempo). Interval is chosen by players to adjust
+    // how fast the game goes.
+    // Update to players only if they won.
     gameCalculationId = setInterval(() => {
         runAttack(gameInstance);
 
@@ -127,6 +130,9 @@ function updateGame(gameId: string, io: Server) {
         }
     }, gameInstance.gameTempo);
 
+    // in regular intervals (GAME_UPDATE_INTERVAL) send game data to players. This interval is server constant. It should
+    // be a compromise between keeping players reasonably actual and do not bombard them with huge amount of data.
+    // Each player has copy of calculating methods to do own calculation in between these GAME_UPDATE_INTERVALs.
     gameUpdateIntervalId = setInterval(() => {
         io.to(gameId).emit('gameUpdated', gameInstance);
     }, GAME_UPDATE_INTERVAL);

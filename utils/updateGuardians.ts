@@ -9,6 +9,7 @@ export const updateGuardians = (currentPlayer: PlayerData, battleZones: BattleZo
         }
     });
 
+    // doplníme hráče do zóny, pokud je v ní
     if (currentPlayer.insideZone?.length > 0) {
         battleZones.forEach((zone: BattleZone) => {
             if (zone.key === currentPlayer.insideZone) {

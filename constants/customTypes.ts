@@ -53,6 +53,7 @@ export interface GameInstance {
 }
 export type InvaderType = "normal"
 export type Invader = {
+    id: number,
     type: InvaderType,
     health: number,
     assembleArea: number|null,

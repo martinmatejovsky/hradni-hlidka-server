@@ -2,6 +2,7 @@ import type {BattleZone, InvaderType, Invader, GameInstance} from "../constants/
 
 export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
+    let invadersCumulativeId = 1;
 
     battleZones.forEach(zone => {
         // create ladder fields
@@ -13,6 +14,7 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
 
             for (let i = 0; i < randomInvadersAmount; i++) {
                 zone.invaders.push({
+                    id: invadersCumulativeId++,
                     type: "normal" as InvaderType,
                     health: 2,
                     assembleArea: i,
