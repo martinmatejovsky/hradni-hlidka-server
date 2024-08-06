@@ -3,7 +3,6 @@ import type {BattleZone} from "../constants/customTypes";
 export const wipeLadderInvaders = (zones: BattleZone[]): void => {
     zones.forEach((zone: BattleZone): void => {
         let defendersStrength = zone.guardians.length;
-        const ladder = zone.assaultLadder.content;
         let invadersOnLadder = zone.invaders.filter(invader => invader.ladderStep !== null);
 
         if (invadersOnLadder.length > 0) {
@@ -17,8 +16,6 @@ export const wipeLadderInvaders = (zones: BattleZone[]): void => {
 
                     // Remove invader if health drops to 0
                     if (invader.health <= 0) {
-                        ladder[invader.ladderStep!] = null;
-
                         // remove invader from zone.invaders array
                         const invaderIndex = zone.invaders.indexOf(invader);
                         zone.invaders.splice(invaderIndex, 1);

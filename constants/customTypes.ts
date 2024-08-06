@@ -26,7 +26,6 @@ export interface GameLocation {
     ladderLengthChoices: number[],
 }
 export interface AssaultLadder {
-    content: (Invader | null)[],
     location: {
         start: Coordinates,
         end: Coordinates
