@@ -4,7 +4,7 @@ export const moveInvadersOnLadder = (gameInstance: GameInstance): void => {
     const zones = gameInstance.battleZones;
 
     zones.forEach((area: BattleZone ): void => {
-        let assembledInvaders = area.invaders.filter(invader => typeof invader.assembleArea === "number" )
+        let assembledInvaders = area.invaders.filter(invader => typeof invader.assemblyArea === "number" )
         let climbingInvaders = area.invaders.filter(invader => typeof invader.ladderStep === "number" )
 
         if (climbingInvaders.length > 0) {
@@ -19,13 +19,13 @@ export const moveInvadersOnLadder = (gameInstance: GameInstance): void => {
         if (assembledInvaders.length > 0) {
             const newInvader = assembledInvaders.shift();
             if (newInvader) {
-                newInvader.assembleArea = null;
+                newInvader.assemblyArea = null;
                 newInvader.ladderStep = 0;
             }
 
             assembledInvaders.forEach(invader => {
-                if (invader.assembleArea !== null) {
-                    invader.assembleArea -= 1;
+                if (invader.assemblyArea !== null) {
+                    invader.assemblyArea -= 1;
                 }
             });
         }

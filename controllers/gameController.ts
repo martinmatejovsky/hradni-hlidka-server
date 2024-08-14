@@ -4,6 +4,7 @@ import {Request ,Response} from "express";
 import type {GameInstance, GameState, PlayerData} from "../constants/customTypes";
 import {Server} from "socket.io";
 import {assembleInvaders} from "../utils/assembleInvaders";
+import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
@@ -39,7 +40,8 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     assembledInvaders: [],
                     assemblyArea: polygon.assemblyArea,
                     assaultLadder: {
-                        location: polygon.assaultLadder.location
+                        location: polygon.assaultLadder.location,
+                        steps: calculateLadderSteps(polygon.assaultLadder, gameInstance.ladderLength),
                     },
                 })
             }

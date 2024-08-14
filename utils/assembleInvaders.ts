@@ -5,8 +5,9 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
     let invadersCumulativeId = 1;
 
     battleZones.forEach(zone => {
-        // create waiting invaders
-        if (zone.invaders.every(invader => invader.assembleArea === null)) {
+        // create waiting invaders.
+        // Mind that max number of invaders must not exceed available assembly areas in polygons[].assemblyArea
+        if (zone.invaders.every(invader => invader.assemblyArea === null)) {
             const randomInvadersAmount = Math.floor(Math.random() * 4) + 1;
 
             for (let i = 0; i < randomInvadersAmount; i++) {
@@ -14,7 +15,7 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
                     id: invadersCumulativeId++,
                     type: "normal" as InvaderType,
                     health: 2,
-                    assembleArea: i,
+                    assemblyArea: i,
                     ladderStep: null,
                 } as Invader)
             }
