@@ -16,6 +16,7 @@ export interface BasePolygon {
     key: string,
     polygonType: PolygonType,
     cornerCoordinates: Coordinates[],
+    assemblyArea: Coordinates[],
     assaultLadder: AssaultLadder,
 }
 export interface GameLocation {
@@ -39,6 +40,7 @@ export interface BattleZone {
     guardians: PlayerData[],
     invaders: Invader[],
     assembledInvaders: Invader[],
+    assemblyArea: Coordinates[],
     assaultLadder: AssaultLadder,
 }
 export interface GameInstance {

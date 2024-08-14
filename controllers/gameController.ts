@@ -37,6 +37,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     guardians: [],
                     invaders: [],
                     assembledInvaders: [],
+                    assemblyArea: polygon.assemblyArea,
                     assaultLadder: {
                         location: polygon.assaultLadder.location
                     },
