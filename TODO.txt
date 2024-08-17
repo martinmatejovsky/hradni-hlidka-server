@@ -1,0 +1,3 @@
+These variables should be probaly constans saved on server, but for now they are configured on frontend during creating game:
+- assaultStrength
+- assemblyCountdown

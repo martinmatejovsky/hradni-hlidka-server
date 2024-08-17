@@ -8,6 +8,8 @@ import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+let assaultStrength: number = 0;
+let assemblyCountdown: number = 0;
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationId: NodeJS.Timeout | null = null;
@@ -27,6 +29,8 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameTempo = req.body.gameTempo;
         gameInstance.ladderLength = req.body.ladderLength;
         let polygonsInGameArea = gameInstance.gameLocation.polygons
+        assaultStrength = req.body.assaultStrength;
+        assemblyCountdown = req.body.assemblyCountdown;
 
         polygonsInGameArea.forEach((polygon) => {
             if (polygon.polygonType === 'battleZone') {
@@ -39,6 +43,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     invaders: [],
                     assembledInvaders: [],
                     assemblyArea: polygon.assemblyArea,
+                    assemblyCountdown: 0,
                     assaultLadder: {
                         location: polygon.assaultLadder.location,
                         steps: calculateLadderSteps(polygon.assaultLadder, gameInstance.ladderLength),
@@ -69,7 +74,7 @@ exports.startGame = (req: Request, res: Response) => {
     const gameId = req.body.gameId;
 
     gameInstance.gameState = 'running' as GameState;
-    gameInstance.battleZones = assembleInvaders(gameInstance);
+    gameInstance.battleZones = assembleInvaders(gameInstance, assaultStrength, assemblyCountdown);
 
     io.to(gameId).emit('gameStarted', gameInstance);
     updateGame(gameId, io);

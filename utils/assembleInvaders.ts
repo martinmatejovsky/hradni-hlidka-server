@@ -1,6 +1,6 @@
 import type {BattleZone, InvaderType, Invader, GameInstance} from "../constants/customTypes";
 
-export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
+export const assembleInvaders = (gameInstance: GameInstance, assaultStrength: number, assemblyCountdown: number): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
     let invadersCumulativeId = 1;
 
@@ -8,7 +8,7 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
         // create waiting invaders.
         // Mind that max number of invaders must not exceed available assembly areas in polygons[].assemblyArea
         if (zone.invaders.every(invader => invader.assemblyArea === null)) {
-            const randomInvadersAmount = Math.floor(Math.random() * 4) + 1;
+            const randomInvadersAmount = Math.floor(Math.random() * 4) + (assaultStrength - 3);
 
             for (let i = 0; i < randomInvadersAmount; i++) {
                 zone.invaders.push({
@@ -19,6 +19,8 @@ export const assembleInvaders = (gameInstance: GameInstance): BattleZone[] => {
                     ladderStep: null,
                 } as Invader)
             }
+
+            zone.assemblyCountdown = assemblyCountdown;
         }
     })
 
