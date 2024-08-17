@@ -1,3 +1,5 @@
-These variables should be probaly constans saved on server, but for now they are configured on frontend during creating game:
+These variables should be probably constants saved on server, but for now they are configured on frontend during creating game so that
+we can test which values for constants are optimal:
 - assaultStrength
 - assemblyCountdown
+- wavesDelay

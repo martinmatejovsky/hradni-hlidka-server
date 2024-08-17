@@ -1,18 +1,18 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, InvaderIncrementID} from "../constants/customTypes";
 import {Server} from "socket.io";
-import {assembleInvaders} from "../utils/assembleInvaders";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 let assaultStrength: number = 0;
 let assemblyCountdown: number = 0;
+let incrementingInvaderId: InvaderIncrementID = {value: 1};
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
-let gameCalculationId: NodeJS.Timeout | null = null;
+let gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
 exports.createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
@@ -48,6 +48,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                         location: polygon.assaultLadder.location,
                         steps: calculateLadderSteps(polygon.assaultLadder, gameInstance.ladderLength),
                     },
+                    waveCooldown: 0,
                 })
             }
         });
@@ -74,7 +75,6 @@ exports.startGame = (req: Request, res: Response) => {
     const gameId = req.body.gameId;
 
     gameInstance.gameState = 'running' as GameState;
-    gameInstance.battleZones = assembleInvaders(gameInstance, assaultStrength, assemblyCountdown);
 
     io.to(gameId).emit('gameStarted', gameInstance);
     updateGame(gameId, io);
@@ -112,9 +112,9 @@ exports.relocatePlayer = (player: PlayerData): GameInstance => {
 }
 
 function clearIntervals() {
-    if (gameUpdateIntervalId !== null && gameCalculationId !== null) {
+    if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
         clearInterval(gameUpdateIntervalId);
-        clearInterval(gameCalculationId);
+        clearInterval(gameCalculationIntervalId);
     }
 }
 
@@ -124,13 +124,13 @@ function updateGame(gameId: string, io: Server) {
     // calculate game data on server in regular intervals (gameTempo). Interval is chosen by players to adjust
     // how fast the game goes.
     // Update to players only if they won.
-    gameCalculationId = setInterval(() => {
-        runAttack(gameInstance);
+    gameCalculationIntervalId = setInterval(() => {
+        runAttack(gameInstance, assaultStrength, assemblyCountdown, incrementingInvaderId);
 
         // Check winning/losing condition
         if (gameInstance.gameState === 'won' || gameInstance.gameState === 'lost') {
             clearInterval(gameUpdateIntervalId!);
-            clearInterval(gameCalculationId!);
+            clearInterval(gameCalculationIntervalId!);
             io.to(gameId).emit('gameUpdated', gameInstance);
             gameInstance.gameState = 'ready';
             return;

@@ -45,6 +45,7 @@ export interface BattleZone {
     assemblyArea: Coordinates[],
     assemblyCountdown: number,
     assaultLadder: AssaultLadder,
+    waveCooldown: number,
 }
 export interface GameInstance {
     id: string,
@@ -62,4 +63,7 @@ export type Invader = {
     health: number,
     assemblyArea: number|null,
     ladderStep: number|null,
+}
+export type InvaderIncrementID = {
+    value: number
 }
