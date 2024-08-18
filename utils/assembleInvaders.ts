@@ -1,6 +1,13 @@
-import type {BattleZone, InvaderType, Invader, GameInstance, InvaderIncrementID} from "../constants/customTypes";
+import type {
+    BattleZone,
+    InvaderType,
+    Invader,
+    GameInstance,
+    Constants,
+    Stats,
+} from "../constants/customTypes";
 
-export const assembleInvaders = (gameInstance: GameInstance, assaultStrength: number, assemblyCountdown: number, incrementingInvaderId: InvaderIncrementID): BattleZone[] => {
+export const assembleInvaders = (gameInstance: GameInstance, constants: Constants, stats: Stats): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     battleZones.forEach(zone => {
@@ -13,22 +20,22 @@ export const assembleInvaders = (gameInstance: GameInstance, assaultStrength: nu
                 return;
             }
 
-            const randomInvadersAmount = Math.floor(Math.random() * 4) + (assaultStrength - 3);
+            const randomInvadersAmount = Math.floor(Math.random() * 4) + (constants.assaultWaveVolume - 3);
 
             for (let i = 0; i < randomInvadersAmount; i++) {
                 zone.invaders.push({
-                    id: incrementingInvaderId.value,
+                    id: stats.incrementingInvaderId,
                     type: "normal" as InvaderType,
                     health: 2,
                     assemblyArea: i,
                     ladderStep: null,
                 } as Invader)
 
-                incrementingInvaderId.value++
+                stats.incrementingInvaderId++
             }
 
-            zone.assemblyCountdown = assemblyCountdown;
-            zone.waveCooldown = assemblyCountdown + Math.floor(Math.random() * 5);
+            zone.assemblyCountdown = constants.assemblyCountdown;
+            zone.waveCooldown = constants.wavesMinDelay + Math.floor(Math.random() * 5);
         }
     })
 

@@ -64,6 +64,16 @@ export type Invader = {
     assemblyArea: number|null,
     ladderStep: number|null,
 }
-export type InvaderIncrementID = {
-    value: number
+export type Constants = {
+    gameTempo: number,
+    ladderLength: number,
+    assaultWaveVolume: number,
+    assemblyCountdown: number,
+    wavesMinDelay: number,
+    defendersHitStrength: number,
 }
+export type Stats = {
+    incrementingInvaderId: number,
+}
+
+// TODO - skoncil jsem ze potrebuju silu obrance defendersHitStrength nastavit i z frontendu

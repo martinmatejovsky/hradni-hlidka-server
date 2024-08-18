@@ -1,22 +1,30 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData, InvaderIncrementID} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, Constants, Stats} from "../constants/customTypes";
 import {Server} from "socket.io";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
-let assaultStrength: number = 0;
-let assemblyCountdown: number = 0;
-let incrementingInvaderId: InvaderIncrementID = {value: 1};
+let constants: Constants = {
+    gameTempo: 0,
+    ladderLength: 0,
+    assaultWaveVolume: 0,
+    assemblyCountdown: 0,
+    wavesMinDelay: 0,
+    defendersHitStrength: 0,
+}
+let stats: Stats = {
+    incrementingInvaderId: 1
+}
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
 exports.createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
-        if (![req.body.gameLocation, req.body.gameTempo, req.body.ladderLength].every(Boolean)) {
+        if (![req.body.gameLocation, req.body.constants].every(Boolean)) {
             return res.status(400).json({ message: 'Missing properties in request body' });
         }
 
@@ -26,11 +34,11 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
         gameInstance.players = [];
-        gameInstance.gameTempo = req.body.gameTempo;
-        gameInstance.ladderLength = req.body.ladderLength;
+        gameInstance.gameTempo = req.body.constants.gameTempo;
+        gameInstance.ladderLength = req.body.constants.ladderLength;
         let polygonsInGameArea = gameInstance.gameLocation.polygons
-        assaultStrength = req.body.assaultStrength;
-        assemblyCountdown = req.body.assemblyCountdown;
+        constants.assaultWaveVolume = req.body.constants.assaultWaveVolume;
+        constants.assemblyCountdown = req.body.constants.assemblyCountdown;
 
         polygonsInGameArea.forEach((polygon) => {
             if (polygon.polygonType === 'battleZone') {
@@ -125,7 +133,7 @@ function updateGame(gameId: string, io: Server) {
     // how fast the game goes.
     // Update to players only if they won.
     gameCalculationIntervalId = setInterval(() => {
-        runAttack(gameInstance, assaultStrength, assemblyCountdown, incrementingInvaderId);
+        runAttack(gameInstance, constants, stats);
 
         // Check winning/losing condition
         if (gameInstance.gameState === 'won' || gameInstance.gameState === 'lost') {
