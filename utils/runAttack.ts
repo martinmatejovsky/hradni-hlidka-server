@@ -1,10 +1,10 @@
-import type {BattleZone, Constants, GameInstance, Stats} from "../constants/customTypes";
+import type {BattleZone, Settings, GameInstance, Stats} from "../constants/customTypes";
 import {wipeLadderInvaders} from "./wipeLadderInvaders";
 import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
 import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
 import {assembleInvaders} from "./assembleInvaders";
 
-export const runAttack = (gameInstance: GameInstance, constants: Constants, stats: Stats) => {
+export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     // evaluate winning conditions - no attacker left on ladders or in assembly area
@@ -13,7 +13,7 @@ export const runAttack = (gameInstance: GameInstance, constants: Constants, stat
     // }
 
     // assemble new wave of attackers
-    assembleInvaders(gameInstance, constants, stats);
+    assembleInvaders(gameInstance, settings, stats);
 
     // calculate damage done by guardians and remove attackers from ladders
     wipeLadderInvaders(battleZones);

@@ -3,11 +3,11 @@ import type {
     InvaderType,
     Invader,
     GameInstance,
-    Constants,
+    Settings,
     Stats,
 } from "../constants/customTypes";
 
-export const assembleInvaders = (gameInstance: GameInstance, constants: Constants, stats: Stats): BattleZone[] => {
+export const assembleInvaders = (gameInstance: GameInstance, settings: Settings, stats: Stats): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     battleZones.forEach(zone => {
@@ -20,7 +20,7 @@ export const assembleInvaders = (gameInstance: GameInstance, constants: Constant
                 return;
             }
 
-            const randomInvadersAmount = Math.floor(Math.random() * 4) + (constants.assaultWaveVolume - 3);
+            const randomInvadersAmount = Math.floor(Math.random() * 4) + (settings.assaultWaveVolume - 3);
 
             for (let i = 0; i < randomInvadersAmount; i++) {
                 zone.invaders.push({
@@ -34,8 +34,8 @@ export const assembleInvaders = (gameInstance: GameInstance, constants: Constant
                 stats.incrementingInvaderId++
             }
 
-            zone.assemblyCountdown = constants.assemblyCountdown;
-            zone.waveCooldown = constants.wavesMinDelay + Math.floor(Math.random() * 5);
+            zone.assemblyCountdown = settings.assemblyCountdown;
+            zone.waveCooldown = settings.wavesMinDelay + Math.floor(Math.random() * 5);
         }
     })
 
