@@ -100,7 +100,7 @@ exports.getGameLocations = (req, res) => {
                         }
                     },
                 ],
-                speedChoices: [1000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
+                speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
                 ladderLengthChoices: [10, 20, 30],
             },
             {
@@ -135,7 +135,7 @@ exports.getGameLocations = (req, res) => {
                         }
                     }
                 ],
-                speedChoices: [1000, 5000, 10000, 15000, 20000, 25000, 30000],
+                speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000],
                 ladderLengthChoices: [10, 20, 30],
             }
         ]

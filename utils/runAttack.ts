@@ -8,7 +8,7 @@ import {evaluateSuccessfulDefend} from "./evaluateSuccessfulDefend";
 export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
-    if (stats.incrementingWaveId >= settings.gameLength) {
+    if (stats.incrementingWaveId > settings.gameLength) {
         evaluateSuccessfulDefend(gameInstance);
     } else {
         assembleInvaders(gameInstance, settings, stats);
