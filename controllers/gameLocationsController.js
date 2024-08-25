@@ -4,6 +4,7 @@ exports.getGameLocations = (req, res) => {
             {
                 locationName: 'Loket Sportovní',
                 key: 'loketSportovni',
+                mapCenter: {lat: 50.1910833, lng: 12.7438483},
                 polygons: [
                     {
                         polygonName: 'Panelák',
@@ -105,6 +106,7 @@ exports.getGameLocations = (req, res) => {
             {
                 locationName: 'Česko',
                 key: 'cesko',
+                mapCenter: {lat: 50.1912117, lng: 12.7431447},
                 polygons: [
                     {
                         polygonName: 'Česko',

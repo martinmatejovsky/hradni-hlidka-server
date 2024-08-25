@@ -7,6 +7,7 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     gameLocation: {
         locationName: '',
         key: '',
+        mapCenter: {lat: 0, lng: 0},
         polygons: [],
         speedChoices: [],
         ladderLengthChoices: [],

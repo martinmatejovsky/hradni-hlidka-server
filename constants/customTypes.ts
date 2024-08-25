@@ -23,6 +23,7 @@ export interface BasePolygon {
 export interface GameLocation {
     locationName: string,
     key: string,
+    mapCenter: Coordinates,
     polygons: BasePolygon[],
     speedChoices: number[],
     ladderLengthChoices: number[],
