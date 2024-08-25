@@ -1,14 +1,19 @@
-import type {BattleZone} from "../constants/customTypes";
+import type {BattleZone, PlayerData} from "../constants/customTypes";
 
-export const wipeLadderInvaders = (zones: BattleZone[]): void => {
+export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): void => {
     zones.forEach((zone: BattleZone): void => {
         // make a concatenation of all guardians strength and save it to variable "strength":
-        let defendersStrength = zone.guardians.reduce((total, player) => total + player.strength, 0);
+        let defendersCombinedStrength = zone.guardians.reduce((total, player) => total + player.strength, 0);
         let invadersOnLadder = zone.invaders.filter(invader => invader.ladderStep !== null);
+        const allDefendersAreInZone = players.every(player => player.insideZone === zone.key);
 
         if (invadersOnLadder.length > 0) {
             invadersOnLadder.forEach(invader => {
-                const damageStrength = Math.min(defendersStrength, invader.health);
+                if (invader.type === "captain" && !allDefendersAreInZone) {
+                    return;
+                }
+
+                const damageStrength = Math.min(defendersCombinedStrength, invader.health);
 
                 // Deal damage to invader
                 invader.health -= damageStrength;
@@ -21,7 +26,7 @@ export const wipeLadderInvaders = (zones: BattleZone[]): void => {
                 }
 
                 // Reduce defenders strength by the damage dealt
-                defendersStrength -= damageStrength;
+                defendersCombinedStrength -= damageStrength;
             })
         }
     });

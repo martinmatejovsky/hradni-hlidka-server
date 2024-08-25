@@ -56,14 +56,7 @@ export interface GameInstance {
     gameTempo: number,
     ladderLength: number,
 }
-export type InvaderType = "normal"
-export type Invader = {
-    id: number,
-    type: InvaderType,
-    health: number,
-    assemblyArea: number|null,
-    ladderStep: number|null,
-}
+export type InvaderType = "regular" | "captain"
 export type Settings = {
     gameTempo: number,
     gameLength: number,
@@ -76,4 +69,35 @@ export type Settings = {
 export type Stats = {
     incrementingInvaderId: number,
     incrementingWaveId: number,
+}
+
+export class Invader {
+    id: number;
+    type: InvaderType;
+    health: number;
+    assemblyArea: number | null;
+    ladderStep: number | null;
+
+    constructor(id: number, type: InvaderType, assemblyArea: number | null) {
+        this.id = id;
+        this.type = type;
+        this.assemblyArea = assemblyArea;
+        this.ladderStep = null;
+
+        if (type === 'captain') {
+            this.health = 3;
+        } else {
+            this.health = 2;
+        }
+    }
+
+    // Factory method to create a normal invader
+    static createNormalInvader(id: number, assemblyArea: number): Invader {
+        return new Invader(id, 'regular' as InvaderType, assemblyArea);
+    }
+
+    // Factory method to create a captain invader
+    static createCaptainInvader(id: number, assemblyArea: number): Invader {
+        return new Invader(id, 'captain' as InvaderType, assemblyArea);
+    }
 }

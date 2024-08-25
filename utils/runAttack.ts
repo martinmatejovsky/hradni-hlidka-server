@@ -15,7 +15,7 @@ export const runAttack = (gameInstance: GameInstance, settings: Settings, stats:
     }
 
     // calculate damage done by guardians and remove attackers from ladders
-    wipeLadderInvaders(battleZones);
+    wipeLadderInvaders(battleZones, gameInstance.players);
 
     // move attackers up the ladder
     moveInvadersOnLadder(gameInstance);
