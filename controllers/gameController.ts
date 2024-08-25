@@ -9,6 +9,7 @@ import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectCon
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 let settings: Settings = {
     gameTempo: 0,
+    gameLength: 0,
     ladderLength: 0,
     assaultWaveVolume: 0,
     assemblyCountdown: 0,
@@ -16,7 +17,8 @@ let settings: Settings = {
     defendersHitStrength: 0,
 }
 let stats: Stats = {
-    incrementingInvaderId: 1
+    incrementingInvaderId: 1,
+    incrementingWaveId: 1,
 }
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
@@ -39,6 +41,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         let polygonsInGameArea = gameInstance.gameLocation.polygons
         Object.assign(settings, req.body.settings);
         stats.incrementingInvaderId = 1;
+        stats.incrementingWaveId = 1;
 
         polygonsInGameArea.forEach((polygon) => {
             if (polygon.polygonType === 'battleZone') {
@@ -49,7 +52,6 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     conquered: false,
                     guardians: [],
                     invaders: [],
-                    assembledInvaders: [],
                     assemblyArea: polygon.assemblyArea,
                     assemblyCountdown: 0,
                     assaultLadder: {
@@ -138,6 +140,11 @@ function updateGame(gameId: string, io: Server) {
     // Update to players only if they won.
     gameCalculationIntervalId = setInterval(() => {
         runAttack(gameInstance, settings, stats);
+
+        // announce approaching last waves
+        if (stats.incrementingWaveId === settings.gameLength - 2) {
+            io.to(gameId).emit('lastWaveIncoming', gameInstance);
+        }
 
         // Check winning/losing condition
         if (gameInstance.gameState === 'won' || gameInstance.gameState === 'lost') {

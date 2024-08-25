@@ -3,17 +3,16 @@ import {wipeLadderInvaders} from "./wipeLadderInvaders";
 import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
 import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
 import {assembleInvaders} from "./assembleInvaders";
+import {evaluateSuccessfulDefend} from "./evaluateSuccessfulDefend";
 
 export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
-    // evaluate winning conditions - no attacker left on ladders or in assembly area
-    // if (???) {
-    //
-    // }
-
-    // assemble new wave of attackers
-    assembleInvaders(gameInstance, settings, stats);
+    if (stats.incrementingWaveId >= settings.gameLength) {
+        evaluateSuccessfulDefend(gameInstance);
+    } else {
+        assembleInvaders(gameInstance, settings, stats);
+    }
 
     // calculate damage done by guardians and remove attackers from ladders
     wipeLadderInvaders(battleZones);

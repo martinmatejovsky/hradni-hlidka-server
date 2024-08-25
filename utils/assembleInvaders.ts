@@ -34,6 +34,8 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
                 stats.incrementingInvaderId++
             }
 
+            stats.incrementingWaveId++
+
             zone.assemblyCountdown = settings.assemblyCountdown;
             zone.waveCooldown = settings.wavesMinDelay + Math.floor(Math.random() * 5);
         }
