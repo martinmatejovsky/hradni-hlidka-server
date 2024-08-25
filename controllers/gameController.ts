@@ -102,7 +102,7 @@ exports.removePlayer = (player: PlayerData): GameInstance => {
     if (gameInstance.players.length === 0) {
         clearIntervals();
 
-        // TODO: in real app it should delete whole javascript file, not just reset state
+        // TODO: in real app with multiple battles running it should delete whole game differently
         gameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
     }
     return gameInstance;
@@ -151,7 +151,6 @@ function updateGame(gameId: string, io: Server) {
             clearInterval(gameUpdateIntervalId!);
             clearInterval(gameCalculationIntervalId!);
             io.to(gameId).emit('gameUpdated', gameInstance);
-            gameInstance.gameState = 'ready';
             return;
         }
     }, gameInstance.gameTempo);
