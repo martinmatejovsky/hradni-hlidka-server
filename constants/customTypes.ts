@@ -70,6 +70,7 @@ export type Stats = {
     incrementingInvaderId: number,
     incrementingWaveId: number,
 }
+export type LastWaveNotice = 'none' | 'incoming' | 'running'
 
 export class Invader {
     id: number;
@@ -78,26 +79,26 @@ export class Invader {
     assemblyArea: number | null;
     ladderStep: number | null;
 
-    constructor(id: number, type: InvaderType, assemblyArea: number | null) {
+    constructor(id: number, type: InvaderType, assemblyArea: number | null, amountOfPlayers: number) {
         this.id = id;
         this.type = type;
         this.assemblyArea = assemblyArea;
         this.ladderStep = null;
 
         if (type === 'captain') {
-            this.health = 3;
+            this.health = Math.ceil(amountOfPlayers * 1.25);
         } else {
-            this.health = 2;
+            this.health = amountOfPlayers;
         }
     }
 
     // Factory method to create a normal invader
-    static createNormalInvader(id: number, assemblyArea: number): Invader {
-        return new Invader(id, 'regular' as InvaderType, assemblyArea);
+    static createNormalInvader(id: number, assemblyArea: number, amountOfPlayers: number): Invader {
+        return new Invader(id, 'regular' as InvaderType, assemblyArea, amountOfPlayers);
     }
 
     // Factory method to create a captain invader
-    static createCaptainInvader(id: number, assemblyArea: number): Invader {
-        return new Invader(id, 'captain' as InvaderType, assemblyArea);
+    static createCaptainInvader(id: number, assemblyArea: number, amountOfPlayers: number): Invader {
+        return new Invader(id, 'captain' as InvaderType, assemblyArea, amountOfPlayers);
     }
 }

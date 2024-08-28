@@ -6,6 +6,7 @@ import {Server} from "socket.io";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
+import {LastWaveNotice} from "../constants/customTypes";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 let settings: Settings = {
     gameTempo: 0,
@@ -143,7 +144,13 @@ function updateGame(gameId: string, io: Server) {
 
         // announce approaching last waves
         if (stats.incrementingWaveId === settings.gameLength - 2) {
-            io.to(gameId).emit('lastWaveIncoming', gameInstance);
+            const event: LastWaveNotice = "incoming"
+            io.to(gameId).emit('lastWaveNotice', event);
+
+        } else if (stats.incrementingWaveId === settings.gameLength) {
+            const event: LastWaveNotice = "running"
+            io.to(gameId).emit('lastWaveNotice', event);
+
         }
 
         // Check winning/losing condition

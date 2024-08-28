@@ -9,6 +9,7 @@ import { Invader } from "../constants/customTypes";
 
 export const assembleInvaders = (gameInstance: GameInstance, settings: Settings, stats: Stats): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
+    let amountOfPlayers = gameInstance.players.length;
 
     battleZones.forEach(zone => {
         // create waiting invaders if assemblyArea is empty.
@@ -27,7 +28,7 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
             }
 
             // each wave has a random amount of invaders, increased with each waveId/2.
-            const randomInvadersAmount = Math.floor(Math.random() * 4) + (settings.assaultWaveVolume - 3) + Math.floor(stats.incrementingWaveId / 2);
+            const randomInvadersAmount = Math.floor(Math.random() * 4) + (settings.assaultWaveVolume - 3) + Math.floor(stats.incrementingWaveId / 3);
             // in first wave all zones are invaded. So to make it easier for players, we do not add for these first attacks any captains.
             const amountOfZones = gameInstance.battleZones.length;
 
@@ -35,9 +36,9 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
                 let newInvader: Invader;
 
                 if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / (randomInvadersAmount * 2)) {
-                    newInvader = Invader.createCaptainInvader(stats.incrementingInvaderId, i);
+                    newInvader = Invader.createCaptainInvader(stats.incrementingInvaderId, i, amountOfPlayers);
                 } else {
-                    newInvader = Invader.createNormalInvader(stats.incrementingInvaderId, i);
+                    newInvader = Invader.createNormalInvader(stats.incrementingInvaderId, i, amountOfPlayers);
                 }
 
                 zone.invaders.push(newInvader)

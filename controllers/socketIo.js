@@ -29,7 +29,7 @@ function initializeSocket(server) {
         });
     });
 
-    // Store io instance in server.io
+    // Store io instance in server.io, that is then accessible for other scripts
     server.io = io;
 }
 
