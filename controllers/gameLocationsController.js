@@ -99,6 +99,17 @@ exports.getGameLocations = (req, res) => {
                             }
                         }
                     },
+                    {
+                        polygonName: 'Kovárna',
+                        key: 'smithy',
+                        polygonType: "smithy",
+                        cornerCoordinates: [
+                            {lat: 50.1910053, lng: 12.7432583},
+                            {lat: 50.1909811, lng: 12.7433953},
+                            {lat: 50.1908678, lng: 12.7433911},
+                            {lat: 50.1908961, lng: 12.7432317},
+                        ],
+                    },
                 ],
                 speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
                 ladderLengthChoices: [10, 20, 30],

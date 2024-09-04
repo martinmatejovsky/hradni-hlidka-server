@@ -62,6 +62,15 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                     waveCooldown: 0,
                 })
             }
+
+            if (polygon.polygonType === 'smithy') {
+                gameInstance.utilityZones.push({
+                    zoneName: polygon.polygonName,
+                    key: polygon.key,
+                    cornerCoordinates: polygon.cornerCoordinates,
+                    guardians: [],
+                })
+            }
         });
 
         return res.status(201).json({ gameInstance, statusCode: 201 });
