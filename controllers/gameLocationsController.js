@@ -9,7 +9,7 @@ exports.getGameLocations = (req, res) => {
                     {
                         polygonName: 'Panelák',
                         key: 'panelak',
-                        polygonType: "battleZone",
+                        polygonType: "assaultZone",
                         cornerCoordinates: [
                             {lat: 50.1912719, lng: 12.7429919},
                             {lat: 50.1911711, lng: 12.7433686},
@@ -40,7 +40,7 @@ exports.getGameLocations = (req, res) => {
                     {
                         polygonName: 'U Stašků',
                         key: 'uStasku',
-                        polygonType: "battleZone",
+                        polygonType: "assaultZone",
                         cornerCoordinates: [
                             {lat: 50.1910928, lng: 12.7435950},
                             {lat: 50.1910156, lng: 12.7438483},
@@ -71,7 +71,7 @@ exports.getGameLocations = (req, res) => {
                     {
                         polygonName: 'Baráček',
                         key: 'baracek',
-                        polygonType: "battleZone",
+                        polygonType: "assaultZone",
                         cornerCoordinates: [
                             {lat: 50.1909744, lng: 12.7440025},
                             {lat: 50.1908025, lng: 12.7444953},
@@ -106,7 +106,7 @@ exports.getGameLocations = (req, res) => {
                         cornerCoordinates: [
                             {lat: 50.1910053, lng: 12.7432583},
                             {lat: 50.1909811, lng: 12.7433953},
-                            {lat: 50.1908678, lng: 12.7433911},
+                            {lat: 50.1908867, lng: 12.7433739},
                             {lat: 50.1908961, lng: 12.7432317},
                         ],
                     },
@@ -122,7 +122,7 @@ exports.getGameLocations = (req, res) => {
                     {
                         polygonName: 'Česko',
                         key: 'cesko',
-                        polygonType: "battleZone",
+                        polygonType: "assaultZone",
                         cornerCoordinates: [
                             {lat: 51.0842650, lng: 11.8788950},
                             {lat: 48.6634603, lng: 11.7910044},

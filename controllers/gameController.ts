@@ -16,6 +16,7 @@ let settings: Settings = {
     assemblyCountdown: 0,
     wavesMinDelay: 0,
     defendersHitStrength: 0,
+    smithyUpgradeWaiting: 5000,
 }
 let stats: Stats = {
     incrementingInvaderId: 1,
@@ -45,19 +46,20 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         stats.incrementingWaveId = 1;
 
         polygonsInGameArea.forEach((polygon) => {
-            if (polygon.polygonType === 'battleZone') {
+            if (polygon.polygonType === 'assaultZone') {
                 gameInstance.battleZones.push({
                     zoneName: polygon.polygonName,
                     key: polygon.key,
+                    polygonType: polygon.polygonType,
                     cornerCoordinates: polygon.cornerCoordinates,
                     conquered: false,
                     guardians: [],
                     invaders: [],
-                    assemblyArea: polygon.assemblyArea,
+                    assemblyArea: polygon.assemblyArea!,
                     assemblyCountdown: 0,
                     assaultLadder: {
-                        location: polygon.assaultLadder.location,
-                        steps: calculateLadderSteps(polygon.assaultLadder, gameInstance.ladderLength),
+                        location: polygon.assaultLadder!.location!,
+                        steps: calculateLadderSteps(polygon.assaultLadder!, gameInstance.ladderLength),
                     },
                     waveCooldown: 0,
                 })
@@ -67,6 +69,7 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
                 gameInstance.utilityZones.push({
                     zoneName: polygon.polygonName,
                     key: polygon.key,
+                    polygonType: polygon.polygonType,
                     cornerCoordinates: polygon.cornerCoordinates,
                     guardians: [],
                 })
