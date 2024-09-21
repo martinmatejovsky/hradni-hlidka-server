@@ -1,7 +1,7 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData, Settings, Stats} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, Settings, Stats, Perks} from "../constants/customTypes";
 import {Server} from "socket.io";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
@@ -16,7 +16,8 @@ let settings: Settings = {
     assemblyCountdown: 0,
     wavesMinDelay: 0,
     defendersHitStrength: 0,
-    smithyUpgradeWaiting: 5000,
+    smithyUpgradeWaiting: 0,
+    smithyUpgradeStrength: 0,
 }
 let stats: Stats = {
     incrementingInvaderId: 1,
@@ -138,6 +139,15 @@ exports.relocatePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
+exports.upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
+    const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
+    if (playerToUpdate) {
+        playerToUpdate.perks[perk] = perkValue;
+    }
+
+    return gameInstance;
+}
+
 function clearIntervals() {
     if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
         clearInterval(gameUpdateIntervalId);
@@ -150,7 +160,6 @@ function updateGame(gameId: string, io: Server) {
 
     // calculate game data on server in regular intervals (gameTempo). Interval is chosen by players to adjust
     // how fast the game goes.
-    // Update to players only if they won.
     gameCalculationIntervalId = setInterval(() => {
         runAttack(gameInstance, settings, stats);
 

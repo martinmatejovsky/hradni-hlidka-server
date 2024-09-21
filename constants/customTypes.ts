@@ -9,6 +9,12 @@ export type PlayerData = {
     location: PlayerCoordinates,
     insideZone: string,
     strength: number,
+    perks: {
+        smithyUpgrade: number,
+    }
+}
+export enum Perks {
+    smithyUpgrade = 'smithyUpgrade'
 }
 export type GameState = "none" | "ready" | "running" | "won" | "lost"
 type PolygonType = "assaultZone" | "smithy"
@@ -41,7 +47,7 @@ export interface BattleZone {
     polygonType: PolygonType,
     cornerCoordinates: Coordinates[],
     conquered: boolean,
-    guardians: PlayerData[],
+    guardians: string[],
     invaders: Invader[],
     assemblyArea: Coordinates[],
     assemblyCountdown: number,
@@ -53,7 +59,7 @@ export interface UtilityZone {
     key: string,
     polygonType: PolygonType,
     cornerCoordinates: Coordinates[],
-    guardians: PlayerData[],
+    guardians: string[],
 }
 export interface GameInstance {
     id: string,
@@ -75,6 +81,7 @@ export type Settings = {
     wavesMinDelay: number,
     defendersHitStrength: number,
     smithyUpgradeWaiting: number,
+    smithyUpgradeStrength: number,
 }
 export type Stats = {
     incrementingInvaderId: number,
