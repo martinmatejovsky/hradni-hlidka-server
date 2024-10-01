@@ -1,21 +1,21 @@
-import type {BattleZone, GameInstance, Invader} from "../constants/customTypes";
+import type {BattleZone, Settings, GameInstance, Stats} from "../constants/customTypes";
 import {wipeLadderInvaders} from "./wipeLadderInvaders";
 import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
 import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
+import {assembleInvaders} from "./assembleInvaders";
+import {evaluateSuccessfulDefend} from "./evaluateSuccessfulDefend";
 
-export const runAttack = (gameInstance: GameInstance) => {
+export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
-    // evaluate winning conditions - no attacker left on ladders or in assembly area
-    // if (battleZones.every((area: BattleZone): boolean => area.assembledInvaders.length === 0
-    //     && area.assaultLadder.content.every((ladderField: Invader | null) => ladderField === null)
-    // )) {
-    //     gameInstance.gameState = 'won';
-    //     return
-    // }
+    if (stats.incrementingWaveId > settings.gameLength) {
+        evaluateSuccessfulDefend(gameInstance);
+    } else {
+        assembleInvaders(gameInstance, settings, stats);
+    }
 
     // calculate damage done by guardians and remove attackers from ladders
-    wipeLadderInvaders(battleZones);
+    wipeLadderInvaders(battleZones, gameInstance.players);
 
     // move attackers up the ladder
     moveInvadersOnLadder(gameInstance);

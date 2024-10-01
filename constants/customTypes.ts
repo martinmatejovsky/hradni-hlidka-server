@@ -8,53 +8,114 @@ export type PlayerData = {
     key: string,
     location: PlayerCoordinates,
     insideZone: string,
+    strength: number,
+    perks: {
+        smithyUpgrade: number,
+    }
+}
+export enum Perks {
+    smithyUpgrade = 'smithyUpgrade'
 }
 export type GameState = "none" | "ready" | "running" | "won" | "lost"
-type PolygonType = "battleZone" | "smithy" | "barracks"
+type PolygonType = "assaultZone" | "smithy"
 export interface BasePolygon {
     polygonName: string,
     key: string,
     polygonType: PolygonType,
     cornerCoordinates: Coordinates[],
-    assaultLadder: AssaultLadder,
+    assemblyArea?: Coordinates[],
+    assaultLadder?: AssaultLadder,
 }
 export interface GameLocation {
     locationName: string,
     key: string,
+    mapCenter: Coordinates,
     polygons: BasePolygon[],
     speedChoices: number[],
     ladderLengthChoices: number[],
 }
 export interface AssaultLadder {
-    content: (Invader | null)[],
     location: {
         start: Coordinates,
         end: Coordinates
-    }
+    },
+    steps: Coordinates[],
 }
 export interface BattleZone {
     zoneName: string,
     key: string,
+    polygonType: PolygonType,
     cornerCoordinates: Coordinates[],
     conquered: boolean,
-    guardians: PlayerData[],
+    guardians: string[],
     invaders: Invader[],
-    assembledInvaders: Invader[],
+    assemblyArea: Coordinates[],
+    assemblyCountdown: number,
     assaultLadder: AssaultLadder,
+    waveCooldown: number,
+}
+export interface UtilityZone {
+    zoneName: string,
+    key: string,
+    polygonType: PolygonType,
+    cornerCoordinates: Coordinates[],
+    guardians: string[],
 }
 export interface GameInstance {
     id: string,
     gameState: GameState,
     gameLocation: GameLocation,
     battleZones: BattleZone[],
+    utilityZones: UtilityZone[],
     players: PlayerData[],
     gameTempo: number,
     ladderLength: number,
 }
-export type InvaderType = "normal"
-export type Invader = {
-    type: InvaderType,
-    health: number,
-    assembleArea: number|null,
-    ladderStep: number|null,
+export type InvaderType = "regular" | "captain"
+export type Settings = {
+    gameTempo: number,
+    gameLength: number,
+    ladderLength: number,
+    assaultWaveVolume: number,
+    assemblyCountdown: number,
+    wavesMinDelay: number,
+    defendersHitStrength: number,
+    smithyUpgradeWaiting: number,
+    smithyUpgradeStrength: number,
+}
+export type Stats = {
+    incrementingInvaderId: number,
+    incrementingWaveId: number,
+}
+export type LastWaveNotice = 'none' | 'incoming' | 'running'
+
+export class Invader {
+    id: number;
+    type: InvaderType;
+    health: number;
+    assemblyArea: number | null;
+    ladderStep: number | null;
+
+    constructor(id: number, type: InvaderType, assemblyArea: number | null, amountOfPlayers: number) {
+        this.id = id;
+        this.type = type;
+        this.assemblyArea = assemblyArea;
+        this.ladderStep = null;
+
+        if (type === 'captain') {
+            this.health = Math.ceil(amountOfPlayers * 1.25);
+        } else {
+            this.health = amountOfPlayers;
+        }
+    }
+
+    // Factory method to create a normal invader
+    static createNormalInvader(id: number, assemblyArea: number, amountOfPlayers: number): Invader {
+        return new Invader(id, 'regular' as InvaderType, assemblyArea, amountOfPlayers);
+    }
+
+    // Factory method to create a captain invader
+    static createCaptainInvader(id: number, assemblyArea: number, amountOfPlayers: number): Invader {
+        return new Invader(id, 'captain' as InvaderType, assemblyArea, amountOfPlayers);
+    }
 }

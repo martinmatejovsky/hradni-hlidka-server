@@ -27,9 +27,16 @@ function initializeSocket(server) {
 
             io.to(payload.gameId).emit('gameUpdated', gameWithRelocatedPlayers)
         });
+
+        socket.on('smithyUpgradeAchieved', (payload) => {
+            const gameWithUpgradedPlayers = gameController.upgradeGuardian(payload.player, payload.perk, payload.perkValue);
+
+            io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers)
+
+        })
     });
 
-    // Store io instance in server.io
+    // Store io instance in server.io, that is then accessible for other scripts
     server.io = io;
 }
 

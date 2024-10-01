@@ -1,31 +1,55 @@
-import type {BattleZone} from "../constants/customTypes";
+import type {BattleZone, PlayerData} from "../constants/customTypes";
 
-export const wipeLadderInvaders = (zones: BattleZone[]): void => {
+export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): void => {
     zones.forEach((zone: BattleZone): void => {
-        let defendersStrength = zone.guardians.length;
-        const ladder = zone.assaultLadder.content;
-        let invadersOnLadder = zone.invaders.filter(invader => invader.ladderStep !== null);
+        // Zamíchej obránce, protože chci umožnit obráncům sbírat statistiky zabitých a nevím, jak jinak spravedlivě
+        // dělit zkušenosti mezi obránce, než se budou k pořadí na úder dostávat náhodně
+        let shuffledGuardians = [...zone.guardians].sort(() => Math.random() - 0.5);
+        let invadersOnLadder = [...zone.invaders].filter(invader => invader.ladderStep !== null);
+        const allDefendersAreInZone = players.every(player => player.insideZone === zone.key);
 
         if (invadersOnLadder.length > 0) {
-            // write me function: if an invader is on ladder position 1 or more, than hit it according to defenders strength and lower defenders strength
-            invadersOnLadder.forEach(invader => {
-                if (invader.ladderStep! > 0) {
-                    const damageStrength = Math.min(defendersStrength, invader.health);
+            const usedSmithyPerk = new Map<string, boolean>(); // Temporary state to track used perks
 
-                    // Deal damage to invader
-                    invader.health -= damageStrength;
+            invadersOnLadder.forEach((invader, invaderIndex) => {
+                if (invader.type === "captain" && !allDefendersAreInZone) {
+                    return;
+                }
 
-                    // Remove invader if health drops to 0
-                    if (invader.health <= 0) {
-                        ladder[invader.ladderStep!] = null;
+                while (shuffledGuardians.length > 0 && invader.health > 0) {
+                    let guardian = players.find(player => player.key === shuffledGuardians[0]) ;
+                    if (!guardian) return
 
-                        // remove invader from zone.invaders array
-                        const invaderIndex = zone.invaders.indexOf(invader);
-                        zone.invaders.splice(invaderIndex, 1);
+                    let guardianStrength = guardian.strength;
+
+                    // Pokud má guardian perk smithyUpgrade, zvýší se jeho síla a opotřebuje se výdrž perku
+                    if (guardian.perks.smithyUpgrade > 0 && !usedSmithyPerk.get(guardian.key)) {
+                        guardianStrength += 1;
+                        guardian.perks.smithyUpgrade -= 1;
+                        usedSmithyPerk.set(guardian.key, true);
                     }
 
-                    // Reduce defenders strength by the damage dealt
-                    defendersStrength -= damageStrength;
+                    // Aplikuj sílu obránce na nájezdníka
+                    if (guardianStrength >= invader.health) {
+                        guardianStrength -= invader.health;
+                        invader.health = 0;
+
+                        const ladderInvaderIndex = zone.invaders.indexOf(invader);
+                        zone.invaders.splice(ladderInvaderIndex, 1);
+                        invadersOnLadder.splice(invaderIndex, 1);
+
+                        // Pokud zbyla nějaká síla, použij ji na dalšího nájezdníka
+                        if (guardianStrength > 0 && invaderIndex < invadersOnLadder.length) {
+                            invader = invadersOnLadder[invaderIndex];
+
+                        } else {
+                            shuffledGuardians.shift(); // Síla spotřebována, odstranit obránce
+                        }
+                    } else {
+                        // Pokud obráncova síla nestačí k zabití nájezdníka
+                        invader.health -= guardianStrength;
+                        shuffledGuardians.shift(); // Síla spotřebována, odstranit obránce
+                    }
                 }
             })
         }

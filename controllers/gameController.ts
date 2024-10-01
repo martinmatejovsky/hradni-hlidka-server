@@ -1,19 +1,35 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, Settings, Stats, Perks} from "../constants/customTypes";
 import {Server} from "socket.io";
-import {assembleInvaders} from "../utils/assembleInvaders";
+import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
+import {LastWaveNotice} from "../constants/customTypes";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+let settings: Settings = {
+    gameTempo: 0,
+    gameLength: 0,
+    ladderLength: 0,
+    assaultWaveVolume: 0,
+    assemblyCountdown: 0,
+    wavesMinDelay: 0,
+    defendersHitStrength: 0,
+    smithyUpgradeWaiting: 0,
+    smithyUpgradeStrength: 0,
+}
+let stats: Stats = {
+    incrementingInvaderId: 1,
+    incrementingWaveId: 1,
+}
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
-let gameCalculationId: NodeJS.Timeout | null = null;
+let gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
 exports.createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
-        if (![req.body.gameLocation, req.body.gameTempo, req.body.ladderLength].every(Boolean)) {
+        if (![req.body.gameLocation, req.body.settings].every(Boolean)) {
             return res.status(400).json({ message: 'Missing properties in request body' });
         }
 
@@ -23,24 +39,40 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
         gameInstance.players = [];
-        gameInstance.gameTempo = req.body.gameTempo;
-        gameInstance.ladderLength = req.body.ladderLength;
+        gameInstance.gameTempo = req.body.settings.gameTempo;
+        gameInstance.ladderLength = req.body.settings.ladderLength;
         let polygonsInGameArea = gameInstance.gameLocation.polygons
+        Object.assign(settings, req.body.settings);
+        stats.incrementingInvaderId = 1;
+        stats.incrementingWaveId = 1;
 
         polygonsInGameArea.forEach((polygon) => {
-            if (polygon.polygonType === 'battleZone') {
+            if (polygon.polygonType === 'assaultZone') {
                 gameInstance.battleZones.push({
                     zoneName: polygon.polygonName,
                     key: polygon.key,
+                    polygonType: polygon.polygonType,
                     cornerCoordinates: polygon.cornerCoordinates,
                     conquered: false,
                     guardians: [],
                     invaders: [],
-                    assembledInvaders: [],
+                    assemblyArea: polygon.assemblyArea!,
+                    assemblyCountdown: 0,
                     assaultLadder: {
-                        content: new Array(gameInstance.ladderLength).fill(null),
-                        location: polygon.assaultLadder.location
+                        location: polygon.assaultLadder!.location!,
+                        steps: calculateLadderSteps(polygon.assaultLadder!, gameInstance.ladderLength),
                     },
+                    waveCooldown: 0,
+                })
+            }
+
+            if (polygon.polygonType === 'smithy') {
+                gameInstance.utilityZones.push({
+                    zoneName: polygon.polygonName,
+                    key: polygon.key,
+                    polygonType: polygon.polygonType,
+                    cornerCoordinates: polygon.cornerCoordinates,
+                    guardians: [],
                 })
             }
         });
@@ -55,6 +87,10 @@ exports.getGameInstance = (req: Request, res: Response) => {
     return res.json(gameInstance);
 }
 
+exports.getGameSettings = (req: Request, res: Response) => {
+    return res.json(settings);
+}
+
 exports.joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
     updateGuardians(player, gameInstance.battleZones);
@@ -67,7 +103,6 @@ exports.startGame = (req: Request, res: Response) => {
     const gameId = req.body.gameId;
 
     gameInstance.gameState = 'running' as GameState;
-    gameInstance.battleZones = assembleInvaders(gameInstance);
 
     io.to(gameId).emit('gameStarted', gameInstance);
     updateGame(gameId, io);
@@ -81,7 +116,7 @@ exports.removePlayer = (player: PlayerData): GameInstance => {
     if (gameInstance.players.length === 0) {
         clearIntervals();
 
-        // TODO: in real app it should delete whole javascript file, not just reset state
+        // TODO: in real app with multiple battles running it should delete whole game differently
         gameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
     }
     return gameInstance;
@@ -104,29 +139,53 @@ exports.relocatePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
+exports.upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
+    const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
+    if (playerToUpdate) {
+        playerToUpdate.perks[perk] = perkValue;
+    }
+
+    return gameInstance;
+}
+
 function clearIntervals() {
-    if (gameUpdateIntervalId !== null && gameCalculationId !== null) {
+    if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
         clearInterval(gameUpdateIntervalId);
-        clearInterval(gameCalculationId);
+        clearInterval(gameCalculationIntervalId);
     }
 }
 
 function updateGame(gameId: string, io: Server) {
     clearIntervals();
 
-    gameCalculationId = setInterval(() => {
-        runAttack(gameInstance);
+    // calculate game data on server in regular intervals (gameTempo). Interval is chosen by players to adjust
+    // how fast the game goes.
+    gameCalculationIntervalId = setInterval(() => {
+        runAttack(gameInstance, settings, stats);
+
+        // announce approaching last waves
+        if (stats.incrementingWaveId === settings.gameLength - 2) {
+            const event: LastWaveNotice = "incoming"
+            io.to(gameId).emit('lastWaveNotice', event);
+
+        } else if (stats.incrementingWaveId === settings.gameLength) {
+            const event: LastWaveNotice = "running"
+            io.to(gameId).emit('lastWaveNotice', event);
+
+        }
 
         // Check winning/losing condition
         if (gameInstance.gameState === 'won' || gameInstance.gameState === 'lost') {
             clearInterval(gameUpdateIntervalId!);
-            clearInterval(gameCalculationId!);
+            clearInterval(gameCalculationIntervalId!);
             io.to(gameId).emit('gameUpdated', gameInstance);
-            gameInstance.gameState = 'ready';
             return;
         }
     }, gameInstance.gameTempo);
 
+    // in regular intervals (GAME_UPDATE_INTERVAL) send game data to players. This interval is server constant. It should
+    // be a compromise between keeping players reasonably actual and do not bombard them with huge amount of data.
+    // Each player has copy of calculating methods to do own calculation in between these GAME_UPDATE_INTERVALs.
     gameUpdateIntervalId = setInterval(() => {
         io.to(gameId).emit('gameUpdated', gameInstance);
     }, GAME_UPDATE_INTERVAL);
