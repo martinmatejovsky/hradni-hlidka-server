@@ -131,3 +131,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /.idea/
+/hradni-hlidka-server-rsa.pem
