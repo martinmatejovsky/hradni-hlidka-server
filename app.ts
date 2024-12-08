@@ -1,15 +1,19 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const http = require("http");
+import * as http from "node:http";
 const server = http.createServer(app); // Create an HTTP server using Express
-const cors = require('cors');
-const path = require("path");
+import cors from "cors"
+import path from "path"
+import { fileURLToPath } from 'url';
 const port = 8080;
-const gameLocationsRouter = require('./routes/game-locations');
-const gameRouter = require('./routes/game');
+import gameLocationsRouter from './src/routes/game-locations';
+import gameRouter from './src/routes/game';
 const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
-const initializeSocket = require('./controllers/socketIo');
+import initializeSocket from './src/controllers/socketIo'
 import { Request, Response, NextFunction } from 'express';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
@@ -26,5 +30,5 @@ app.use('/api/game', (req: Request, res: Response, next: NextFunction) => {
 app.use(express.static(path.join(__dirname, frontendPath)));
 
 server.listen(port, () => {
-    console.log("Listen on the port", port, "...");
+    console.log("Server listening on the port", port, "...");
 });

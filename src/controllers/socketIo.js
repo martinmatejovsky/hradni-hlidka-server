@@ -1,5 +1,5 @@
-const { Server } = require("socket.io");
-const gameController = require('./gameController');
+import {Server} from "socket.io";
+import gameController from './gameController';
 
 function initializeSocket(server) {
     const io = new Server(
@@ -40,4 +40,4 @@ function initializeSocket(server) {
     server.io = io;
 }
 
-module.exports = initializeSocket;
+export default initializeSocket;

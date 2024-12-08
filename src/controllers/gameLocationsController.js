@@ -1,4 +1,4 @@
-exports.getGameLocations = (req, res) => {
+const getGameLocations = (req, res) => {
     return res.json(
         [
             {
@@ -152,3 +152,5 @@ exports.getGameLocations = (req, res) => {
         ]
     );
 }
+
+export default getGameLocations;

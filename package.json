@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Node backend server pro hru Hradní Hlídka",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "start": "npx tsc && node app.js",
-    "serve": "npx nodemon ./app.ts",
+    "build": "rollup -c",
+    "start": "npm run build && node dist/app.js",
+    "serve": "npx nodemon --exec \"npx tsx\" ./app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,9 +21,16 @@
     "vite-plugin-vuetify": "^2.0.3"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@types/express": "^4.17.21",
     "nodemon": "^3.1.0",
+    "rollup": "^4.27.2",
+    "rollup-plugin-copy": "^3.5.0",
     "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.4.3"
   }
 }
