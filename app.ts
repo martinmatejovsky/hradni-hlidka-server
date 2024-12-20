@@ -6,10 +6,10 @@ import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';
 const port = 8080;
-import gameLocationsRouter from './src/routes/game-locations';
-import gameRouter from './src/routes/game';
+import gameLocationsRouter from './src/routes/game-locations.js';
+import gameRouter from './src/routes/game.js';
 const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
-import initializeSocket from './src/controllers/socketIo'
+import initializeSocket from './src/controllers/socketIo.js'
 import { Request, Response, NextFunction } from 'express';
 
 const __filename = fileURLToPath(import.meta.url);
