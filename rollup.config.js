@@ -1,30 +1,23 @@
-import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import copy from 'rollup-plugin-copy';
-import json from '@rollup/plugin-json';
+import typescript from '@rollup/plugin-typescript';
 
 export default {
-  input: 'app.ts',
+  input: 'app.ts', // Adjust this to your entry point
   output: {
     file: 'dist/app.js',
-    format: 'es',
+    format: 'esm',       // Use ES module syntax
   },
   plugins: [
     resolve(),
     commonjs(),
-    typescript({
-      tsconfig: './tsconfig.json'
-    }),
-    json({
-      compact: true
-    }),
-    copy({
-      targets: [
-        { src: 'src/constants/**/*', dest: 'dist/constants' },
-        { src: 'src/controllers/**/*', dest: 'dist/controllers' },
-        { src: 'src/routes/**/*', dest: 'dist/routes' },
-      ]
-    })
-  ]
+    typescript(),
+  ],
+  external: [
+    'cors',
+    'express',
+    'serverless-http',
+    'socket.io',
+    'vite-plugin-vuetify'
+  ],
 };
