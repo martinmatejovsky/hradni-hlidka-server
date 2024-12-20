@@ -27,7 +27,7 @@ let stats: Stats = {
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
-exports.createNewGameInstance = async (req: Request, res: Response) => {
+const createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
         if (![req.body.gameLocation, req.body.settings].every(Boolean)) {
             return res.status(400).json({ message: 'Missing properties in request body' });
@@ -83,22 +83,22 @@ exports.createNewGameInstance = async (req: Request, res: Response) => {
     }
 }
 
-exports.getGameInstance = (req: Request, res: Response) => {
+const getGameInstance = (req: Request, res: Response) => {
     return res.json(gameInstance);
 }
 
-exports.getGameSettings = (req: Request, res: Response) => {
+const getGameSettings = (req: Request, res: Response) => {
     return res.json(settings);
 }
 
-exports.joinNewPlayer = (player: PlayerData): GameInstance => {
+const joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
     updateGuardians(player, gameInstance.battleZones);
 
     return gameInstance;
 }
 
-exports.startGame = (req: Request, res: Response) => {
+const startGame = (req: Request, res: Response) => {
     const io = req.app.get('io')
     const gameId = req.body.gameId;
 
@@ -109,7 +109,7 @@ exports.startGame = (req: Request, res: Response) => {
     return res.status(200).json({ message: 'Game started', statusCode: 200 });
 }
 
-exports.removePlayer = (player: PlayerData): GameInstance => {
+const removePlayer = (player: PlayerData): GameInstance => {
     updateGuardians(player, gameInstance.battleZones);
     gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
 
@@ -122,12 +122,12 @@ exports.removePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
-exports.checkGameStatus = async (req: Request, res: Response) => {
+const checkGameStatus = async (req: Request, res: Response) => {
     const gameStatus = gameInstance.gameState;
     return res.status(200).json({ gameStatus });
 }
 
-exports.relocatePlayer = (player: PlayerData): GameInstance => {
+const relocatePlayer = (player: PlayerData): GameInstance => {
     const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
     if (playerToUpdate) {
         playerToUpdate.location = player.location;
@@ -139,7 +139,7 @@ exports.relocatePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
-exports.upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
+const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
     const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
     if (playerToUpdate) {
         playerToUpdate.perks[perk] = perkValue;
@@ -189,4 +189,21 @@ function updateGame(gameId: string, io: Server) {
     gameUpdateIntervalId = setInterval(() => {
         io.to(gameId).emit('gameUpdated', gameInstance);
     }, GAME_UPDATE_INTERVAL);
+}
+
+const findPlayerBySocketId = (socketId: string): PlayerData | undefined => {
+    return gameInstance.players.find(p => p.socketId === socketId);
+}
+
+export default {
+    createNewGameInstance,
+    getGameInstance,
+    getGameSettings,
+    joinNewPlayer,
+    startGame,
+    removePlayer,
+    checkGameStatus,
+    relocatePlayer,
+    upgradeGuardian,
+    findPlayerBySocketId,
 }

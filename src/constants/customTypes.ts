@@ -12,6 +12,7 @@ export type PlayerData = {
     perks: {
         smithyUpgrade: number,
     }
+    socketId: string,
 }
 export enum Perks {
     smithyUpgrade = 'smithyUpgrade'

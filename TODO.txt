@@ -1,2 +1,2 @@
-Some variables in type Settings should be saved on server and not be configurable by players. It would be too complicated for them.
-Right now they are configurable so that we can test the game easier.
+Some variables in type Settings should be saved on server and not be configurable by
+layers. It would be too complicated for them. Right now they are configurable so that we can test the game easier.

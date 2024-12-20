@@ -1,6 +1,6 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
-const gameController = require('../controllers/gameController');
+import gameController from '../controllers/gameController';
 
 router.get("/", gameController.getGameInstance);
 router.get("/settings", gameController.getGameSettings);
@@ -8,4 +8,4 @@ router.post("/createGame", gameController.createNewGameInstance);
 router.get("/checkGameStatus", gameController.checkGameStatus);
 router.post("/start", gameController.startGame); // Pass io instance to the controller method
 
-module.exports = router;
+export default router;

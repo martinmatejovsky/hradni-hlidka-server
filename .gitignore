@@ -131,3 +131,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /.idea/
+/hradni-hlidka-server-rsa.pem
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
