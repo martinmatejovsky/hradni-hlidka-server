@@ -1,7 +1,7 @@
 import {Server} from "socket.io";
 import gameController from './gameController';
 
-function initializeSocket(server) {
+function initializeSocket(server: any) {
     const io = new Server(
         server, { cors: { origin: "http://localhost:3000" } });
 
@@ -9,12 +9,12 @@ function initializeSocket(server) {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
 
-            const gameWithNewPlayer = gameController.joinNewPlayer(payload.player);
+            const playerWithSocketId = { ...payload.player, socketId: socket.id };
+            const gameWithNewPlayer = gameController.joinNewPlayer(playerWithSocketId);
             io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer)
         });
 
         socket.on('leaveGame', (payload, callback) => {
-
             const gameWithoutPlayer = gameController.removePlayer(payload.player);
             socket.leave(payload.gameId);
             io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
@@ -34,6 +34,13 @@ function initializeSocket(server) {
             io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers)
 
         })
+
+        socket.on('disconnect', () => {
+            const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id);
+            if (disconnectedPlayer) {
+                gameController.removePlayer(disconnectedPlayer);
+            }
+        });
     });
 
     // Store io instance in server.io, that is then accessible for other scripts

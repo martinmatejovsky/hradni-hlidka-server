@@ -1,4 +1,6 @@
-const getGameLocations = (req, res) => {
+import {Request, Response} from "express";
+
+const getGameLocations = (_: Request, res: Response) => {
     return res.json(
         [
             {

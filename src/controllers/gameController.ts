@@ -191,6 +191,10 @@ function updateGame(gameId: string, io: Server) {
     }, GAME_UPDATE_INTERVAL);
 }
 
+const findPlayerBySocketId = (socketId: string): PlayerData | undefined => {
+    return gameInstance.players.find(p => p.socketId === socketId);
+}
+
 export default {
     createNewGameInstance,
     getGameInstance,
@@ -201,4 +205,5 @@ export default {
     checkGameStatus,
     relocatePlayer,
     upgradeGuardian,
+    findPlayerBySocketId,
 }
