@@ -17,8 +17,8 @@ const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
-        origin: 'http://localhost:3000',
-    }
+    origin: 'http://localhost:3000',
+}
 ));
 app.use(express.json());
 initializeSocket(server);

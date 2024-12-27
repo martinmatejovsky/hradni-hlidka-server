@@ -38,6 +38,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameState = 'ready';
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
+        gameInstance.utilityZones = [];
         gameInstance.players = [];
         gameInstance.gameTempo = req.body.settings.gameTempo;
         gameInstance.ladderLength = req.body.settings.ladderLength;
