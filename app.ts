@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 import * as http from "node:http";
-const server = http.createServer(app); // Create an HTTP server using Express
+const server = http.createServer(app);
 import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';

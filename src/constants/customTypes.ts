@@ -23,7 +23,8 @@ export interface BasePolygon {
     polygonName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     assemblyArea?: Coordinates[],
     assaultLadder?: AssaultLadder,
 }
@@ -46,7 +47,8 @@ export interface BattleZone {
     zoneName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     conquered: boolean,
     guardians: string[],
     invaders: Invader[],
@@ -59,7 +61,8 @@ export interface UtilityZone {
     zoneName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     guardians: string[],
 }
 export interface GameInstance {

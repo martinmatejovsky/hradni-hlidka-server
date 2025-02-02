@@ -53,7 +53,8 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     zoneName: polygon.polygonName,
                     key: polygon.key,
                     polygonType: polygon.polygonType,
-                    cornerCoordinates: polygon.cornerCoordinates,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
                     conquered: false,
                     guardians: [],
                     invaders: [],
@@ -72,7 +73,8 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     zoneName: polygon.polygonName,
                     key: polygon.key,
                     polygonType: polygon.polygonType,
-                    cornerCoordinates: polygon.cornerCoordinates,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
                     guardians: [],
                 })
             }

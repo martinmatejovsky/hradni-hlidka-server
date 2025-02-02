@@ -12,7 +12,13 @@ const getGameLocations = (_: Request, res: Response) => {
                         polygonName: 'Panelák',
                         key: 'panelak',
                         polygonType: "assaultZone",
-                        cornerCoordinates: [
+                        areaOfAcceptedPresence: [
+                            {lat: 50.1912719, lng: 12.7429919},
+                            {lat: 50.1911711, lng: 12.7433686},
+                            {lat: 50.1910528, lng: 12.7432950},
+                            {lat: 50.1911431, lng: 12.7429128},
+                        ],
+                        areaPresentational: [
                             {lat: 50.1912719, lng: 12.7429919},
                             {lat: 50.1911711, lng: 12.7433686},
                             {lat: 50.1910528, lng: 12.7432950},
@@ -43,7 +49,13 @@ const getGameLocations = (_: Request, res: Response) => {
                         polygonName: 'U Stašků',
                         key: 'uStasku',
                         polygonType: "assaultZone",
-                        cornerCoordinates: [
+                        areaOfAcceptedPresence: [
+                            {lat: 50.1910928, lng: 12.7435950},
+                            {lat: 50.1910156, lng: 12.7438483},
+                            {lat: 50.1909264, lng: 12.7437878},
+                            {lat: 50.1910069, lng: 12.7435381},
+                        ],
+                        areaPresentational: [
                             {lat: 50.1910928, lng: 12.7435950},
                             {lat: 50.1910156, lng: 12.7438483},
                             {lat: 50.1909264, lng: 12.7437878},
@@ -74,7 +86,13 @@ const getGameLocations = (_: Request, res: Response) => {
                         polygonName: 'Baráček',
                         key: 'baracek',
                         polygonType: "assaultZone",
-                        cornerCoordinates: [
+                        areaOfAcceptedPresence: [
+                            {lat: 50.1909744, lng: 12.7440025},
+                            {lat: 50.1908025, lng: 12.7444953},
+                            {lat: 50.1907103, lng: 12.7444250},
+                            {lat: 50.1908658, lng: 12.7439169},
+                        ],
+                        areaPresentational: [
                             {lat: 50.1909744, lng: 12.7440025},
                             {lat: 50.1908025, lng: 12.7444953},
                             {lat: 50.1907103, lng: 12.7444250},
@@ -105,7 +123,13 @@ const getGameLocations = (_: Request, res: Response) => {
                         polygonName: 'Kovárna',
                         key: 'smithy',
                         polygonType: "smithy",
-                        cornerCoordinates: [
+                        areaOfAcceptedPresence: [
+                            {lat: 50.1910247, lng: 12.7430683},
+                            {lat: 50.1909906, lng: 12.7433956},
+                            {lat: 50.1908842, lng: 12.7433931},
+                            {lat: 50.1908892, lng: 12.7430658},
+                        ],
+                        areaPresentational: [
                             {lat: 50.1910053, lng: 12.7432583},
                             {lat: 50.1909811, lng: 12.7433953},
                             {lat: 50.1908867, lng: 12.7433739},
@@ -125,7 +149,13 @@ const getGameLocations = (_: Request, res: Response) => {
                         polygonName: 'Česko',
                         key: 'cesko',
                         polygonType: "assaultZone",
-                        cornerCoordinates: [
+                        areaOfAcceptedPresence: [
+                            {lat: 51.0842650, lng: 11.8788950},
+                            {lat: 48.6634603, lng: 11.7910044},
+                            {lat: 48.3614256, lng: 17.6686900},
+                            {lat: 51.1704517, lng: 17.7346081},
+                        ],
+                        areaPresentational: [
                             {lat: 51.0842650, lng: 11.8788950},
                             {lat: 48.6634603, lng: 11.7910044},
                             {lat: 48.3614256, lng: 17.6686900},
