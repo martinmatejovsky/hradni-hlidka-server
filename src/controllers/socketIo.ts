@@ -32,7 +32,6 @@ function initializeSocket(server: any) {
             const gameWithUpgradedPlayers = gameController.upgradeGuardian(payload.player, payload.perk, payload.perkValue);
 
             io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers)
-
         })
 
         socket.on('disconnect', () => {

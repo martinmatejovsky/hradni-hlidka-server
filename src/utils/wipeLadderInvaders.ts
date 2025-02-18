@@ -22,10 +22,10 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): 
 
                     let guardianStrength = guardian.strength;
 
-                    // Pokud má guardian perk smithyUpgrade, zvýší se jeho síla a opotřebuje se výdrž perku
-                    if (guardian.perks.smithyUpgrade > 0 && !usedSmithyPerk.get(guardian.key)) {
+                    // Pokud má guardian perk sharpSword, zvýší se jeho síla a opotřebuje se výdrž perku
+                    if (guardian.perks.sharpSword > 0 && !usedSmithyPerk.get(guardian.key)) {
                         guardianStrength += 1;
-                        guardian.perks.smithyUpgrade -= 1;
+                        guardian.perks.sharpSword -= 1;
                         usedSmithyPerk.set(guardian.key, true);
                     }
 

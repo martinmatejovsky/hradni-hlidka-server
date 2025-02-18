@@ -10,12 +10,12 @@ export type PlayerData = {
     insideZone: string,
     strength: number,
     perks: {
-        smithyUpgrade: number,
+        sharpSword: number,
     }
     socketId: string,
 }
 export enum Perks {
-    smithyUpgrade = 'smithyUpgrade'
+    sharpSword = 'sharpSword'
 }
 export type GameState = "none" | "ready" | "running" | "won" | "lost"
 type PolygonType = "assaultZone" | "smithy"
