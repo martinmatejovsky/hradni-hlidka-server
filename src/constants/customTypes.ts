@@ -64,6 +64,10 @@ export interface UtilityZone {
     areaOfAcceptedPresence: Coordinates[],
     areaPresentational: Coordinates[],
     guardians: string[],
+    boilingOil: {
+        readiness: number,
+        readyAt: number,
+    } | null,
 }
 export interface GameInstance {
     id: string,
@@ -86,6 +90,7 @@ export type Settings = {
     defendersHitStrength: number,
     smithyUpgradeWaiting: number,
     smithyUpgradeStrength: number,
+    oilBoilingTime: number,
 }
 export type Stats = {
     incrementingInvaderId: number,

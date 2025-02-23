@@ -18,6 +18,7 @@ let settings: Settings = {
     defendersHitStrength: 0,
     smithyUpgradeWaiting: 0,
     smithyUpgradeStrength: 0,
+    oilBoilingTime: 0,
 }
 let stats: Stats = {
     incrementingInvaderId: 1,
@@ -76,6 +77,10 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
                     areaPresentational: polygon.areaPresentational,
                     guardians: [],
+                    boilingOil: {
+                        readiness: 0,
+                        readyAt: req.body.settings.oilBoilingTime,
+                    }
                 })
             }
         });
