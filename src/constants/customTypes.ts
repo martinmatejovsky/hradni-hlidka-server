@@ -29,6 +29,7 @@ export interface BasePolygon {
     areaPresentational: Coordinates[],
     assemblyArea?: Coordinates[],
     assaultLadder?: AssaultLadder,
+    boilingOilPotLocation?: Coordinates,
 }
 export interface GameLocation {
     locationName: string,
@@ -69,6 +70,7 @@ export interface UtilityZone {
     boilingOil: {
         readiness: number,
         readyAt: number,
+        location?: Coordinates,
     } | null,
 }
 export interface oilPot {

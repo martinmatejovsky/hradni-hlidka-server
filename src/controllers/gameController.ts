@@ -83,7 +83,8 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     boilingOil: {
                         readiness: 0,
                         readyAt: req.body.settings.oilBoilingTime,
-                    }
+                        location: polygon.boilingOilPotLocation,
+                    },
                 })
             }
         });

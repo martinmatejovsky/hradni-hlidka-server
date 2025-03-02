@@ -135,6 +135,7 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1908867, lng: 12.7433739},
                             {lat: 50.1908961, lng: 12.7432317},
                         ],
+                        boilingOilPotLocation: {lat: 50.1909119, lng: 12.7433344},
                     },
                 ],
                 speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],

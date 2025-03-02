@@ -23,14 +23,13 @@ export const handleBoilingOil = (gameInstance: GameInstance) => {
 export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData, perkValue: number | string) => {
   if (player.perks.boilingOil) return; // cannot carry another oil if already carrying
 
-  const alreadyHalfPickedPot = gameInstance.carriedOilPots.find(oilPot => oilPot.carriedBy.length === 2);
+  const alreadyHalfPickedPot = gameInstance.carriedOilPots.find(oilPot => oilPot.carriedBy.length === 1);
   if (alreadyHalfPickedPot) {
     alreadyHalfPickedPot.carriedBy.push(player.key)
+    gameInstance.utilityZones.find(zone => zone.key === perkValue)!.boilingOil!.readiness = 0;
   } else {
     gameInstance.carriedOilPots.push({carriedBy: [player.key]});
   }
-
-  gameInstance.utilityZones.find(zone => zone.key === perkValue)!.boilingOil!.readiness = 0;
 
   player.perks.boilingOil = true;
 }
