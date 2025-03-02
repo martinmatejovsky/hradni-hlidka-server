@@ -17,4 +17,5 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     players: [],
     gameTempo: 5000,
     ladderLength: 10,
+    carriedOilPots: [],
 };
