@@ -1,12 +1,14 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData, Settings, Stats, Perks} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, Settings, Stats} from "../constants/customTypes";
+import {Perks} from "../constants/customTypes.js" // to enable enum to be defined at runtime it must be imported without "type" prefix
 import {Server} from "socket.io";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 import {LastWaveNotice} from "../constants/customTypes";
+import {pickUpBoilingOil} from "../utils/handleBoilingOil.js";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 let settings: Settings = {
     gameTempo: 0,
@@ -43,6 +45,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.players = [];
         gameInstance.gameTempo = req.body.settings.gameTempo;
         gameInstance.ladderLength = req.body.settings.ladderLength;
+        gameInstance.carriedOilPots = []
         let polygonsInGameArea = gameInstance.gameLocation.polygons
         Object.assign(settings, req.body.settings);
         stats.incrementingInvaderId = 1;
@@ -147,9 +150,15 @@ const relocatePlayer = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
-const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
+const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number | string): GameInstance => {
     const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
-    if (playerToUpdate) {
+    if (! playerToUpdate) {
+        return gameInstance;
+    }
+
+    if (perk === Perks.boilingOil) {
+        pickUpBoilingOil(gameInstance, playerToUpdate, perkValue)
+    } else {
         playerToUpdate.perks[perk] = perkValue;
     }
 
