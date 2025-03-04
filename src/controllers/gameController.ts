@@ -166,6 +166,19 @@ const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number | st
     return gameInstance;
 }
 
+const dropUnsupportedOilPot = (player: PlayerData): GameInstance => {
+    const potCarriedByPlayer = gameInstance.carriedOilPots.find(pot =>
+        pot.carriedBy.includes(player.key)
+    );
+
+    if (potCarriedByPlayer?.carriedBy.length === 1) {
+        gameInstance.carriedOilPots.splice(gameInstance.carriedOilPots.indexOf(potCarriedByPlayer), 1);
+        gameInstance.players.find(p => p.key === player.key)!.perks.boilingOil = false;
+    }
+
+    return gameInstance;
+}
+
 function clearIntervals() {
     if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
         clearInterval(gameUpdateIntervalId);
@@ -223,5 +236,6 @@ export default {
     checkGameStatus,
     relocatePlayer,
     upgradeGuardian,
+    dropUnsupportedOilPot,
     findPlayerBySocketId,
 }
