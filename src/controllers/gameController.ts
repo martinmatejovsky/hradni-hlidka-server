@@ -105,7 +105,7 @@ const getGameSettings = (req: Request, res: Response) => {
 
 const joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
 
     return gameInstance;
 }
@@ -122,7 +122,7 @@ const startGame = (req: Request, res: Response) => {
 }
 
 const removePlayer = (player: PlayerData): GameInstance => {
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
     gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
 
     if (gameInstance.players.length === 0) {
@@ -146,7 +146,7 @@ const relocatePlayer = (player: PlayerData): GameInstance => {
         playerToUpdate.insideZone = player.insideZone;
     }
 
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
 
     return gameInstance;
 }

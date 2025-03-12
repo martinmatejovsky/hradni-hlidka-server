@@ -13,6 +13,7 @@ export type PlayerData = {
         sharpSword: number,
         boilingOil: boolean,
     }
+    canPourBoilingOil: boolean,
     socketId: string,
 }
 export enum Perks {
