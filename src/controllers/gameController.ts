@@ -8,7 +8,7 @@ import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 import {LastWaveNotice} from "../constants/customTypes";
-import {pickUpBoilingOil} from "../utils/handleBoilingOil.js";
+import {pickUpBoilingOil, handleSuccesfullyBoiledOil} from "../utils/handleBoilingOil.js";
 let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
 let settings: Settings = {
     gameTempo: 0,
@@ -179,6 +179,20 @@ const dropUnsupportedOilPot = (player: PlayerData): GameInstance => {
     return gameInstance;
 }
 
+const setPouredOffOilPots = (player: PlayerData): GameInstance => {
+    let potByPlayer = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key))
+
+    if (potByPlayer) {
+        potByPlayer.pouredInZone[potByPlayer.carriedBy.indexOf(player.key)] = player.insideZone;
+
+        if (potByPlayer.pouredInZone[0] === potByPlayer.pouredInZone[1]) {
+            handleSuccesfullyBoiledOil(gameInstance, potByPlayer)
+        }
+    }
+
+    return gameInstance
+}
+
 function clearIntervals() {
     if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
         clearInterval(gameUpdateIntervalId);
@@ -238,4 +252,5 @@ export default {
     upgradeGuardian,
     dropUnsupportedOilPot,
     findPlayerBySocketId,
+    setPouredOffOilPots,
 }

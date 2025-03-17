@@ -39,6 +39,11 @@ function initializeSocket(server: any) {
             io.emit('gameUpdated', gameWithDroppedPot);
         })
 
+        socket.on('oilIsPouredOff', (payload) => {
+            const gameWithUpdatedOilPots = gameController.setPouredOffOilPots(payload.player);
+            io.emit('gameUpdated', gameWithUpdatedOilPots);
+        })
+
         socket.on('disconnect', () => {
             const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id);
             if (disconnectedPlayer) {

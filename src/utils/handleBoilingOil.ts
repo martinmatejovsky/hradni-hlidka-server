@@ -1,4 +1,4 @@
-import {GameInstance, PlayerData, UtilityZone} from "../constants/customTypes.js";
+import {GameInstance, OilPot, PlayerData, UtilityZone} from "../constants/customTypes.js";
 
 export const handleBoilingOil = (gameInstance: GameInstance) => {
   const allOilStations = gameInstance.utilityZones.filter(
@@ -28,8 +28,26 @@ export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData,
     alreadyHalfPickedPot.carriedBy.push(player.key)
     gameInstance.utilityZones.find(zone => zone.key === perkValue)!.boilingOil!.readiness = 0;
   } else {
-    gameInstance.carriedOilPots.push({carriedBy: [player.key]});
+    gameInstance.carriedOilPots.push({carriedBy: [player.key], pouredInZone: ['', '']});
   }
 
   player.perks.boilingOil = true;
 }
+
+export const handleSuccesfullyBoiledOil = (gameInstance: GameInstance, oilPot: OilPot) => {
+  let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === oilPot.pouredInZone[0]);
+  if (!affectedBattleZone) return;
+
+  affectedBattleZone.invaders = affectedBattleZone.invaders.filter(invader => {
+    return typeof invader.ladderStep !== 'number';
+  });
+
+  let carryingPlayers = gameInstance.players.filter(player => oilPot.carriedBy.includes(player.key));
+
+  carryingPlayers.forEach(player => {
+    player.perks.boilingOil = false;
+    player.canPourBoilingOil = false;
+  });
+
+  gameInstance.carriedOilPots = gameInstance.carriedOilPots.filter(pot => pot !== oilPot);
+};

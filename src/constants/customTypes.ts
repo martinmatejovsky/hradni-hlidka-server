@@ -76,6 +76,7 @@ export interface UtilityZone {
 }
 export interface OilPot {
     carriedBy: string[], // IDs of players
+    pouredInZone: string[],
 }
 export interface GameInstance {
     id: string,
