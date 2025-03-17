@@ -4,8 +4,9 @@ export type Coordinates = {
 }
 export type PlayerCoordinates = Coordinates & {accuracy: number | null}
 export type PlayerData = {
-    name: string,
     key: string,
+    name: string,
+    weaponType: WeaponType;
     location: PlayerCoordinates,
     insideZone: string,
     strength: number,
@@ -107,7 +108,14 @@ export type Stats = {
     incrementingWaveId: number,
 }
 export type LastWaveNotice = 'none' | 'incoming' | 'running'
-
+export enum WeaponType {
+    SWORD = 'sword',
+    CANON = 'canon'
+}
+export const WeaponData: Record<WeaponType, { label: string }> = {
+    [WeaponType.SWORD]: { label: 'Meč' },
+    [WeaponType.CANON]: { label: 'Dělo' }
+};
 export class Invader {
     id: number;
     type: InvaderType;
