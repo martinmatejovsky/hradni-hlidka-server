@@ -6,6 +6,7 @@ export type PlayerCoordinates = Coordinates & {accuracy: number | null}
 export type PlayerData = {
     name: string,
     key: string,
+    weaponType: WeaponType;
     location: PlayerCoordinates,
     insideZone: string,
     strength: number,
@@ -57,6 +58,7 @@ export interface BattleZone {
     guardians: string[],
     invaders: Invader[],
     assemblyArea: Coordinates[],
+    assemblyAreaCenter: Coordinates,
     assemblyCountdown: number,
     assaultLadder: AssaultLadder,
     waveCooldown: number,
@@ -106,7 +108,20 @@ export type Stats = {
     incrementingWaveId: number,
 }
 export type LastWaveNotice = 'none' | 'incoming' | 'running'
-
+export enum WeaponType {
+    SWORD = 'sword',
+    CANON = 'canon'
+}
+export const WeaponData: Record<WeaponType, { label: string }> = {
+    [WeaponType.SWORD]: { label: 'Meč' },
+    [WeaponType.CANON]: { label: 'Dělo' }
+};
+export interface WeaponAbility {
+    perkSharpSword: boolean,
+    perkBoilingOil: boolean,
+    canDefeatInvaders: boolean,
+    canBombardAssemblyArea: boolean,
+}
 export class Invader {
     id: number;
     type: InvaderType;
