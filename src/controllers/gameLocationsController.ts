@@ -38,6 +38,7 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1914903, lng: 12.7435267},
                             {lat: 50.1914972, lng: 12.7434811},
                         ],
+                        assemblyAreaCenter: {lat: 50.1914425, lng: 12.7434172},
                         assaultLadder: {
                             location: {
                                 start: {lat: 50.1913958, lng: 12.7433683},
@@ -75,6 +76,7 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1912222, lng: 12.7440550},
                             {lat: 50.1912411, lng: 12.7440683},
                         ],
+                        assemblyAreaCenter: {lat: 50.1912708, lng: 12.7439428},
                         assaultLadder: {
                             location: {
                                 start: {lat: 50.1912553, lng: 12.7439131},
@@ -112,6 +114,7 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1910736, lng: 12.7444442},
                             {lat: 50.1911028, lng: 12.7444578},
                         ],
+                        assemblyAreaCenter: {lat: 50.1910528, lng: 12.7444283},
                         assaultLadder: {
                             location: {
                                 start: {lat: 50.1910169, lng: 12.7443422},

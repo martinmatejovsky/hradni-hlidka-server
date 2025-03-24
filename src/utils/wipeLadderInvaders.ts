@@ -1,4 +1,5 @@
 import type {BattleZone, PlayerData} from "../constants/customTypes";
+import {evaluateWeaponAbility} from "./evaluateWeaponAbility.js";
 
 export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): void => {
     zones.forEach((zone: BattleZone): void => {
@@ -6,7 +7,8 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): 
         // dělit zkušenosti mezi obránce, než se budou k pořadí na úder dostávat náhodně
         let shuffledGuardians = [...zone.guardians].sort(() => Math.random() - 0.5);
         let invadersOnLadder = [...zone.invaders].filter(invader => invader.ladderStep !== null);
-        const allDefendersAreInZone = players.every(player => player.insideZone === zone.key);
+        let guardiansAvailableToFight = players.filter(player => evaluateWeaponAbility(player.weaponType))
+        const allDefendersAreInZone = guardiansAvailableToFight.every(player => player.insideZone === zone.key);
 
         if (invadersOnLadder.length > 0) {
             const usedSmithyPerk = new Map<string, boolean>(); // Temporary state to track used perks
@@ -18,7 +20,9 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): 
 
                 while (shuffledGuardians.length > 0 && invader.health > 0) {
                     let guardian = players.find(player => player.key === shuffledGuardians[0]) ;
-                    if (!guardian) return
+
+                    // if guardian has no ability to defeat invaders, skip him
+                    if (!guardian || !evaluateWeaponAbility(guardian.weaponType).canDefeatInvaders) return
 
                     let guardianStrength = guardian.strength;
 

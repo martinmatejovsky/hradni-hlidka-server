@@ -58,6 +58,7 @@ export interface BattleZone {
     guardians: string[],
     invaders: Invader[],
     assemblyArea: Coordinates[],
+    assemblyAreaCenter: Coordinates,
     assemblyCountdown: number,
     assaultLadder: AssaultLadder,
     waveCooldown: number,
@@ -116,6 +117,12 @@ export const WeaponData: Record<WeaponType, { label: string }> = {
     [WeaponType.SWORD]: { label: 'Meč' },
     [WeaponType.CANON]: { label: 'Dělo' }
 };
+export interface WeaponAbility {
+    perkSharpSword: boolean,
+    perkBoilingOil: boolean,
+    canDefeatInvaders: boolean,
+    canBombardAssemblyArea: boolean,
+}
 export class Invader {
     id: number;
     type: InvaderType;
