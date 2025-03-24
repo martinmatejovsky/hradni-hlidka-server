@@ -21,6 +21,7 @@ let settings: Settings = {
     smithyUpgradeWaiting: 0,
     smithyUpgradeStrength: 0,
     oilBoilingTime: 0,
+    canonLoadingTime: 0,
 }
 let stats: Stats = {
     incrementingInvaderId: 1,
@@ -63,6 +64,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     guardians: [],
                     invaders: [],
                     assemblyArea: polygon.assemblyArea!,
+                    assemblyAreaCenter: polygon.assemblyAreaCenter!,
                     assemblyCountdown: 0,
                     assaultLadder: {
                         location: polygon.assaultLadder!.location!,

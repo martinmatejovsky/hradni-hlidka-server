@@ -31,6 +31,7 @@ export interface BasePolygon {
     areaPresentational: Coordinates[],
     assemblyArea?: Coordinates[],
     assaultLadder?: AssaultLadder,
+    assemblyAreaCenter?: Coordinates,
     boilingOilPotLocation?: Coordinates,
 }
 export interface GameLocation {
@@ -103,6 +104,7 @@ export type Settings = {
     smithyUpgradeWaiting: number,
     smithyUpgradeStrength: number,
     oilBoilingTime: number,
+    canonLoadingTime: number,
 }
 export type Stats = {
     incrementingInvaderId: number,
