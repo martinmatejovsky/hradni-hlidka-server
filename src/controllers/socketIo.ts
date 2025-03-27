@@ -1,5 +1,6 @@
 import {Server} from "socket.io";
 import gameController from './gameController';
+import weaponsController from "./weaponsController.js";
 
 function initializeSocket(server: any) {
     const io = new Server(
@@ -40,7 +41,12 @@ function initializeSocket(server: any) {
         })
 
         socket.on('oilIsPouredOff', (payload) => {
-            const gameWithUpdatedOilPots = gameController.setPouredOffOilPots(payload.player);
+            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player);
+            io.emit('gameUpdated', gameWithUpdatedOilPots);
+        })
+
+        socket.on('fireCannon', (payload) => {
+            const gameWithUpdatedOilPots = weaponsController.fireCannon(payload.targetZoneKey);
             io.emit('gameUpdated', gameWithUpdatedOilPots);
         })
 
