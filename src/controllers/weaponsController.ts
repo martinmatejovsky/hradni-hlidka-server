@@ -22,8 +22,8 @@ const fireCannon = (targetZoneKey: string): GameInstance => {
   if (!affectedBattleZone) return gameInstance;
 
   affectedBattleZone.invaders = affectedBattleZone.invaders.filter(invader => {
-    const randomKillThisOne = Math.random() < 0.8;
-    return typeof invader.ladderStep === 'number' || randomKillThisOne;
+    const randomKillThisOne = Math.random() < 0.7;
+    return typeof invader.ladderStep === 'number' || !randomKillThisOne;
   });
 
   return gameInstance
