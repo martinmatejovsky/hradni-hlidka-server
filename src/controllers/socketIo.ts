@@ -1,6 +1,7 @@
 import {Server} from "socket.io";
 import gameController from './gameController';
 import weaponsController from "./weaponsController.js";
+import {cannonBallSpeed} from "../constants/projectConstants.js";
 
 function initializeSocket(server: any) {
     const io = new Server(
@@ -46,8 +47,12 @@ function initializeSocket(server: any) {
         })
 
         socket.on('fireCannon', (payload) => {
-            const gameWithUpdatedOilPots = weaponsController.fireCannon(payload.targetZoneKey);
-            io.emit('gameUpdated', gameWithUpdatedOilPots);
+            // set timeout, because cannonball is traveling
+            setTimeout(() => {
+                const gameWithUpdatedAfterFiring =
+                    weaponsController.fireCannon(payload.targetZoneKey);
+                    io.emit('gameUpdated', gameWithUpdatedAfterFiring);
+              }, cannonBallSpeed);
         })
 
         socket.on('disconnect', () => {
