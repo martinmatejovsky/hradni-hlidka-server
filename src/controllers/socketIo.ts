@@ -42,7 +42,7 @@ function initializeSocket(server: any) {
         })
 
         socket.on('oilIsPouredOff', (payload) => {
-            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player);
+            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player, io);
             io.emit('gameUpdated', gameWithUpdatedOilPots);
         })
 

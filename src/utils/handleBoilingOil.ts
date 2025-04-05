@@ -34,7 +34,7 @@ export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData,
   player.perks.boilingOil = true;
 }
 
-export const handleSuccesfullyBoiledOil = (gameInstance: GameInstance, oilPot: OilPot) => {
+export const handleSuccessfullyBoiledOil = (gameInstance: GameInstance, oilPot: OilPot) => {
   let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === oilPot.pouredInZone[0]);
   if (!affectedBattleZone) return;
 
