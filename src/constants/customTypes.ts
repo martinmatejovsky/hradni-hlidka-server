@@ -112,12 +112,14 @@ export type Stats = {
 }
 export type LastWaveNotice = 'none' | 'incoming' | 'running'
 export enum WeaponType {
+    NONE = 'none',
     SWORD = 'sword',
-    cannon = 'cannon'
+    CANNON = 'cannon'
 }
 export const WeaponData: Record<WeaponType, { label: string }> = {
+    [WeaponType.NONE]: { label: 'Žádná'},
     [WeaponType.SWORD]: { label: 'Meč' },
-    [WeaponType.cannon]: { label: 'Dělo' }
+    [WeaponType.CANNON]: { label: 'Dělo' }
 };
 export interface WeaponAbility {
     perkSharpSword: boolean,
