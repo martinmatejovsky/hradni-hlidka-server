@@ -9,17 +9,17 @@ const setPouredOffOilPots = (player: PlayerData, io: Server): GameInstance => {
   if (potByPlayer) {
     potByPlayer.pouredInZone[potByPlayer.carriedBy.indexOf(player.key)] = player.insideZone;
 
-    // if (potByPlayer.pouredInZone[0] === potByPlayer.pouredInZone[1]) {
+    if (potByPlayer.pouredInZone[0] === potByPlayer.pouredInZone[1]) {
       io.emit('oilIsPoured', potByPlayer.pouredInZone[0])
       handleSuccessfullyBoiledOil(gameInstance, potByPlayer)
-    // }
+    }
   }
 
   return gameInstance
 }
 
 const fireCannon = (targetZoneKey: string): GameInstance => {
-  // kill just some of the invaders, not all
+  // kill just some invaders, not all
   let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === targetZoneKey);
   if (!affectedBattleZone) return gameInstance;
 

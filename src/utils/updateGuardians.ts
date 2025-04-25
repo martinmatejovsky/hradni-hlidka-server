@@ -34,22 +34,21 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
 
     // aktualizuj, kdo může/nemůže použít perk boilingOil
     gameInstance.players.forEach((player) => {
-        player.canPourBoilingOil = true;
-        // player.canPourBoilingOil = false;
-        //
-        // if (player.perks.boilingOil && player.insideZone) {
-        //     // find carriedOilPots where this player is, and if there is also another player, check if the other player is in the same zone
-        //     const carriedPot = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key));
-        //     if (carriedPot) {
-        //         const otherPlayerKey = carriedPot.carriedBy.find(key => key !== player.key);
-        //         if (otherPlayerKey) {
-        //             const otherPlayer = gameInstance.players.find(p => p.key === otherPlayerKey);
-        //             if (otherPlayer && otherPlayer.insideZone === player.insideZone) {
-        //                 player.canPourBoilingOil = true;
-        //                 otherPlayer.canPourBoilingOil = true;
-        //             }
-        //         }
-        //     }
-        // }
+        player.canPourBoilingOil = false;
+
+        if (player.perks.boilingOil && player.insideZone) {
+            // find carriedOilPots where this player is, and if there is also another player, check if the other player is in the same zone
+            const carriedPot = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key));
+            if (carriedPot) {
+                const otherPlayerKey = carriedPot.carriedBy.find(key => key !== player.key);
+                if (otherPlayerKey) {
+                    const otherPlayer = gameInstance.players.find(p => p.key === otherPlayerKey);
+                    if (otherPlayer && otherPlayer.insideZone === player.insideZone) {
+                        player.canPourBoilingOil = true;
+                        otherPlayer.canPourBoilingOil = true;
+                    }
+                }
+            }
+        }
     });
 }
