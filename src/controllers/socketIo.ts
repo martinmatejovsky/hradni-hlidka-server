@@ -47,6 +47,9 @@ function initializeSocket(server: any) {
         })
 
         socket.on('fireCannon', (payload) => {
+            // emit event to all players, that cannonball is fired, so each player can show the cannonball flight animation
+            io.emit('cannonIsFired', payload.targetZoneKey, payload.firedBy);
+
             // set timeout, because cannonball is traveling
             setTimeout(() => {
                 const gameWithUpdatedAfterFiring =
