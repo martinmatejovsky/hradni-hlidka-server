@@ -37,16 +37,26 @@ export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData,
 export const handleSuccessfullyBoiledOil = (gameInstance: GameInstance, oilPot: OilPot) => {
   let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === oilPot.pouredInZone[0]);
   if (!affectedBattleZone) return;
+  let killedAmount = 0;
 
   affectedBattleZone.invaders = affectedBattleZone.invaders.filter(invader => {
-    return typeof invader.ladderStep !== 'number';
+    if (typeof invader.ladderStep === 'number') {
+      killedAmount += 1;
+      return false;
+    } else return true;
   });
 
   let carryingPlayers = gameInstance.players.filter(player => oilPot.carriedBy.includes(player.key));
 
-  carryingPlayers.forEach(player => {
+  // distribute kills to two players
+  const baseKill = Math.floor(killedAmount / 2);
+  const hasExtraKill = killedAmount % 2 === 1;
+  const randomIndex = hasExtraKill ? Math.floor(Math.random() * 2) : -1;
+
+  carryingPlayers.forEach((player, index) => {
     player.perks.boilingOil = false;
     player.canPourBoilingOil = false;
+    player.killScore += baseKill + (index === randomIndex ? 1 : 0);
   });
 
   gameInstance.carriedOilPots = gameInstance.carriedOilPots.filter(pot => pot !== oilPot);

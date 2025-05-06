@@ -53,7 +53,7 @@ function initializeSocket(server: any) {
             // set timeout, because cannonball is traveling
             setTimeout(() => {
                 const gameWithUpdatedAfterFiring =
-                    weaponsController.fireCannon(payload.targetZoneKey);
+                    weaponsController.fireCannon(payload.targetZoneKey, payload.firedBy);
                     io.emit('gameUpdated', gameWithUpdatedAfterFiring);
               }, cannonBallSpeed);
         })

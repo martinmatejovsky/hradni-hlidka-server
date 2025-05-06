@@ -38,7 +38,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Missing properties in request body' });
         }
 
-        // create new object based on data from chosen Game Area and Hosting Player
+        // create a new object based on data from chosen Game Area and Hosting Player
         gameInstance.id = Date.now().toString();
         gameInstance.gameState = 'ready';
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);

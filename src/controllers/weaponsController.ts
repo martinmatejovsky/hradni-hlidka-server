@@ -18,15 +18,27 @@ const setPouredOffOilPots = (player: PlayerData, io: Server): GameInstance => {
   return gameInstance
 }
 
-const fireCannon = (targetZoneKey: string): GameInstance => {
+const fireCannon = (targetZoneKey: string, firedBy: string): GameInstance => {
   // kill just some invaders, not all
   let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === targetZoneKey);
   if (!affectedBattleZone) return gameInstance;
+  let killedAmount = 0;
 
   affectedBattleZone.invaders = affectedBattleZone.invaders.filter(invader => {
+    if (typeof invader.ladderStep === 'number') return true;
+
     const randomKillThisOne = Math.random() < 0.7;
-    return typeof invader.ladderStep === 'number' || !randomKillThisOne;
+    if (randomKillThisOne) {
+      killedAmount += 1;
+      return false
+    } else {
+      return true;
+    }
   });
+  const firingPlayer = gameInstance.players.find(player => player.key === firedBy);
+  if (firingPlayer) {
+    firingPlayer.killScore += killedAmount
+  }
 
   return gameInstance
 }

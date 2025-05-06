@@ -4,7 +4,7 @@ import {evaluateWeaponAbility} from "./evaluateWeaponAbility.js";
 export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): void => {
     zones.forEach((zone: BattleZone): void => {
         // Zamíchej obránce, protože chci umožnit obráncům sbírat statistiky zabitých a nevím, jak jinak spravedlivě
-        // dělit zkušenosti mezi obránce, než se budou k pořadí na úder dostávat náhodně
+        // dělit zkušenosti mezi obránce, než že se budou k pořadí na úder dostávat náhodně
         let shuffledGuardians = [...zone.guardians].sort(() => Math.random() - 0.5);
         let invadersOnLadder = [...zone.invaders].filter(invader => invader.ladderStep !== null);
         let guardiansAvailableToFight = players.filter(player => evaluateWeaponAbility(player.weaponType))
@@ -37,6 +37,7 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): 
                     if (guardianStrength >= invader.health) {
                         guardianStrength -= invader.health;
                         invader.health = 0;
+                        guardian.killScore += 1;
 
                         const ladderInvaderIndex = zone.invaders.indexOf(invader);
                         zone.invaders.splice(ladderInvaderIndex, 1);

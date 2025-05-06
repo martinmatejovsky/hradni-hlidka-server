@@ -16,6 +16,7 @@ export type PlayerData = {
     }
     canPourBoilingOil: boolean,
     socketId: string,
+    killScore: number,
 }
 export enum Perks {
     sharpSword = 'sharpSword',
