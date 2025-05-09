@@ -1,10 +1,10 @@
-import type {GameInstance, PlayerData} from "../constants/customTypes.js";
+import type {GameInstance, OilPot, PlayerData} from "../constants/customTypes.js";
 import {handleSuccessfullyBoiledOil} from "../utils/handleBoilingOil.js";
 import {gameInstance} from "./gameController.js";
 import {Server} from "socket.io";
 
 const setPouredOffOilPots = (player: PlayerData, io: Server): GameInstance => {
-  let potByPlayer = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key))
+  let potByPlayer: OilPot | undefined = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key))
 
   if (potByPlayer) {
     potByPlayer.pouredInZone[potByPlayer.carriedBy.indexOf(player.key)] = player.insideZone;
