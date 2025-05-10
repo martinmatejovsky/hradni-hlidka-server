@@ -143,12 +143,6 @@ const checkGameStatus = async (req: Request, res: Response) => {
 }
 
 const relocatePlayer = (player: PlayerData): GameInstance => {
-    const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
-    if (playerToUpdate) {
-        playerToUpdate.location = player.location;
-        playerToUpdate.insideZone = player.insideZone;
-    }
-
     updateGuardians(player, gameInstance);
 
     return gameInstance;
