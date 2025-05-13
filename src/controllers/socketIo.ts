@@ -5,7 +5,7 @@ import {cannonBallSpeed} from "../constants/projectConstants.js";
 
 function initializeSocket(server: any) {
     const io = new Server(
-        server, { cors: { origin: "http://localhost:3000" } });
+        server, { cors: { origin: process.env.CORS_ORIGIN || 'http://localhost:3000' } });
 
     io.on('connection', (socket) => {
         socket.on('joinGame', (payload) => {
