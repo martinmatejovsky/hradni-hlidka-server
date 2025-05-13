@@ -1,6 +1,6 @@
 import type {GameInstance} from "./customTypes";
 
-export const GAME_UPDATE_INTERVAL: number = 2000
+export const GAME_UPDATE_INTERVAL: number = 5000
 export const EMPTY_GAME_INSTANCE: GameInstance = {
     id: '',
     gameState: 'none',
@@ -17,4 +17,6 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     players: [],
     gameTempo: 5000,
     ladderLength: 10,
+    carriedOilPots: [],
 };
+export const cannonBallSpeed: number = 2000;

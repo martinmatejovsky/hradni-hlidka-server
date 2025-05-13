@@ -1,5 +1,7 @@
 import {Server} from "socket.io";
 import gameController from './gameController';
+import weaponsController from "./weaponsController.js";
+import {cannonBallSpeed} from "../constants/projectConstants.js";
 
 function initializeSocket(server: any) {
     const io = new Server(
@@ -32,7 +34,28 @@ function initializeSocket(server: any) {
             const gameWithUpgradedPlayers = gameController.upgradeGuardian(payload.player, payload.perk, payload.perkValue);
 
             io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers)
+        })
 
+        socket.on('dropUnsupportedOilPot', (payload) => {
+            const gameWithDroppedPot = gameController.dropUnsupportedOilPot(payload.player);
+            io.emit('gameUpdated', gameWithDroppedPot);
+        })
+
+        socket.on('oilIsPouredOff', (payload) => {
+            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player, io);
+            io.emit('gameUpdated', gameWithUpdatedOilPots);
+        })
+
+        socket.on('fireCannon', (payload) => {
+            // emit event to all players, that cannonball is fired, so each player can show the cannonball flight animation
+            io.emit('cannonIsFired', payload.targetZoneKey, payload.firedBy);
+
+            // set timeout, because cannonball is traveling
+            setTimeout(() => {
+                const gameWithUpdatedAfterFiring =
+                    weaponsController.fireCannon(payload.targetZoneKey, payload.firedBy);
+                    io.emit('gameUpdated', gameWithUpdatedAfterFiring);
+              }, cannonBallSpeed);
         })
 
         socket.on('disconnect', () => {

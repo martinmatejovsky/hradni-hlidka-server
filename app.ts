@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 import * as http from "node:http";
-const server = http.createServer(app); // Create an HTTP server using Express
+const server = http.createServer(app);
 import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';
@@ -17,8 +17,8 @@ const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
-        origin: 'http://localhost:3000',
-    }
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+}
 ));
 app.use(express.json());
 initializeSocket(server);

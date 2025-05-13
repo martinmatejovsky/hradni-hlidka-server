@@ -1,13 +1,16 @@
 import {updateGuardians} from "../utils/updateGuardians";
 
 import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData, Settings, Stats, Perks} from "../constants/customTypes";
+import type {GameInstance, GameState, PlayerData, Settings, Stats} from "../constants/customTypes";
+import {Perks} from "../constants/customTypes.js" // to enable enum to be defined at runtime it must be imported without "type" prefix
 import {Server} from "socket.io";
 import {calculateLadderSteps} from "../utils/calculateLadderSteps";
 import {runAttack} from "../utils/runAttack";
 import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
 import {LastWaveNotice} from "../constants/customTypes";
-let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+import {pickUpBoilingOil} from "../utils/handleBoilingOil.js";
+export let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+
 let settings: Settings = {
     gameTempo: 0,
     gameLength: 0,
@@ -18,6 +21,8 @@ let settings: Settings = {
     defendersHitStrength: 0,
     smithyUpgradeWaiting: 0,
     smithyUpgradeStrength: 0,
+    oilBoilingTime: 0,
+    cannonLoadingTime: 0,
 }
 let stats: Stats = {
     incrementingInvaderId: 1,
@@ -33,14 +38,16 @@ const createNewGameInstance = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Missing properties in request body' });
         }
 
-        // create new object based on data from chosen Game Area and Hosting Player
+        // create a new object based on data from chosen Game Area and Hosting Player
         gameInstance.id = Date.now().toString();
         gameInstance.gameState = 'ready';
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
+        gameInstance.utilityZones = [];
         gameInstance.players = [];
         gameInstance.gameTempo = req.body.settings.gameTempo;
         gameInstance.ladderLength = req.body.settings.ladderLength;
+        gameInstance.carriedOilPots = []
         let polygonsInGameArea = gameInstance.gameLocation.polygons
         Object.assign(settings, req.body.settings);
         stats.incrementingInvaderId = 1;
@@ -52,11 +59,13 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     zoneName: polygon.polygonName,
                     key: polygon.key,
                     polygonType: polygon.polygonType,
-                    cornerCoordinates: polygon.cornerCoordinates,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
                     conquered: false,
                     guardians: [],
                     invaders: [],
                     assemblyArea: polygon.assemblyArea!,
+                    assemblyAreaCenter: polygon.assemblyAreaCenter!,
                     assemblyCountdown: 0,
                     assaultLadder: {
                         location: polygon.assaultLadder!.location!,
@@ -71,8 +80,14 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                     zoneName: polygon.polygonName,
                     key: polygon.key,
                     polygonType: polygon.polygonType,
-                    cornerCoordinates: polygon.cornerCoordinates,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
                     guardians: [],
+                    boilingOil: {
+                        readiness: 0,
+                        readyAt: req.body.settings.oilBoilingTime,
+                        location: polygon.boilingOilPotLocation,
+                    },
                 })
             }
         });
@@ -93,7 +108,7 @@ const getGameSettings = (req: Request, res: Response) => {
 
 const joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
 
     return gameInstance;
 }
@@ -110,7 +125,7 @@ const startGame = (req: Request, res: Response) => {
 }
 
 const removePlayer = (player: PlayerData): GameInstance => {
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
     gameInstance.players = gameInstance.players.filter((item) => item.key !== player.key);
 
     if (gameInstance.players.length === 0) {
@@ -128,21 +143,34 @@ const checkGameStatus = async (req: Request, res: Response) => {
 }
 
 const relocatePlayer = (player: PlayerData): GameInstance => {
-    const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
-    if (playerToUpdate) {
-        playerToUpdate.location = player.location;
-        playerToUpdate.insideZone = player.insideZone;
-    }
-
-    updateGuardians(player, gameInstance.battleZones);
+    updateGuardians(player, gameInstance);
 
     return gameInstance;
 }
 
-const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number): GameInstance => {
+const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number | string): GameInstance => {
     const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
-    if (playerToUpdate) {
+    if (! playerToUpdate) {
+        return gameInstance;
+    }
+
+    if (perk === Perks.boilingOil) {
+        pickUpBoilingOil(gameInstance, playerToUpdate, perkValue)
+    } else {
         playerToUpdate.perks[perk] = perkValue;
+    }
+
+    return gameInstance;
+}
+
+const dropUnsupportedOilPot = (player: PlayerData): GameInstance => {
+    const potCarriedByPlayer = gameInstance.carriedOilPots.find(pot =>
+        pot.carriedBy.includes(player.key)
+    );
+
+    if (potCarriedByPlayer?.carriedBy.length === 1) {
+        gameInstance.carriedOilPots.splice(gameInstance.carriedOilPots.indexOf(potCarriedByPlayer), 1);
+        gameInstance.players.find(p => p.key === player.key)!.perks.boilingOil = false;
     }
 
     return gameInstance;
@@ -196,6 +224,7 @@ const findPlayerBySocketId = (socketId: string): PlayerData | undefined => {
 }
 
 export default {
+    gameInstance,
     createNewGameInstance,
     getGameInstance,
     getGameSettings,
@@ -205,5 +234,6 @@ export default {
     checkGameStatus,
     relocatePlayer,
     upgradeGuardian,
+    dropUnsupportedOilPot,
     findPlayerBySocketId,
 }

@@ -4,18 +4,23 @@ export type Coordinates = {
 }
 export type PlayerCoordinates = Coordinates & {accuracy: number | null}
 export type PlayerData = {
-    name: string,
     key: string,
+    name: string,
+    weaponType: WeaponType;
     location: PlayerCoordinates,
     insideZone: string,
     strength: number,
     perks: {
-        smithyUpgrade: number,
+        sharpSword: number,
+        boilingOil: boolean,
     }
+    canPourBoilingOil: boolean,
     socketId: string,
+    killScore: number,
 }
 export enum Perks {
-    smithyUpgrade = 'smithyUpgrade'
+    sharpSword = 'sharpSword',
+    boilingOil = 'boilingOil'
 }
 export type GameState = "none" | "ready" | "running" | "won" | "lost"
 type PolygonType = "assaultZone" | "smithy"
@@ -23,9 +28,12 @@ export interface BasePolygon {
     polygonName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     assemblyArea?: Coordinates[],
     assaultLadder?: AssaultLadder,
+    assemblyAreaCenter?: Coordinates,
+    boilingOilPotLocation?: Coordinates,
 }
 export interface GameLocation {
     locationName: string,
@@ -46,11 +54,13 @@ export interface BattleZone {
     zoneName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     conquered: boolean,
     guardians: string[],
     invaders: Invader[],
     assemblyArea: Coordinates[],
+    assemblyAreaCenter: Coordinates,
     assemblyCountdown: number,
     assaultLadder: AssaultLadder,
     waveCooldown: number,
@@ -59,8 +69,18 @@ export interface UtilityZone {
     zoneName: string,
     key: string,
     polygonType: PolygonType,
-    cornerCoordinates: Coordinates[],
+    areaOfAcceptedPresence: Coordinates[],
+    areaPresentational: Coordinates[],
     guardians: string[],
+    boilingOil: {
+        readiness: number,
+        readyAt: number,
+        location?: Coordinates,
+    } | null,
+}
+export interface OilPot {
+    carriedBy: string[], // IDs of players
+    pouredInZone: string[],
 }
 export interface GameInstance {
     id: string,
@@ -71,6 +91,7 @@ export interface GameInstance {
     players: PlayerData[],
     gameTempo: number,
     ladderLength: number,
+    carriedOilPots: OilPot[],
 }
 export type InvaderType = "regular" | "captain"
 export type Settings = {
@@ -83,13 +104,30 @@ export type Settings = {
     defendersHitStrength: number,
     smithyUpgradeWaiting: number,
     smithyUpgradeStrength: number,
+    oilBoilingTime: number,
+    cannonLoadingTime: number,
 }
 export type Stats = {
     incrementingInvaderId: number,
     incrementingWaveId: number,
 }
 export type LastWaveNotice = 'none' | 'incoming' | 'running'
-
+export enum WeaponType {
+    NONE = 'none',
+    SWORD = 'sword',
+    CANNON = 'cannon'
+}
+export const WeaponData: Record<WeaponType, { label: string }> = {
+    [WeaponType.NONE]: { label: 'Žádná'},
+    [WeaponType.SWORD]: { label: 'Meč' },
+    [WeaponType.CANNON]: { label: 'Dělo' }
+};
+export interface WeaponAbility {
+    perkSharpSword: boolean,
+    perkBoilingOil: boolean,
+    canDefeatInvaders: boolean,
+    canBombardAssemblyArea: boolean,
+}
 export class Invader {
     id: number;
     type: InvaderType;
