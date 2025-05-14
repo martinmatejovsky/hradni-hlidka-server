@@ -5,7 +5,7 @@ const server = http.createServer(app);
 import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';
-const port = 8080;
+const port = process.env.PORT || 8080;
 import gameLocationsRouter from './src/routes/game-locations.js';
 import gameRouter from './src/routes/game.js';
 const frontendPath = process.env.FRONTEND_PATH || "../hradni-hlidka/dist";
@@ -29,6 +29,6 @@ app.use('/api/game', (req: Request, res: Response, next: NextFunction) => {
 });
 app.use(express.static(path.join(__dirname, frontendPath)));
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
     console.log("Server listening on the port", port, "...");
 });
