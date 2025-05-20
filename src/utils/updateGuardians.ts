@@ -32,6 +32,14 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
         });
     }
 
+    // aktualizovat dalsi parametry hráče
+    gameInstance.players.forEach((player) => {
+        if (player.key === currentPlayer.key) {
+            player.location = currentPlayer.location;
+            player.perks = currentPlayer.perks;
+        }
+    });
+
     // aktualizuj, kdo může/nemůže použít perk boilingOil
     gameInstance.players.forEach((player) => {
         player.canPourBoilingOil = false;
