@@ -37,6 +37,7 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
         if (player.key === currentPlayer.key) {
             player.location = currentPlayer.location;
             player.perks = currentPlayer.perks;
+            player.insideZone = currentPlayer.insideZone;
         }
     });
 
