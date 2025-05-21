@@ -156,7 +156,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.1868636, lng: 12.7560411},
                             {lat: 50.1869100, lng: 12.7562236},
-                            {lat: 50.1868000, lng: 12.7563094},
+                            {lat: 50.1867811, lng: 12.7562961},
                             {lat: 50.1867639, lng: 12.7561083},
                         ],
                         areaPresentational: [
@@ -206,7 +206,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.186689, lng: 12.756111},
                             {lat: 50.186723, lng: 12.756321},
-                            {lat: 50.186618, lng: 12.756385},
+                            {lat: 50.1866061, lng: 12.7563661},
                             {lat: 50.186580, lng: 12.756160}
                         ],
                         areaPresentational: [
@@ -306,8 +306,8 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.186149, lng: 12.756152},
                             {lat: 50.186137, lng: 12.756382},
-                            {lat: 50.186032, lng: 12.756371},
-                            {lat: 50.186048, lng: 12.756109}
+                            {lat: 50.1860147, lng: 12.7563442},
+                            {lat: 50.1860325, lng: 12.7561064}
                         ],
                         areaPresentational: [
                             {lat: 50.186129, lng: 12.756224},
