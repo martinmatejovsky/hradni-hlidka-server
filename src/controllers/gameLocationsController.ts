@@ -323,7 +323,7 @@ const getGameLocations = (_: Request, res: Response) => {
                     },
                 ],
                 speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
-                ladderLengthChoices: [10, 20, 30],
+                ladderLengthChoices: [20, 30, 40],
             },
         ]
     );
