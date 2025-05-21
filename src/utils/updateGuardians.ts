@@ -32,11 +32,22 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
         });
     }
 
+    // aktualizovat dalsi parametry hráče
+    gameInstance.players.forEach((player) => {
+        if (player.key === currentPlayer.key) {
+            player.location = currentPlayer.location;
+            player.perks = currentPlayer.perks;
+            player.insideZone = currentPlayer.insideZone;
+        }
+    });
+
     // aktualizuj, kdo může/nemůže použít perk boilingOil
     gameInstance.players.forEach((player) => {
         player.canPourBoilingOil = false;
 
-        if (player.perks.boilingOil && player.insideZone) {
+        const playerIsInBattleZone = gameInstance.battleZones.some(zone => zone.key === player.insideZone);
+
+        if (player.perks.boilingOil && playerIsInBattleZone ) {
             // find carriedOilPots where this player is, and if there is also another player, check if the other player is in the same zone
             const carriedPot = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key));
             if (carriedPot) {

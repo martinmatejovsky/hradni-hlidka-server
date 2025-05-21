@@ -35,7 +35,7 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
             for (let i = 0; i < randomInvadersAmount; i++) {
                 let newInvader: Invader;
 
-                if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / (randomInvadersAmount * 2)) {
+                if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / (randomInvadersAmount * 3)) {
                     newInvader = Invader.createCaptainInvader(stats.incrementingInvaderId, i, amountOfPlayers);
                 } else {
                     newInvader = Invader.createNormalInvader(stats.incrementingInvaderId, i, amountOfPlayers);

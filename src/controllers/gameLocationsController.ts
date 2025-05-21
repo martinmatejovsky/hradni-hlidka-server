@@ -156,7 +156,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.1868636, lng: 12.7560411},
                             {lat: 50.1869100, lng: 12.7562236},
-                            {lat: 50.1868000, lng: 12.7563094},
+                            {lat: 50.1867811, lng: 12.7562961},
                             {lat: 50.1867639, lng: 12.7561083},
                         ],
                         areaPresentational: [
@@ -166,6 +166,18 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1867828, lng: 12.7561725},
                         ],
                         assemblyArea: [
+                            {lat: 50.186888, lng: 12.756618},
+                            {lat: 50.186869, lng: 12.756631},
+                            {lat: 50.186881, lng: 12.756669},
+                            {lat: 50.186915, lng: 12.756642},
+                            {lat: 50.186948, lng: 12.756653},
+                            {lat: 50.186942, lng: 12.756693},
+                            {lat: 50.186913, lng: 12.756680},
+                            {lat: 50.186880, lng: 12.756717},
+                            {lat: 50.186919, lng: 12.756725},
+                            {lat: 50.186909, lng: 12.756744},
+                            {lat: 50.186889, lng: 12.756755},
+                            {lat: 50.186867, lng: 12.756723},
                             {lat: 50.186888, lng: 12.756618},
                             {lat: 50.186869, lng: 12.756631},
                             {lat: 50.186881, lng: 12.756669},
@@ -194,7 +206,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.186689, lng: 12.756111},
                             {lat: 50.186723, lng: 12.756321},
-                            {lat: 50.186618, lng: 12.756385},
+                            {lat: 50.1866061, lng: 12.7563661},
                             {lat: 50.186580, lng: 12.756160}
                         ],
                         areaPresentational: [
@@ -204,6 +216,18 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186602, lng: 12.756240}
                         ],
                         assemblyArea: [
+                            {lat: 50.186742, lng: 12.756728},
+                            {lat: 50.186733, lng: 12.756760},
+                            {lat: 50.186712, lng: 12.756739},
+                            {lat: 50.186683, lng: 12.756739},
+                            {lat: 50.186696, lng: 12.756787},
+                            {lat: 50.186751, lng: 12.756782},
+                            {lat: 50.186770, lng: 12.756814},
+                            {lat: 50.186765, lng: 12.756843},
+                            {lat: 50.186737, lng: 12.756817},
+                            {lat: 50.186700, lng: 12.756825},
+                            {lat: 50.186729, lng: 12.756849},
+                            {lat: 50.186757, lng: 12.756873},
                             {lat: 50.186742, lng: 12.756728},
                             {lat: 50.186733, lng: 12.756760},
                             {lat: 50.186712, lng: 12.756739},
@@ -254,6 +278,18 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186311, lng: 12.756851},
                             {lat: 50.186280, lng: 12.756859},
                             {lat: 50.186252, lng: 12.756841},
+                            {lat: 50.186300, lng: 12.756766},
+                            {lat: 50.186307, lng: 12.756787},
+                            {lat: 50.186288, lng: 12.756774},
+                            {lat: 50.186266, lng: 12.756744},
+                            {lat: 50.186263, lng: 12.756779},
+                            {lat: 50.186287, lng: 12.756790},
+                            {lat: 50.186271, lng: 12.756817},
+                            {lat: 50.186307, lng: 12.756808},
+                            {lat: 50.186328, lng: 12.756830},
+                            {lat: 50.186311, lng: 12.756851},
+                            {lat: 50.186280, lng: 12.756859},
+                            {lat: 50.186252, lng: 12.756841},
                         ],
                         assemblyAreaCenter: {lat: 50.186299, lng: 12.7567947},
                         assaultLadder: {
@@ -270,8 +306,8 @@ const getGameLocations = (_: Request, res: Response) => {
                         areaOfAcceptedPresence: [
                             {lat: 50.186149, lng: 12.756152},
                             {lat: 50.186137, lng: 12.756382},
-                            {lat: 50.186032, lng: 12.756371},
-                            {lat: 50.186048, lng: 12.756109}
+                            {lat: 50.1860147, lng: 12.7563442},
+                            {lat: 50.1860325, lng: 12.7561064}
                         ],
                         areaPresentational: [
                             {lat: 50.186129, lng: 12.756224},
@@ -280,6 +316,18 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186053, lng: 12.756197}
                         ],
                         assemblyArea: [
+                            {lat: 50.1860012, lng: 12.756723},
+                            {lat: 50.1860322, lng: 12.756709},
+                            {lat: 50.1860132, lng: 12.756747},
+                            {lat: 50.1860002, lng: 12.756749},
+                            {lat: 50.1859912, lng: 12.756712},
+                            {lat: 50.1859742, lng: 12.756715},
+                            {lat: 50.1859912, lng: 12.756760},
+                            {lat: 50.1859712, lng: 12.756779},
+                            {lat: 50.1859792, lng: 12.756803},
+                            {lat: 50.1860032, lng: 12.756782},
+                            {lat: 50.1860282, lng: 12.756776},
+                            {lat: 50.1860382, lng: 12.756827},
                             {lat: 50.1860012, lng: 12.756723},
                             {lat: 50.1860322, lng: 12.756709},
                             {lat: 50.1860132, lng: 12.756747},
@@ -323,7 +371,7 @@ const getGameLocations = (_: Request, res: Response) => {
                     },
                 ],
                 speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
-                ladderLengthChoices: [10, 20, 30],
+                ladderLengthChoices: [20, 30, 40],
             },
         ]
     );
