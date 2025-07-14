@@ -15,8 +15,8 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     battleZones: [],
     utilityZones: [],
     players: [],
-    gameTempo: 5000,
-    ladderLength: 10,
+    gameTempo: 10000,
+    ladderLength: 30,
     carriedOilPots: [],
 };
 export const cannonBallSpeed: number = 2000;

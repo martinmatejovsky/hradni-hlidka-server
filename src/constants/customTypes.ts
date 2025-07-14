@@ -11,6 +11,7 @@ export type PlayerData = {
     insideZone: string,
     strength: number,
     perks: {
+        woodenSword: boolean,
         sharpSword: number,
         boilingOil: boolean,
     }
@@ -19,6 +20,7 @@ export type PlayerData = {
     killScore: number,
 }
 export enum Perks {
+    woodenSword = 'woodenSword',
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil'
 }
@@ -104,6 +106,7 @@ export type Settings = {
     defendersHitStrength: number,
     smithyUpgradeWaiting: number,
     smithyUpgradeStrength: number,
+    perkSharpSwordBonus: number,
     oilBoilingTime: number,
     cannonLoadingTime: number,
 }

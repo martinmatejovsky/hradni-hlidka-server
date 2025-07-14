@@ -19,15 +19,15 @@ const setPouredOffOilPots = (player: PlayerData, io: Server): GameInstance => {
 }
 
 const fireCannon = (targetZoneKey: string, firedBy: string): GameInstance => {
-  // kill just some invaders, not all
+  // kill just some invaders. Captain is immune to cannon fire
   let affectedBattleZone = gameInstance.battleZones.find(zone => zone.key === targetZoneKey);
   if (!affectedBattleZone) return gameInstance;
   let killedAmount = 0;
 
   affectedBattleZone.invaders = affectedBattleZone.invaders.filter(invader => {
-    if (typeof invader.ladderStep === 'number') return true;
+    if (typeof invader.ladderStep === 'number' || invader.type === 'captain') return true;
 
-    const randomKillThisOne = Math.random() < 0.7;
+    const randomKillThisOne = Math.random() < 0.5;
     if (randomKillThisOne) {
       killedAmount += 1;
       return false

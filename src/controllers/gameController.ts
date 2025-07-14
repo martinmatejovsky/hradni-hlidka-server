@@ -21,6 +21,7 @@ let settings: Settings = {
     defendersHitStrength: 0,
     smithyUpgradeWaiting: 0,
     smithyUpgradeStrength: 0,
+    perkSharpSwordBonus: 0,
     oilBoilingTime: 0,
     cannonLoadingTime: 0,
 }

@@ -14,7 +14,7 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
     battleZones.forEach(zone => {
         // create waiting invaders if assemblyArea is empty.
         // Mind that max number of invaders must not exceed available assembly areas in polygons[].assemblyArea. The amount
-        // of invaders can exceed initial max number assaultWaveVolume, because waves get stronger with each incrementingWaveId.
+        // of invaders could potentially exceed initial max number assaultWaveVolume, because waves get stronger with each incrementingWaveId.
         if (zone.invaders.every(invader => invader.assemblyArea === null)) {
             // in case of last wave, just reset cooldown and send invaders immediately
             if (stats.incrementingWaveId >= settings.gameLength) {
