@@ -11,7 +11,7 @@ export type PlayerData = {
     insideZone: string,
     strength: number,
     perks: {
-        woodenSword: boolean,
+        woodenWeapon: boolean,
         sharpSword: number,
         boilingOil: boolean,
     }
@@ -116,15 +116,11 @@ export type Stats = {
 }
 export type LastWaveNotice = 'none' | 'incoming' | 'running'
 export enum WeaponType {
-    NONE = 'none',
     SWORD = 'sword',
-    CANNON = 'cannon'
+    CANNON = 'cannon',
+    AXE = 'axe',
+    SPEAR = 'spear',
 }
-export const WeaponData: Record<WeaponType, { label: string }> = {
-    [WeaponType.NONE]: { label: 'Žádná'},
-    [WeaponType.SWORD]: { label: 'Meč' },
-    [WeaponType.CANNON]: { label: 'Dělo' }
-};
 export interface WeaponAbility {
     perkSharpSword: boolean,
     perkBoilingOil: boolean,
