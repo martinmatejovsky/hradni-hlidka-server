@@ -17,6 +17,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "cors": "^2.8.5",
     "express": "^4.21.0",
+    "prettier": "^3.6.2",
     "serverless-http": "^3.2.0",
     "socket.io": "^4.7.4",
     "vite-plugin-vuetify": "^2.0.3"
