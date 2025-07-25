@@ -1,4 +1,4 @@
-import type { BattleZone, GameInstance, Settings, Stats } from '../constants/customTypes';
+import { BattleZone, GameInstance, Settings, Stats } from '../constants/customTypes';
 
 import { Invader } from '../constants/customTypes';
 
@@ -33,10 +33,18 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
             for (let i = 0; i < randomInvadersAmount; i++) {
                 let newInvader: Invader;
 
-                if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / (randomInvadersAmount * 3)) {
-                    newInvader = Invader.createCaptainInvader(stats.incrementingInvaderId, i, amountOfPlayers);
+                if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / 6) {
+                    newInvader = new Invader(stats.incrementingInvaderId, 'captain', i, amountOfPlayers);
+                } else if (Math.random() < 1 / 4) {
+                    newInvader = new Invader(
+                        stats.incrementingInvaderId,
+                        'shielded',
+                        i,
+                        amountOfPlayers,
+                        stats.axesInGame,
+                    );
                 } else {
-                    newInvader = Invader.createNormalInvader(stats.incrementingInvaderId, i, amountOfPlayers);
+                    newInvader = new Invader(stats.incrementingInvaderId, 'regular', i, amountOfPlayers);
                 }
 
                 zone.invaders.push(newInvader);

@@ -1,15 +1,15 @@
-import {updateGuardians} from "../utils/updateGuardians";
+import { updateGuardians } from '../utils/updateGuardians';
 
-import {Request ,Response} from "express";
-import type {GameInstance, GameState, PlayerData, Settings, Stats} from "../constants/customTypes";
-import {Perks} from "../constants/customTypes.js" // to enable enum to be defined at runtime it must be imported without "type" prefix
-import {Server} from "socket.io";
-import {calculateLadderSteps} from "../utils/calculateLadderSteps";
-import {runAttack} from "../utils/runAttack";
-import {GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE} from "../constants/projectConstants";
-import {LastWaveNotice} from "../constants/customTypes";
-import {pickUpBoilingOil} from "../utils/handleBoilingOil.js";
-export let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE)
+import { Request, Response } from 'express';
+import { GameInstance, GameState, PlayerData, Settings, Stats, WeaponType } from '../constants/customTypes';
+import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
+import { Server } from 'socket.io';
+import { calculateLadderSteps } from '../utils/calculateLadderSteps';
+import { runAttack } from '../utils/runAttack';
+import { GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE } from '../constants/projectConstants';
+import { LastWaveNotice } from '../constants/customTypes';
+import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
+export let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
 
 let settings: Settings = {
     gameTempo: 0,
@@ -24,11 +24,12 @@ let settings: Settings = {
     perkSharpSwordBonus: 0,
     oilBoilingTime: 0,
     cannonLoadingTime: 0,
-}
+};
 let stats: Stats = {
     incrementingInvaderId: 1,
     incrementingWaveId: 1,
-}
+    axesInGame: 0,
+};
 
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationIntervalId: NodeJS.Timeout | null = null;
@@ -48,8 +49,8 @@ const createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.players = [];
         gameInstance.gameTempo = req.body.settings.gameTempo;
         gameInstance.ladderLength = req.body.settings.ladderLength;
-        gameInstance.carriedOilPots = []
-        let polygonsInGameArea = gameInstance.gameLocation.polygons
+        gameInstance.carriedOilPots = [];
+        let polygonsInGameArea = gameInstance.gameLocation.polygons;
         Object.assign(settings, req.body.settings);
         stats.incrementingInvaderId = 1;
         stats.incrementingWaveId = 1;
@@ -73,7 +74,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                         steps: calculateLadderSteps(polygon.assaultLadder!, gameInstance.ladderLength),
                     },
                     waveCooldown: 0,
-                })
+                });
             }
 
             if (polygon.polygonType === 'smithy') {
@@ -89,7 +90,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
                         readyAt: req.body.settings.oilBoilingTime,
                         location: polygon.boilingOilPotLocation,
                     },
-                })
+                });
             }
         });
 
@@ -97,33 +98,34 @@ const createNewGameInstance = async (req: Request, res: Response) => {
     } else {
         return res.status(200).json({ message: 'Game instance already exists', statusCode: 200 });
     }
-}
+};
 
 const getGameInstance = (req: Request, res: Response) => {
     return res.json(gameInstance);
-}
+};
 
 const getGameSettings = (req: Request, res: Response) => {
     return res.json(settings);
-}
+};
 
 const joinNewPlayer = (player: PlayerData): GameInstance => {
     gameInstance.players.push(player);
     updateGuardians(player, gameInstance);
 
     return gameInstance;
-}
+};
 
 const startGame = (req: Request, res: Response) => {
-    const io = req.app.get('io')
+    const io = req.app.get('io');
     const gameId = req.body.gameId;
 
     gameInstance.gameState = 'running' as GameState;
 
     io.to(gameId).emit('gameStarted', gameInstance);
+
     updateGame(gameId, io);
     return res.status(200).json({ message: 'Game started', statusCode: 200 });
-}
+};
 
 const removePlayer = (player: PlayerData): GameInstance => {
     updateGuardians(player, gameInstance);
@@ -136,46 +138,44 @@ const removePlayer = (player: PlayerData): GameInstance => {
         gameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
     }
     return gameInstance;
-}
+};
 
 const checkGameStatus = async (req: Request, res: Response) => {
     const gameStatus = gameInstance.gameState;
     return res.status(200).json({ gameStatus });
-}
+};
 
 const relocatePlayer = (player: PlayerData): GameInstance => {
     updateGuardians(player, gameInstance);
 
     return gameInstance;
-}
+};
 
 const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number | string): GameInstance => {
-    const playerToUpdate = gameInstance.players.find(p => p.key === player.key);
-    if (! playerToUpdate) {
+    const playerToUpdate = gameInstance.players.find((p) => p.key === player.key);
+    if (!playerToUpdate) {
         return gameInstance;
     }
 
     if (perk === Perks.boilingOil) {
-        pickUpBoilingOil(gameInstance, playerToUpdate, perkValue)
+        pickUpBoilingOil(gameInstance, playerToUpdate, perkValue);
     } else {
         playerToUpdate.perks[perk] = perkValue;
     }
 
     return gameInstance;
-}
+};
 
 const dropUnsupportedOilPot = (player: PlayerData): GameInstance => {
-    const potCarriedByPlayer = gameInstance.carriedOilPots.find(pot =>
-        pot.carriedBy.includes(player.key)
-    );
+    const potCarriedByPlayer = gameInstance.carriedOilPots.find((pot) => pot.carriedBy.includes(player.key));
 
     if (potCarriedByPlayer?.carriedBy.length === 1) {
         gameInstance.carriedOilPots.splice(gameInstance.carriedOilPots.indexOf(potCarriedByPlayer), 1);
-        gameInstance.players.find(p => p.key === player.key)!.perks.boilingOil = false;
+        gameInstance.players.find((p) => p.key === player.key)!.perks.boilingOil = false;
     }
 
     return gameInstance;
-}
+};
 
 function clearIntervals() {
     if (gameUpdateIntervalId !== null && gameCalculationIntervalId !== null) {
@@ -186,6 +186,7 @@ function clearIntervals() {
 
 function updateGame(gameId: string, io: Server) {
     clearIntervals();
+    stats.axesInGame = gameInstance.players.filter((p) => p.weaponType === WeaponType.AXE).length;
 
     // calculate game data on server in regular intervals (gameTempo). Interval is chosen by players to adjust
     // how fast the game goes.
@@ -194,13 +195,11 @@ function updateGame(gameId: string, io: Server) {
 
         // announce approaching last waves
         if (stats.incrementingWaveId === settings.gameLength - 2) {
-            const event: LastWaveNotice = "incoming"
+            const event: LastWaveNotice = 'incoming';
             io.to(gameId).emit('lastWaveNotice', event);
-
         } else if (stats.incrementingWaveId === settings.gameLength) {
-            const event: LastWaveNotice = "running"
+            const event: LastWaveNotice = 'running';
             io.to(gameId).emit('lastWaveNotice', event);
-
         }
 
         // Check winning/losing condition
@@ -221,8 +220,8 @@ function updateGame(gameId: string, io: Server) {
 }
 
 const findPlayerBySocketId = (socketId: string): PlayerData | undefined => {
-    return gameInstance.players.find(p => p.socketId === socketId);
-}
+    return gameInstance.players.find((p) => p.socketId === socketId);
+};
 
 export default {
     gameInstance,
@@ -237,4 +236,4 @@ export default {
     upgradeGuardian,
     dropUnsupportedOilPot,
     findPlayerBySocketId,
-}
+};
