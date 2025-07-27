@@ -32,10 +32,12 @@ export const assembleInvaders = (gameInstance: GameInstance, settings: Settings,
 
             for (let i = 0; i < randomInvadersAmount; i++) {
                 let newInvader: Invader;
+                const randomInvaderType = Math.floor(Math.random() * 100) + 1;
 
-                if (stats.incrementingWaveId > amountOfZones && Math.random() < 1 / 6) {
+                // 0 - 9 = captain, 10 - 34 = shielded, 35 - 100 = regular
+                if (stats.incrementingWaveId > amountOfZones && randomInvaderType < 10) {
                     newInvader = new Invader(stats.incrementingInvaderId, 'captain', i, amountOfPlayers);
-                } else if (Math.random() < 1 / 4) {
+                } else if (stats.axesInGame === 0 ? randomInvaderType < 20 : randomInvaderType < 35) {
                     newInvader = new Invader(
                         stats.incrementingInvaderId,
                         'shielded',

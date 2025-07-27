@@ -39,7 +39,8 @@ export const weaponHit = {
                 invader = invadersOnLadder[invaderIndex];
             }
 
-            if (invader && guardianStrength > 0) {
+            if (!invader) break;
+            if (guardianStrength > 0) {
                 invader.health -= guardianStrength;
             }
 
@@ -92,7 +93,8 @@ export const weaponHit = {
                 invader = invadersOnLadder[invaderIndex];
             }
 
-            if (invader && guardianStrength > 0) {
+            if (!invader) break;
+            if (guardianStrength > 0) {
                 invader.health -= guardianStrength;
             }
 

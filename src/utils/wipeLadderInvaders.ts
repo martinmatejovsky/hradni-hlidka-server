@@ -1,6 +1,7 @@
 import { BattleZone, PlayerData, Settings, WeaponType } from '../constants/customTypes';
 import { evaluateWeaponAbility } from './evaluateWeaponAbility';
 import { weaponHit } from './weaponHit';
+import { shuffleArray } from './shuffleArray.js';
 
 interface GuardianStrength extends PlayerData {
     guardianStrength?: number;
@@ -23,12 +24,13 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[], s
         // dělit zkušenosti mezi obránce, než že se budou k pořadí na úder dostávat náhodně.
         // Aby hra byla těžší, tak sekerníci, kteří umí rozbíjet štíty, budou vyhodnoceni jako poslední; kopiníci
         // jako první.
-        const guardiansWithSword: GuardianStrength[] = guardiansCloseCombatInZone
-            .filter((g) => g.weaponType === WeaponType.SWORD)
-            .sort(() => Math.random() - 0.5);
-        const guardiansWithAxe = guardiansCloseCombatInZone
-            .filter((g) => g.weaponType === WeaponType.AXE)
-            .sort(() => Math.random() - 0.5);
+        const guardiansWithSword: GuardianStrength[] = guardiansCloseCombatInZone.filter(
+            (g) => g.weaponType === WeaponType.SWORD,
+        );
+        const guardiansWithAxe = guardiansCloseCombatInZone.filter((g) => g.weaponType === WeaponType.AXE);
+
+        shuffleArray(guardiansWithSword);
+        shuffleArray(guardiansWithAxe);
 
         const allDefendersAgainstCaptain = players.filter((player) => player.weaponType === WeaponType.SWORD);
         const allDefendersAreInZone = allDefendersAgainstCaptain.every((player) => player.insideZone === zone.key);
