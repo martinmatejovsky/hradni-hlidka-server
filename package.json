@@ -8,13 +8,15 @@
     "build": "rollup -c",
     "start": "node dist/app.js",
     "serve": "npx nodemon --exec \"npx tsx\" ./app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:Game": "vitest tests/integration.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@rollup/plugin-json": "^6.1.0",
+    "axios": "^1.11.0",
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "prettier": "^3.6.2",
