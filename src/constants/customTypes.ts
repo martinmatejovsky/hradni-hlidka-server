@@ -106,9 +106,11 @@ export type Settings = {
     assaultWaveVolume: number;
     assemblyCountdown: number;
     wavesMinDelay: number;
-    defendersHitStrength: number;
+    weaponsStrength: Record<WeaponType, number>;
+    spearHitDepth: number;
     smithyUpgradeWaiting: number;
     smithyUpgradeStrength: number;
+    fragsToUpgradeSword: number;
     perkSharpSwordBonus: number;
     oilBoilingTime: number;
     cannonLoadingTime: number;

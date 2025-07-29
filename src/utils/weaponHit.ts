@@ -10,19 +10,15 @@ export const weaponHit = {
         allDefendersAreInZone: boolean,
         settings: Settings,
     ): void => {
-        while (swordsmen.length > 0 && invader.health > 0) {
+        while (swordsmen.length > 0) {
             const guardian = swordsmen[0];
 
             // Captain je zranitelný šermířem jen pokud všichni šermíři jsou v zóně
             if (invader.type === 'captain' && !allDefendersAreInZone) return;
 
             let guardianStrength = guardian.strength;
-            if (guardian.perks.woodenWeapon) {
-                guardianStrength = Math.ceil(guardianStrength * 0.5);
-            }
-            if (invader.type === 'shielded') {
-                guardianStrength = Math.max(Math.ceil(guardianStrength * 0.5), 1);
-            }
+            if (guardian.perks.woodenWeapon) guardianStrength = Math.ceil(guardianStrength * 0.5);
+            if (invader.type === 'shielded') guardianStrength = Math.ceil(guardianStrength * 0.5);
             if (guardian.perks.sharpSword > 0) {
                 guardianStrength += settings.perkSharpSwordBonus;
                 guardian.perks.sharpSword -= 1;
@@ -54,7 +50,7 @@ export const weaponHit = {
         invaderIndex: number,
         invadersOnLadder: Invader[],
     ): void {
-        while (axemen.length > 0 && invader.health > 0) {
+        while (axemen.length > 0) {
             const guardian = axemen[0];
 
             let guardianStrength = guardian.strength;
@@ -99,6 +95,41 @@ export const weaponHit = {
             }
 
             axemen.shift();
+        }
+    },
+    spearHit(spearmen: PlayerData[], zone: BattleZone, invadersOnLadder: Invader[], settings: Settings): void {
+        if (!invadersOnLadder.length) return;
+        if (invadersOnLadder[0].type === 'shielded') return;
+
+        while (spearmen.length > 0 && invadersOnLadder.length > 0) {
+            const guardian = spearmen[0];
+            const hitDepth = settings.spearHitDepth;
+            let helperIterator = 0;
+            let topInvaderLadderStep = invadersOnLadder[0].ladderStep || 0;
+
+            let guardianStrength = guardian.strength;
+            if (guardian.perks.woodenWeapon) guardianStrength = Math.ceil(guardianStrength * 0.5);
+
+            for (let depth = 0; depth < hitDepth; depth++) {
+                if (!invadersOnLadder[helperIterator]) break;
+
+                if (
+                    invadersOnLadder[helperIterator].ladderStep !== topInvaderLadderStep - depth ||
+                    invadersOnLadder[helperIterator].type === 'shielded'
+                )
+                    return;
+                if (invadersOnLadder[helperIterator].type === 'captain') {
+                    invadersOnLadder[helperIterator].health -= Math.ceil(guardianStrength * 0.5);
+                } else invadersOnLadder[helperIterator].health -= guardianStrength;
+
+                if (invadersOnLadder[helperIterator].health <= 0) {
+                    guardian.killScore.kills += 1;
+                    zone.invaders.splice(zone.invaders.indexOf(invadersOnLadder[helperIterator]), 1);
+                    invadersOnLadder.splice(helperIterator, 1);
+                } else helperIterator += 1;
+            }
+
+            spearmen.shift();
         }
     },
 };
