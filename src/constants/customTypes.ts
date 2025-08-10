@@ -7,6 +7,7 @@ export type PlayerData = {
     key: string;
     name: string;
     weaponType: WeaponType;
+    weaponDurability: number;
     location: PlayerCoordinates;
     insideZone: string;
     strength: number;

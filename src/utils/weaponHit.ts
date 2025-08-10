@@ -1,4 +1,5 @@
 import { BattleZone, Invader, PlayerData, Settings } from '../constants/customTypes';
+import evaluateWeaponBroke from './evaluateWeaponBroke.js';
 
 export const weaponHit = {
     swordHit: (
@@ -89,7 +90,8 @@ export const weaponHit = {
                 invader = invadersOnLadder[invaderIndex];
             }
 
-            if (!invader) break;
+            evaluateWeaponBroke();
+
             if (guardianStrength > 0) {
                 invader.health -= guardianStrength;
             }
