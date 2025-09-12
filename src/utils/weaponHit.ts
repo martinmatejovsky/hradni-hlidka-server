@@ -68,15 +68,16 @@ export const weaponHit = {
                         guardian.killScore.brokenShields += 1;
                         inv.feature.shieldEndurance = 0;
                         inv.type = 'regular';
-                    }
-
-                    if (guardianStrength > 0) {
+                    } else if (guardianStrength > 0) {
                         inv.feature.shieldEndurance -= guardianStrength;
                         guardianStrength = 0;
                         break;
                     } else break;
                 }
             }
+
+            const shieldReport = invadersOnLadder.map((inv) => [inv.ladderStep, inv.feature])
+            console.log(shieldReport)
 
             // if there is still some strength left, attack on
             while (invader && guardianStrength >= invader.health) {
