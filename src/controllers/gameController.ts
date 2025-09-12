@@ -49,7 +49,7 @@ const createNewGameInstance = async (req: Request, res: Response) => {
 
         // create a new object based on data from chosen Game Area and Hosting Player
         gameInstance.id = Date.now().toString();
-        gameInstance.gameState = 'ready';
+        gameInstance.gameState = GameState.Ready;
         gameInstance.gameLocation = Object.assign(req.body.gameLocation);
         gameInstance.battleZones = [];
         gameInstance.utilityZones = [];
@@ -126,7 +126,7 @@ const startGame = (req: Request, res: Response) => {
     const io = req.app.get('io');
     const gameId = req.body.gameId;
 
-    gameInstance.gameState = 'running' as GameState;
+    gameInstance.gameState = GameState.Running;
 
     io.to(gameId).emit('gameStarted', gameInstance);
 
@@ -210,7 +210,7 @@ function updateGame(gameId: string, io: Server) {
         }
 
         // Check winning/losing condition
-        if (gameInstance.gameState === 'won' || gameInstance.gameState === 'lost') {
+        if (gameInstance.gameState === GameState.Won || gameInstance.gameState === GameState.Lost) {
             clearInterval(gameUpdateIntervalId!);
             clearInterval(gameCalculationIntervalId!);
             io.to(gameId).emit('gameUpdated', gameInstance);

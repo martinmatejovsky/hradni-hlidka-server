@@ -1,9 +1,9 @@
-import type {GameInstance} from "./customTypes";
+import {GameInstance, GameState} from "./customTypes";
 
 export const GAME_UPDATE_INTERVAL: number = 2000 // should not be longer than EMPTY_GAME_INSTANCE.gameTempo
 export const EMPTY_GAME_INSTANCE: GameInstance = {
     id: '',
-    gameState: 'none',
+    gameState: GameState.None,
     gameLocation: {
         locationName: '',
         key: '',

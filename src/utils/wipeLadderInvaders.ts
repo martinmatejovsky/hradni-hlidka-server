@@ -46,7 +46,9 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[], s
                     settings,
                 );
             }
-            if (invadersOnLadder.length === 0) return;
+        });
+
+        invadersOnLadder.forEach((invader, invaderIndex) => {
             if (guardiansWithAxe.length > 0) {
                 shuffleArray(guardiansWithAxe);
                 weaponHit.axeHit(guardiansWithAxe, invader, zone, invaderIndex, invadersOnLadder);

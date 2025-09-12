@@ -28,7 +28,13 @@ export enum Perks {
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
-export type GameState = 'none' | 'ready' | 'running' | 'won' | 'lost';
+export enum GameState {
+    None,
+    Ready,
+    Running,
+    Won,
+    Lost
+}
 type PolygonType = 'assaultZone' | 'smithy';
 export interface BasePolygon {
     polygonName: string;

@@ -1,4 +1,4 @@
-import type {GameInstance} from "../constants/customTypes";
+import {GameInstance, GameState} from "../constants/customTypes";
 
 export const evaluateSuccessfulDefend = (gameInstance: GameInstance) => {
     // check if all invaders are dead
@@ -10,7 +10,7 @@ export const evaluateSuccessfulDefend = (gameInstance: GameInstance) => {
     })
 
     if (allInvadersDead) {
-        gameInstance.gameState = 'won';
+        gameInstance.gameState = GameState.Won;
         return true;
     } else {
         return false;
