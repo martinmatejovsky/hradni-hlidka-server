@@ -165,6 +165,13 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.1867950, lng: 12.7562397},
                             {lat: 50.1867828, lng: 12.7561725},
                         ],
+                        assaultLadder: {
+                            location: {
+                                start: {lat: 50.1868928, lng: 12.7564958},
+                                end: {lat: 50.1868206, lng: 12.7562061}
+                            }
+                        },
+                        assemblyAreaCenter: {lat: 50.1869142, lng: 12.7566900},
                         assemblyArea: [
                             {lat: 50.186888, lng: 12.756618},
                             {lat: 50.186869, lng: 12.756631},
@@ -191,23 +198,16 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186889, lng: 12.756755},
                             {lat: 50.186867, lng: 12.756723}
                         ],
-                        assemblyAreaCenter: {lat: 50.1869142, lng: 12.7566900},
-                        assaultLadder: {
-                            location: {
-                                start: {lat: 50.1868928, lng: 12.7564958},
-                                end: {lat: 50.1868206, lng: 12.7562061}
-                            }
-                        }
                     },
                     {
                         polygonName: 'Fortna',
                         key: 'fortna',
                         polygonType: "assaultZone",
                         areaOfAcceptedPresence: [
-                            {lat: 50.186689, lng: 12.756111},
-                            {lat: 50.186723, lng: 12.756321},
-                            {lat: 50.1866061, lng: 12.7563661},
-                            {lat: 50.186580, lng: 12.756160}
+                            { lat: 50.186716, lng: 12.756205 },
+                            { lat: 50.186729, lng: 12.756270 },
+                            { lat: 50.186692, lng: 12.756280 },
+                            { lat: 50.186681, lng: 12.756219 },
                         ],
                         areaPresentational: [
                             {lat: 50.186682, lng: 12.756205},
@@ -215,6 +215,13 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186614, lng: 12.756321},
                             {lat: 50.186602, lng: 12.756240}
                         ],
+                        assaultLadder: {
+                            location: {
+                                start: {lat: 50.1867142, lng: 12.7565722},
+                                end: {lat: 50.1866533, lng: 12.7562772}
+                            }
+                        },
+                        assemblyAreaCenter: {lat: 50.1867442, lng: 12.7567972},
                         assemblyArea: [
                             {lat: 50.186742, lng: 12.756728},
                             {lat: 50.186733, lng: 12.756760},
@@ -241,23 +248,16 @@ const getGameLocations = (_: Request, res: Response) => {
                             {lat: 50.186729, lng: 12.756849},
                             {lat: 50.186757, lng: 12.756873}
                         ],
-                        assemblyAreaCenter: {lat: 50.1867442, lng: 12.7567972},
-                        assaultLadder: {
-                            location: {
-                                start: {lat: 50.1867142, lng: 12.7565722},
-                                end: {lat: 50.1866533, lng: 12.7562772}
-                            }
-                        }
                     },
                     {
-                        polygonName: 'U Purkrabího',
-                        key: 'uPurkrabiho',
+                        polygonName: 'Parkán',
+                        key: 'parkan',
                         polygonType: "assaultZone",
                         areaOfAcceptedPresence: [
-                            {lat: 50.186344, lng: 12.756178},
-                            {lat: 50.186325, lng: 12.756441},
-                            {lat: 50.186207, lng: 12.756417},
-                            {lat: 50.186217, lng: 12.756154}
+                            { lat: 50.186609, lng: 12.756248 },
+                            { lat: 50.186623, lng: 12.756312 },
+                            { lat: 50.186575, lng: 12.756334 },
+                            { lat: 50.186567, lng: 12.756267 },
                         ],
                         areaPresentational: [
                             {lat: 50.186322, lng: 12.756278},
@@ -300,14 +300,114 @@ const getGameLocations = (_: Request, res: Response) => {
                         }
                     },
                     {
-                        polygonName: 'Vyhlídka',
-                        key: 'vyhlidka',
+                        polygonName: 'Sv. Václava',
+                        key: 'svVaclava',
                         polygonType: "assaultZone",
                         areaOfAcceptedPresence: [
-                            {lat: 50.186149, lng: 12.756152},
-                            {lat: 50.186137, lng: 12.756382},
-                            {lat: 50.1860147, lng: 12.7563442},
-                            {lat: 50.1860325, lng: 12.7561064}
+                            { lat: 50.186376, lng: 12.756291 },
+                            { lat: 50.186372, lng: 12.756366 },
+                            { lat: 50.186339, lng: 12.756353 },
+                            { lat: 50.186345, lng: 12.756286 },
+                        ],
+                        areaPresentational: [
+                            {lat: 50.186322, lng: 12.756278},
+                            {lat: 50.186317, lng: 12.756366},
+                            {lat: 50.186234, lng: 12.756342},
+                            {lat: 50.186236, lng: 12.756256}
+                        ],
+                        assemblyArea: [
+                            {lat: 50.186300, lng: 12.756766},
+                            {lat: 50.186307, lng: 12.756787},
+                            {lat: 50.186288, lng: 12.756774},
+                            {lat: 50.186266, lng: 12.756744},
+                            {lat: 50.186263, lng: 12.756779},
+                            {lat: 50.186287, lng: 12.756790},
+                            {lat: 50.186271, lng: 12.756817},
+                            {lat: 50.186307, lng: 12.756808},
+                            {lat: 50.186328, lng: 12.756830},
+                            {lat: 50.186311, lng: 12.756851},
+                            {lat: 50.186280, lng: 12.756859},
+                            {lat: 50.186252, lng: 12.756841},
+                            {lat: 50.186300, lng: 12.756766},
+                            {lat: 50.186307, lng: 12.756787},
+                            {lat: 50.186288, lng: 12.756774},
+                            {lat: 50.186266, lng: 12.756744},
+                            {lat: 50.186263, lng: 12.756779},
+                            {lat: 50.186287, lng: 12.756790},
+                            {lat: 50.186271, lng: 12.756817},
+                            {lat: 50.186307, lng: 12.756808},
+                            {lat: 50.186328, lng: 12.756830},
+                            {lat: 50.186311, lng: 12.756851},
+                            {lat: 50.186280, lng: 12.756859},
+                            {lat: 50.186252, lng: 12.756841},
+                        ],
+                        assemblyAreaCenter: {lat: 50.186299, lng: 12.7567947},
+                        assaultLadder: {
+                            location: {
+                                start: {lat: 50.1862411, lng: 12.7565750},
+                                end: {lat: 50.1862789, lng: 12.7563067}
+                            }
+                        }
+                    },
+                    {
+                        polygonName: 'U Purkrabího',
+                        key: 'uPurkrabiho',
+                        polygonType: "assaultZone",
+                        areaOfAcceptedPresence: [
+                            { lat: 50.186293, lng: 12.756280 },
+                            { lat: 50.186288, lng: 12.756339 },
+                            { lat: 50.186236, lng: 12.756330 },
+                            { lat: 50.186241, lng: 12.756267 },
+                        ],
+                        areaPresentational: [
+                            {lat: 50.186322, lng: 12.756278},
+                            {lat: 50.186317, lng: 12.756366},
+                            {lat: 50.186234, lng: 12.756342},
+                            {lat: 50.186236, lng: 12.756256}
+                        ],
+                        assemblyArea: [
+                            {lat: 50.186300, lng: 12.756766},
+                            {lat: 50.186307, lng: 12.756787},
+                            {lat: 50.186288, lng: 12.756774},
+                            {lat: 50.186266, lng: 12.756744},
+                            {lat: 50.186263, lng: 12.756779},
+                            {lat: 50.186287, lng: 12.756790},
+                            {lat: 50.186271, lng: 12.756817},
+                            {lat: 50.186307, lng: 12.756808},
+                            {lat: 50.186328, lng: 12.756830},
+                            {lat: 50.186311, lng: 12.756851},
+                            {lat: 50.186280, lng: 12.756859},
+                            {lat: 50.186252, lng: 12.756841},
+                            {lat: 50.186300, lng: 12.756766},
+                            {lat: 50.186307, lng: 12.756787},
+                            {lat: 50.186288, lng: 12.756774},
+                            {lat: 50.186266, lng: 12.756744},
+                            {lat: 50.186263, lng: 12.756779},
+                            {lat: 50.186287, lng: 12.756790},
+                            {lat: 50.186271, lng: 12.756817},
+                            {lat: 50.186307, lng: 12.756808},
+                            {lat: 50.186328, lng: 12.756830},
+                            {lat: 50.186311, lng: 12.756851},
+                            {lat: 50.186280, lng: 12.756859},
+                            {lat: 50.186252, lng: 12.756841},
+                        ],
+                        assemblyAreaCenter: {lat: 50.186299, lng: 12.7567947},
+                        assaultLadder: {
+                            location: {
+                                start: {lat: 50.1862411, lng: 12.7565750},
+                                end: {lat: 50.1862789, lng: 12.7563067}
+                            }
+                        }
+                    },
+                    {
+                        polygonName: 'Pozorovatelna',
+                        key: 'pozorovatelna',
+                        polygonType: "assaultZone",
+                        areaOfAcceptedPresence: [
+                            { lat: 50.186199, lng: 12.756251 },
+                            { lat: 50.186193, lng: 12.756312 },
+                            { lat: 50.186137, lng: 12.756302 },
+                            { lat: 50.186142, lng: 12.756237 }
                         ],
                         areaPresentational: [
                             {lat: 50.186129, lng: 12.756224},
