@@ -1,7 +1,15 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { GameInstance, GameState, PlayerData, Settings, Stats, WeaponType } from '../constants/customTypes';
+import {
+    GameInstance,
+    GameState,
+    PlayerData,
+    Settings,
+    Stats,
+    WeaponType,
+    PolygonsMatchingPlayers,
+} from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { Server } from 'socket.io';
 import { calculateLadderSteps } from '../utils/calculateLadderSteps';
@@ -41,6 +49,13 @@ let stats: Stats = {
 let gameUpdateIntervalId: NodeJS.Timeout | null = null;
 let gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
+const areasToAmountOfPlayers = (polygonsByPlayersTotal: PolygonsMatchingPlayers[], playersTotal: number): string[] => {
+    const match = polygonsByPlayersTotal.find((p) => {
+        return playersTotal <= p.upTo;
+    });
+    return match ? match.locations : [];
+};
+
 const createNewGameInstance = async (req: Request, res: Response) => {
     if (!gameInstance.id) {
         if (![req.body.gameLocation, req.body.settings].every(Boolean)) {
@@ -57,49 +72,10 @@ const createNewGameInstance = async (req: Request, res: Response) => {
         gameInstance.gameTempo = req.body.settings.gameTempo;
         gameInstance.ladderLength = req.body.settings.ladderLength;
         gameInstance.carriedOilPots = [];
-        let polygonsInGameArea = gameInstance.gameLocation.polygons;
+
         Object.assign(settings, req.body.settings);
         stats.incrementingInvaderId = 1;
         stats.incrementingWaveId = 1;
-
-        polygonsInGameArea.forEach((polygon) => {
-            if (polygon.polygonType === 'assaultZone') {
-                gameInstance.battleZones.push({
-                    zoneName: polygon.polygonName,
-                    key: polygon.key,
-                    polygonType: polygon.polygonType,
-                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
-                    areaPresentational: polygon.areaPresentational,
-                    conquered: false,
-                    guardians: [],
-                    invaders: [],
-                    assemblyArea: polygon.assemblyArea!,
-                    assemblyAreaCenter: polygon.assemblyAreaCenter!,
-                    assemblyCountdown: 0,
-                    assaultLadder: {
-                        location: polygon.assaultLadder!.location!,
-                        steps: calculateLadderSteps(polygon.assaultLadder!, gameInstance.ladderLength),
-                    },
-                    waveCooldown: 0,
-                });
-            }
-
-            if (polygon.polygonType === 'smithy') {
-                gameInstance.utilityZones.push({
-                    zoneName: polygon.polygonName,
-                    key: polygon.key,
-                    polygonType: polygon.polygonType,
-                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
-                    areaPresentational: polygon.areaPresentational,
-                    guardians: [],
-                    boilingOil: {
-                        readiness: 0,
-                        readyAt: req.body.settings.oilBoilingTime,
-                        location: polygon.boilingOilPotLocation,
-                    },
-                });
-            }
-        });
 
         return res.status(201).json({ gameInstance, statusCode: 201 });
     } else {
@@ -125,6 +101,54 @@ const joinNewPlayer = (player: PlayerData): GameInstance => {
 const startGame = (req: Request, res: Response) => {
     const io = req.app.get('io');
     const gameId = req.body.gameId;
+
+    const allowedPolygons = areasToAmountOfPlayers(
+        gameInstance.gameLocation.polygonsToPlayersTotal,
+        gameInstance.players.length,
+    );
+
+    let polygonsInGameArea = gameInstance.gameLocation.polygons.filter((polygon) => {
+        return allowedPolygons.includes(polygon.key);
+    });
+
+    polygonsInGameArea.forEach((polygon) => {
+        if (polygon.polygonType === 'assaultZone') {
+            gameInstance.battleZones.push({
+                zoneName: polygon.polygonName,
+                key: polygon.key,
+                polygonType: polygon.polygonType,
+                areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                areaPresentational: polygon.areaPresentational,
+                conquered: false,
+                guardians: [],
+                invaders: [],
+                assemblyArea: polygon.assemblyArea!,
+                assemblyAreaCenter: polygon.assemblyAreaCenter!,
+                assemblyCountdown: 0,
+                assaultLadder: {
+                    location: polygon.assaultLadder!.location!,
+                    steps: calculateLadderSteps(polygon.assaultLadder!, gameInstance.ladderLength),
+                },
+                waveCooldown: 0,
+            });
+        }
+
+        if (polygon.polygonType === 'smithy') {
+            gameInstance.utilityZones.push({
+                zoneName: polygon.polygonName,
+                key: polygon.key,
+                polygonType: polygon.polygonType,
+                areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                areaPresentational: polygon.areaPresentational,
+                guardians: [],
+                boilingOil: {
+                    readiness: 0,
+                    readyAt: settings.oilBoilingTime,
+                    location: polygon.boilingOilPotLocation,
+                },
+            });
+        }
+    });
 
     gameInstance.gameState = GameState.Running;
 

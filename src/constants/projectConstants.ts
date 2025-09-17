@@ -1,13 +1,14 @@
-import {GameInstance, GameState} from "./customTypes";
+import { GameInstance, GameState } from './customTypes';
 
-export const GAME_UPDATE_INTERVAL: number = 2000 // should not be longer than EMPTY_GAME_INSTANCE.gameTempo
+export const GAME_UPDATE_INTERVAL: number = 2000; // should not be longer than EMPTY_GAME_INSTANCE.gameTempo
 export const EMPTY_GAME_INSTANCE: GameInstance = {
     id: '',
     gameState: GameState.None,
     gameLocation: {
         locationName: '',
         key: '',
-        mapCenter: {lat: 0, lng: 0},
+        mapCenter: { lat: 0, lng: 0 },
+        polygonsToPlayersTotal: [],
         polygons: [],
         speedChoices: [],
         ladderLengthChoices: [],

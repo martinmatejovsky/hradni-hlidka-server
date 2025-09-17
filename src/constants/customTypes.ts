@@ -33,7 +33,7 @@ export enum GameState {
     Ready,
     Running,
     Won,
-    Lost
+    Lost,
 }
 type PolygonType = 'assaultZone' | 'smithy';
 export interface BasePolygon {
@@ -47,10 +47,15 @@ export interface BasePolygon {
     assemblyAreaCenter?: Coordinates;
     boilingOilPotLocation?: Coordinates;
 }
+export interface PolygonsMatchingPlayers {
+    upTo: number;
+    locations: string[];
+}
 export interface GameLocation {
     locationName: string;
     key: string;
     mapCenter: Coordinates;
+    polygonsToPlayersTotal: PolygonsMatchingPlayers[];
     polygons: BasePolygon[];
     speedChoices: number[];
     ladderLengthChoices: number[];
