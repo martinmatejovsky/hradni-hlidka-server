@@ -76,9 +76,6 @@ export const weaponHit = {
                 }
             }
 
-            const shieldReport = invadersOnLadder.map((inv) => [inv.ladderStep, inv.feature])
-            console.log(shieldReport)
-
             // if there is still some strength left, attack on
             while (invader && guardianStrength >= invader.health) {
                 guardianStrength -= invader.health;
