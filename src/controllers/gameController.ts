@@ -17,6 +17,7 @@ import { runAttack } from '../utils/runAttack';
 import { GAME_UPDATE_INTERVAL, EMPTY_GAME_INSTANCE } from '../constants/projectConstants';
 import { LastWaveNotice } from '../constants/customTypes';
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
+import { generatePointsAroundCenter } from '../utils/GeneratePointsAroundCenter.js';
 export let gameInstance: GameInstance = Object.assign({}, EMPTY_GAME_INSTANCE);
 
 let settings: Settings = {
@@ -122,8 +123,8 @@ const startGame = (req: Request, res: Response) => {
                 conquered: false,
                 guardians: [],
                 invaders: [],
-                assemblyArea: polygon.assemblyArea!,
                 assemblyAreaCenter: polygon.assemblyAreaCenter!,
+                assemblyArea: polygon.assemblyArea ?? generatePointsAroundCenter(polygon.assemblyAreaCenter!), // can be set manually for specific places, but generally is calculated by randomizer
                 assemblyCountdown: 0,
                 assaultLadder: {
                     location: polygon.assaultLadder!.location!,

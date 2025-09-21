@@ -42,7 +42,7 @@ export interface BasePolygon {
     polygonType: PolygonType;
     areaOfAcceptedPresence: Coordinates[];
     areaPresentational: Coordinates[];
-    assemblyArea?: Coordinates[];
+    assemblyArea?: Coordinates[]; // can be set manually for specific places, but generally is calculated by randomizer
     assaultLadder?: AssaultLadder;
     assemblyAreaCenter?: Coordinates;
     boilingOilPotLocation?: Coordinates;
