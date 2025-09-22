@@ -7,5 +7,6 @@ router.get('/settings', gameController.getGameSettings);
 router.post('/createGame', gameController.createNewGameInstance);
 router.get('/checkGameStatus', gameController.checkGameStatus);
 router.post('/start', gameController.startGame);
+router.get('/runningGames', gameController.getRunningGames);
 
 export default router;

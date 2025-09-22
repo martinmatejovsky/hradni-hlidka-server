@@ -53,6 +53,7 @@ export interface PolygonsMatchingPlayers {
 }
 export interface GameLocation {
     locationName: string;
+    sessionNamePrefix: string;
     key: string;
     mapCenter: Coordinates;
     polygonsToPlayersTotal: PolygonsMatchingPlayers[];
@@ -101,6 +102,7 @@ export interface OilPot {
 }
 export interface GameInstance {
     id: string;
+    sessionName: string;
     gameState: GameState;
     gameLocation: GameLocation;
     battleZones: BattleZone[];
@@ -109,6 +111,8 @@ export interface GameInstance {
     gameTempo: number;
     ladderLength: number;
     carriedOilPots: OilPot[];
+    gameUpdateIntervalId: NodeJS.Timeout | null;
+    gameCalculationIntervalId: NodeJS.Timeout | null;
 }
 export type InvaderType = 'regular' | 'shielded' | 'captain';
 export type Settings = {
@@ -174,4 +178,9 @@ export class Invader {
             this.health = amountOfPlayers;
         }
     }
+}
+// metadata that should not be sent by Socket.io, or it breaks
+export interface GameRuntime {
+    gameUpdateIntervalId: NodeJS.Timeout | null;
+    gameCalculationIntervalId: NodeJS.Timeout | null;
 }

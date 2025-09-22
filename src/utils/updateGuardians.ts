@@ -1,11 +1,11 @@
-import type {GameInstance, PlayerData} from "../constants/customTypes";
+import type { GameInstance, PlayerData } from '../constants/customTypes';
 
 export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameInstance) => {
-    if (!gameInstance.battleZones) return;
+    if (!gameInstance) return;
 
     // odstraníme hráče z jakékoliv předchozí zóny
     gameInstance.battleZones.forEach((zone) => {
-        const index = zone.guardians.findIndex(key => key === currentPlayer.key);
+        const index = zone.guardians.findIndex((key) => key === currentPlayer.key);
         if (index !== -1) {
             zone.guardians.splice(index, 1);
         }
@@ -15,7 +15,7 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
     if (currentPlayer.insideZone?.length > 0) {
         gameInstance.battleZones.forEach((zone) => {
             if (zone.key === currentPlayer.insideZone) {
-                const guardianIndex = zone.guardians.findIndex(g => g === currentPlayer.key);
+                const guardianIndex = zone.guardians.findIndex((g) => g === currentPlayer.key);
                 if (guardianIndex === -1) {
                     zone.guardians.push(currentPlayer.key);
                 } else {
@@ -25,7 +25,7 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
         });
     } else if (currentPlayer.insideZone === '') {
         gameInstance.battleZones.forEach((area) => {
-            const index = area.guardians.findIndex(key => key === currentPlayer.key);
+            const index = area.guardians.findIndex((key) => key === currentPlayer.key);
             if (index !== -1) {
                 area.guardians.splice(index, 1);
             }
@@ -45,15 +45,15 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
     gameInstance.players.forEach((player) => {
         player.canPourBoilingOil = false;
 
-        const playerIsInBattleZone = gameInstance.battleZones.some(zone => zone.key === player.insideZone);
+        const playerIsInBattleZone = gameInstance.battleZones.some((zone) => zone.key === player.insideZone);
 
-        if (player.perks.boilingOil && playerIsInBattleZone ) {
+        if (player.perks.boilingOil && playerIsInBattleZone) {
             // find carriedOilPots where this player is, and if there is also another player, check if the other player is in the same zone
-            const carriedPot = gameInstance.carriedOilPots.find(pot => pot.carriedBy.includes(player.key));
+            const carriedPot = gameInstance.carriedOilPots.find((pot) => pot.carriedBy.includes(player.key));
             if (carriedPot) {
-                const otherPlayerKey = carriedPot.carriedBy.find(key => key !== player.key);
+                const otherPlayerKey = carriedPot.carriedBy.find((key) => key !== player.key);
                 if (otherPlayerKey) {
-                    const otherPlayer = gameInstance.players.find(p => p.key === otherPlayerKey);
+                    const otherPlayer = gameInstance.players.find((p) => p.key === otherPlayerKey);
                     if (otherPlayer && otherPlayer.insideZone === player.insideZone) {
                         player.canPourBoilingOil = true;
                         otherPlayer.canPourBoilingOil = true;
@@ -62,4 +62,4 @@ export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameIns
             }
         }
     });
-}
+};

@@ -1,24 +1,27 @@
 import type { GameInstance, OilPot, PlayerData } from '../constants/customTypes.js';
 import { handleSuccessfullyBoiledOil } from '../utils/handleBoilingOil.js';
-import { gameInstance } from './gameController.js';
+import { gameInstances } from './gameController.js';
 import { Server } from 'socket.io';
 
-const setPouredOffOilPots = (player: PlayerData, io: Server): GameInstance => {
-    let potByPlayer: OilPot | undefined = gameInstance.carriedOilPots.find((pot) => pot.carriedBy.includes(player.key));
+const setPouredOffOilPots = (player: PlayerData, gameId: string, io: Server): GameInstance => {
+    let potByPlayer: OilPot | undefined = gameInstances[gameId].carriedOilPots.find((pot) =>
+        pot.carriedBy.includes(player.key),
+    );
 
     if (potByPlayer) {
         potByPlayer.pouredInZone[potByPlayer.carriedBy.indexOf(player.key)] = player.insideZone;
 
         if (potByPlayer.pouredInZone[0] === potByPlayer.pouredInZone[1]) {
             io.emit('oilIsPoured', potByPlayer.pouredInZone[0]);
-            handleSuccessfullyBoiledOil(gameInstance, potByPlayer);
+            handleSuccessfullyBoiledOil(gameInstances[gameId], potByPlayer);
         }
     }
 
-    return gameInstance;
+    return gameInstances[gameId];
 };
 
-const fireCannon = (targetZoneKey: string, firedBy: string): GameInstance => {
+const fireCannon = (targetZoneKey: string, firedBy: string, gameId: string): GameInstance => {
+    const gameInstance = gameInstances[gameId];
     // kill just some invaders. Captain is immune to cannon fire
     let affectedBattleZone = gameInstance.battleZones.find((zone) => zone.key === targetZoneKey);
     if (!affectedBattleZone) return gameInstance;

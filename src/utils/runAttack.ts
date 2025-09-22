@@ -1,10 +1,10 @@
-import type {BattleZone, Settings, GameInstance, Stats} from "../constants/customTypes";
-import {wipeLadderInvaders} from "./wipeLadderInvaders";
-import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
-import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
-import {assembleInvaders} from "./assembleInvaders";
-import {evaluateSuccessfulDefend} from "./evaluateSuccessfulDefend";
-import {handleBoilingOil} from "./handleBoilingOil";
+import type { BattleZone, Settings, GameInstance, Stats } from '../constants/customTypes';
+import { wipeLadderInvaders } from './wipeLadderInvaders';
+import { moveInvadersOnLadder } from './moveInvadersOnLadder';
+import { checkAnyAreaConquered } from './checkAnyAreaConquered';
+import { assembleInvaders } from './assembleInvaders';
+import { evaluateSuccessfulDefend } from './evaluateSuccessfulDefend';
+import { handleBoilingOil } from './handleBoilingOil';
 
 export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
@@ -25,4 +25,4 @@ export const runAttack = (gameInstance: GameInstance, settings: Settings, stats:
     checkAnyAreaConquered(gameInstance);
 
     handleBoilingOil(gameInstance);
-}
+};

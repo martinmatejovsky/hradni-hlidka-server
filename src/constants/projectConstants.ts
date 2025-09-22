@@ -3,10 +3,12 @@ import { GameInstance, GameState } from './customTypes';
 export const GAME_UPDATE_INTERVAL: number = 2000; // should not be longer than EMPTY_GAME_INSTANCE.gameTempo
 export const EMPTY_GAME_INSTANCE: GameInstance = {
     id: '',
+    sessionName: '',
     gameState: GameState.None,
     gameLocation: {
         locationName: '',
         key: '',
+        sessionNamePrefix: '',
         mapCenter: { lat: 0, lng: 0 },
         polygonsToPlayersTotal: [],
         polygons: [],
@@ -19,5 +21,7 @@ export const EMPTY_GAME_INSTANCE: GameInstance = {
     gameTempo: 10000,
     ladderLength: 30,
     carriedOilPots: [],
+    gameUpdateIntervalId: null,
+    gameCalculationIntervalId: null,
 };
 export const cannonBallSpeed: number = 2000;

@@ -4,6 +4,7 @@ const getGameLocations = (_: Request, res: Response) => {
     return res.json([
         {
             locationName: 'Loket Sportovní',
+            sessionNamePrefix: 'Sportovka',
             key: 'loketSportovni',
             mapCenter: { lat: 50.1910833, lng: 12.7438483 },
             polygonsToPlayersTotal: [
@@ -109,6 +110,7 @@ const getGameLocations = (_: Request, res: Response) => {
         },
         {
             locationName: 'Loket Východní hradba',
+            sessionNamePrefix: 'Loket',
             key: 'loketVychodniHradba',
             mapCenter: { lat: 50.1864258, lng: 12.7563469 },
             polygonsToPlayersTotal: [
