@@ -4,7 +4,7 @@ import gameController from '../controllers/gameController';
 
 router.get('/', gameController.getGameInstance);
 router.get('/settings', gameController.getGameSettings);
-router.post('/createGame', gameController.createNewGameInstance);
+router.post('/createGame', gameController.createGame);
 router.get('/checkGameStatus', gameController.checkGameStatus);
 router.post('/start', gameController.startGame);
 router.get('/runningGames', gameController.getRunningGames);

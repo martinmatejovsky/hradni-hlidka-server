@@ -1,6 +1,7 @@
-import type { GameInstance, PlayerData } from '../constants/customTypes';
+import type { PlayerData } from '../constants/customTypes';
+import { GameSession } from './gameSessionClass.js';
 
-export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameInstance) => {
+export const updateGuardians = (currentPlayer: PlayerData, gameInstance: GameSession) => {
     if (!gameInstance) return;
 
     // odstraníme hráče z jakékoliv předchozí zóny

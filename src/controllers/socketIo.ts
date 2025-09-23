@@ -2,7 +2,7 @@ import { Server } from 'socket.io';
 import gameController from './gameController';
 import weaponsController from './weaponsController.js';
 import { cannonBallSpeed } from '../constants/projectConstants.js';
-import { gameInstances } from './gameController.js';
+import { gameSessions } from './gameController.js';
 
 function initializeSocket(server: any) {
     const io = new Server(server, { cors: { origin: process.env.CORS_ORIGIN || 'http://localhost:3000' } });
@@ -18,14 +18,14 @@ function initializeSocket(server: any) {
         });
 
         socket.on('leaveGame', (payload, callback) => {
-            if (!gameInstances[payload.gameId]) return;
+            if (!gameSessions[payload.gameId]) return;
 
             const gameWithoutPlayer = gameController.removePlayer(payload.player, payload.gameId);
             socket.leave(payload.gameId);
 
             if (gameWithoutPlayer.players.length === 0) {
-                gameController.clearIntervals(payload.gameId);
-                delete gameInstances[payload.gameId];
+                gameWithoutPlayer.stop();
+                delete gameSessions[payload.gameId];
             } else {
                 io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer);
             }
@@ -79,15 +79,16 @@ function initializeSocket(server: any) {
         });
 
         socket.on('disconnect', () => {
-            if (!gameInstances[socket.data.gameId]) return;
+            if (!gameSessions[socket.data.gameId]) return;
 
             const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id, socket.data.gameId);
+
             if (disconnectedPlayer) {
                 gameController.removePlayer(disconnectedPlayer, socket.data.gameId);
 
-                if (gameInstances[socket.data.gameId].players.length === 0) {
-                    gameController.clearIntervals(socket.data.gameId);
-                    delete gameInstances[socket.data.gameId];
+                if (gameSessions[socket.data.gameId].players.length === 0) {
+                    gameSessions[socket.data.gameId].stop();
+                    delete gameSessions[socket.data.gameId];
                 }
             }
         });

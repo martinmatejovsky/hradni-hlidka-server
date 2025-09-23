@@ -1,8 +1,9 @@
-import { BattleZone, GameInstance, Settings, Stats } from '../constants/customTypes';
+import { BattleZone, Settings, Stats } from '../constants/customTypes';
 
 import { Invader } from '../constants/customTypes';
+import { GameSession } from './gameSessionClass.js';
 
-export const assembleInvaders = (gameInstance: GameInstance, settings: Settings, stats: Stats): BattleZone[] => {
+export const assembleInvaders = (gameInstance: GameSession, settings: Settings, stats: Stats): BattleZone[] => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
     let amountOfPlayers = gameInstance.players.length;
 

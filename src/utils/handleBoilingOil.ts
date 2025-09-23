@@ -1,6 +1,7 @@
-import { GameInstance, OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
+import { OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
+import { GameSession } from './gameSessionClass.js';
 
-export const handleBoilingOil = (gameInstance: GameInstance) => {
+export const handleBoilingOil = (gameInstance: GameSession) => {
     const allOilStations = gameInstance.utilityZones.filter(
         (zone): zone is UtilityZone & { boilingOil: NonNullable<UtilityZone['boilingOil']> } =>
             zone.boilingOil !== null && zone.boilingOil.readyAt !== undefined,
@@ -20,7 +21,7 @@ export const handleBoilingOil = (gameInstance: GameInstance) => {
  * @param player
  * @param perkValue - key of utility zone from which the pot was collected
  */
-export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData, perkValue: number | string) => {
+export const pickUpBoilingOil = (gameInstance: GameSession, player: PlayerData, perkValue: number | string) => {
     if (player.perks.boilingOil) return; // cannot carry another oil if already carrying
 
     const alreadyHalfPickedPot = gameInstance.carriedOilPots.find((oilPot) => oilPot.carriedBy.length === 1);
@@ -34,7 +35,7 @@ export const pickUpBoilingOil = (gameInstance: GameInstance, player: PlayerData,
     player.perks.boilingOil = true;
 };
 
-export const handleSuccessfullyBoiledOil = (gameInstance: GameInstance, oilPot: OilPot) => {
+export const handleSuccessfullyBoiledOil = (gameInstance: GameSession, oilPot: OilPot) => {
     let affectedBattleZone = gameInstance.battleZones.find((zone) => zone.key === oilPot.pouredInZone[0]);
     if (!affectedBattleZone) return;
     let killedAmount = 0;
