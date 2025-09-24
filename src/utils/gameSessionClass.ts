@@ -8,8 +8,11 @@ import {
     OilPot,
     Stats,
     Settings,
+    WeaponType,
 } from '../constants/customTypes.js';
 import { runAttack } from './runAttack.js';
+import { generatePointsAroundCenter } from './generatePointsAroundCenter.js';
+import { calculateLadderSteps } from './calculateLadderSteps.js';
 import { LastWaveNotice } from '../constants/customTypes.js';
 import { GAME_UPDATE_INTERVAL } from '../constants/projectConstants.js';
 export class GameSession {
@@ -37,9 +40,12 @@ export class GameSession {
     }
 
     start(io: Server, settings: Settings, stats: Stats) {
-        console.log(`[Game ${this.id}] starting...`);
+        stats.axesInGame = this.players.filter((p) => p.weaponType === WeaponType.AXE).length;
 
         this.stop(); // prevent multiple start by accident
+        this.populatePolygons(settings);
+        this.gameState = GameState.Running;
+        io.to(this.id).emit('gameStarted', this.toJSON());
 
         this.gameCalculationIntervalId = setInterval(() => {
             runAttack(this, settings, stats);
@@ -55,13 +61,12 @@ export class GameSession {
 
             if (this.gameState === GameState.Won || this.gameState === GameState.Lost) {
                 this.stop();
-                io.to(this.id).emit('gameUpdated', this);
+                io.to(this.id).emit('gameUpdated', this.toJSON());
             }
         }, this.gameTempo);
 
         this.gameUpdateIntervalId = setInterval(() => {
-            console.log(`[Game ${this.id}] tick update`);
-            io.to(this.id).emit('gameUpdated', this);
+            io.to(this.id).emit('gameUpdated', this.toJSON());
         }, GAME_UPDATE_INTERVAL);
     }
 
@@ -74,7 +79,6 @@ export class GameSession {
             clearInterval(this.gameUpdateIntervalId);
             this.gameUpdateIntervalId = null;
         }
-        console.log(`[Game ${this.id}] stopped.`);
     }
 
     // JSON format for Socket
@@ -91,5 +95,61 @@ export class GameSession {
             ladderLength: this.ladderLength,
             carriedOilPots: this.carriedOilPots,
         };
+    }
+
+    areasToAmountOfPlayers(): string[] {
+        const polygonsByPlayersTotal = this.gameLocation.polygonsToPlayersTotal;
+        const playersTotal = this.players.length;
+        const match = polygonsByPlayersTotal.find((p) => {
+            return playersTotal <= p.upTo;
+        });
+        return match ? match.locations : [];
+    }
+
+    populatePolygons(settings: Settings) {
+        const allowedPolygons = this.areasToAmountOfPlayers();
+
+        let polygonsInGameArea = this.gameLocation.polygons.filter((polygon) => {
+            return allowedPolygons.includes(polygon.key);
+        });
+
+        polygonsInGameArea.forEach((polygon) => {
+            if (polygon.polygonType === 'assaultZone') {
+                this.battleZones.push({
+                    zoneName: polygon.polygonName,
+                    key: polygon.key,
+                    polygonType: polygon.polygonType,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
+                    conquered: false,
+                    guardians: [],
+                    invaders: [],
+                    assemblyAreaCenter: polygon.assemblyAreaCenter!,
+                    assemblyArea: polygon.assemblyArea ?? generatePointsAroundCenter(polygon.assemblyAreaCenter!), // can be set manually for specific places, but generally is calculated by randomizer
+                    assemblyCountdown: 0,
+                    assaultLadder: {
+                        location: polygon.assaultLadder!.location!,
+                        steps: calculateLadderSteps(polygon.assaultLadder!, this.ladderLength),
+                    },
+                    waveCooldown: 0,
+                });
+            }
+
+            if (polygon.polygonType === 'smithy') {
+                this.utilityZones.push({
+                    zoneName: polygon.polygonName,
+                    key: polygon.key,
+                    polygonType: polygon.polygonType,
+                    areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
+                    areaPresentational: polygon.areaPresentational,
+                    guardians: [],
+                    boilingOil: {
+                        readiness: 0,
+                        readyAt: settings.oilBoilingTime,
+                        location: polygon.boilingOilPotLocation,
+                    },
+                });
+            }
+        });
     }
 }

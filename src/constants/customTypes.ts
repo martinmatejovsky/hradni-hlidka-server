@@ -179,8 +179,3 @@ export class Invader {
         }
     }
 }
-// metadata that should not be sent by Socket.io, or it breaks
-export interface GameRuntime {
-    gameUpdateIntervalId: NodeJS.Timeout | null;
-    gameCalculationIntervalId: NodeJS.Timeout | null;
-}

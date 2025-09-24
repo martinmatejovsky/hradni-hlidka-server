@@ -1,7 +1,7 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Settings, Stats, PolygonsMatchingPlayers } from '../constants/customTypes';
+import { PlayerData, Settings, Stats } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
@@ -33,13 +33,6 @@ let stats: Stats = {
     incrementingInvaderId: 1,
     incrementingWaveId: 1,
     axesInGame: 0,
-};
-
-const areasToAmountOfPlayers = (polygonsByPlayersTotal: PolygonsMatchingPlayers[], playersTotal: number): string[] => {
-    const match = polygonsByPlayersTotal.find((p) => {
-        return playersTotal <= p.upTo;
-    });
-    return match ? match.locations : [];
 };
 
 function createGame(req: Request, res: Response) {
