@@ -10,9 +10,6 @@ import { GameSession } from './gameSessionClass.js';
 export const runAttack = (gameInstance: GameSession, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
-    console.log(stats.incrementingWaveId);
-    console.log(settings.gameLength);
-
     if (stats.incrementingWaveId > settings.gameLength) {
         evaluateSuccessfulDefend(gameInstance);
     } else {

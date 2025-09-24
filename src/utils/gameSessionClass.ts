@@ -26,35 +26,37 @@ export class GameSession {
     public gameTempo: number;
     public ladderLength: number;
     public carriedOilPots: OilPot[] = [];
+    public settings: Settings;
 
     private gameUpdateIntervalId: NodeJS.Timeout | null = null;
     private gameCalculationIntervalId: NodeJS.Timeout | null = null;
 
-    constructor(id: string, sessionName: string, gameLocation: GameLocation, gameTempo: number, ladderLength: number) {
+    constructor(id: string, sessionName: string, gameLocation: GameLocation, settings: Settings) {
         this.id = id;
         this.sessionName = sessionName;
         this.gameLocation = gameLocation;
         this.gameState = GameState.Ready;
-        this.gameTempo = gameTempo;
-        this.ladderLength = ladderLength;
+        this.gameTempo = settings.gameTempo;
+        this.ladderLength = settings.ladderLength;
+        this.settings = settings;
     }
 
-    start(io: Server, settings: Settings, stats: Stats) {
+    start(io: Server, stats: Stats) {
         stats.axesInGame = this.players.filter((p) => p.weaponType === WeaponType.AXE).length;
 
         this.stop(); // prevent multiple start by accident
-        this.populatePolygons(settings);
+        this.populatePolygons();
         this.gameState = GameState.Running;
         io.to(this.id).emit('gameStarted', this.toJSON());
 
         this.gameCalculationIntervalId = setInterval(() => {
-            runAttack(this, settings, stats);
+            runAttack(this, this.settings, stats);
 
             // announce approaching last waves
-            if (stats.incrementingWaveId === settings.gameLength - 2) {
+            if (stats.incrementingWaveId === this.settings.gameLength - 2) {
                 const event: LastWaveNotice = 'incoming';
                 io.to(this.id).emit('lastWaveNotice', event);
-            } else if (stats.incrementingWaveId === settings.gameLength) {
+            } else if (stats.incrementingWaveId === this.settings.gameLength) {
                 const event: LastWaveNotice = 'running';
                 io.to(this.id).emit('lastWaveNotice', event);
             }
@@ -94,10 +96,11 @@ export class GameSession {
             gameTempo: this.gameTempo,
             ladderLength: this.ladderLength,
             carriedOilPots: this.carriedOilPots,
+            settings: this.settings,
         };
     }
 
-    areasToAmountOfPlayers(): string[] {
+    private areasToAmountOfPlayers(): string[] {
         const polygonsByPlayersTotal = this.gameLocation.polygonsToPlayersTotal;
         const playersTotal = this.players.length;
         const match = polygonsByPlayersTotal.find((p) => {
@@ -106,7 +109,7 @@ export class GameSession {
         return match ? match.locations : [];
     }
 
-    populatePolygons(settings: Settings) {
+    private populatePolygons() {
         const allowedPolygons = this.areasToAmountOfPlayers();
 
         let polygonsInGameArea = this.gameLocation.polygons.filter((polygon) => {
@@ -145,7 +148,7 @@ export class GameSession {
                     guardians: [],
                     boilingOil: {
                         readiness: 0,
-                        readyAt: settings.oilBoilingTime,
+                        readyAt: this.settings.oilBoilingTime,
                         location: polygon.boilingOilPotLocation,
                     },
                 });

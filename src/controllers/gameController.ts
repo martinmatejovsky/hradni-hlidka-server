@@ -1,34 +1,13 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Settings, Stats } from '../constants/customTypes';
+import { PlayerData, Stats } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
 
 export const gameSessions: Record<string, GameSession> = {};
 
-let settings: Settings = {
-    gameTempo: 0,
-    gameLength: 0,
-    ladderLength: 0,
-    assaultWaveVolume: 0,
-    assemblyCountdown: 0,
-    wavesMinDelay: 0,
-    weaponsStrength: {
-        sword: 0,
-        cannon: 0,
-        axe: 0,
-        spear: 0,
-    },
-    spearHitDepth: 0,
-    smithyUpgradeWaiting: 0,
-    smithyUpgradeStrength: 0,
-    fragsToUpgradeSword: 0,
-    perkSharpSwordBonus: 0,
-    oilBoilingTime: 0,
-    cannonLoadingTime: 0,
-};
 let stats: Stats = {
     incrementingInvaderId: 1,
     incrementingWaveId: 1,
@@ -38,17 +17,10 @@ let stats: Stats = {
 function createGame(req: Request, res: Response) {
     const id = Date.now().toString();
     const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-4)}`;
-    const session = new GameSession(
-        id,
-        sessionName,
-        req.body.gameLocation,
-        req.body.settings.gameTempo,
-        req.body.settings.ladderLength,
-    );
+    const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
 
     gameSessions[id] = session;
 
-    Object.assign(settings, req.body.settings);
     stats.incrementingInvaderId = 1;
     stats.incrementingWaveId = 1;
 
@@ -61,7 +33,7 @@ function startGame(req: Request) {
 
     const session = gameSessions[gameId];
     if (session) {
-        session.start(io, settings, stats);
+        session.start(io, stats);
     }
 }
 
@@ -86,10 +58,6 @@ const getRunningGames = (req: Request, res: Response) => {
     });
 
     return res.status(200).json(gameNames);
-};
-
-const getGameSettings = (req: Request, res: Response) => {
-    return res.json(settings);
 };
 
 const joinNewPlayer = (player: PlayerData, gameId: string): GameSession => {
@@ -158,7 +126,6 @@ const findPlayerBySocketId = (socketId: string, gameId: string): PlayerData | un
 export default {
     createGame,
     getGameInstance,
-    getGameSettings,
     joinNewPlayer,
     startGame,
     removePlayer,
