@@ -1,11 +1,12 @@
-import type {BattleZone, GameInstance} from "../constants/customTypes";
+import type { BattleZone } from '../constants/customTypes';
+import { GameSession } from './gameSessionClass.js';
 
-export const moveInvadersOnLadder = (gameInstance: GameInstance): void => {
+export const moveInvadersOnLadder = (gameInstance: GameSession): void => {
     const zones = gameInstance.battleZones;
 
-    zones.forEach((zone: BattleZone ): void => {
-        let assembledInvaders = zone.invaders.filter(invader => typeof invader.assemblyArea === "number" )
-        let climbingInvaders = zone.invaders.filter(invader => typeof invader.ladderStep === "number" )
+    zones.forEach((zone: BattleZone): void => {
+        let assembledInvaders = zone.invaders.filter((invader) => typeof invader.assemblyArea === 'number');
+        let climbingInvaders = zone.invaders.filter((invader) => typeof invader.ladderStep === 'number');
 
         if (climbingInvaders.length > 0) {
             for (let i = climbingInvaders.length - 1; i >= 0; i--) {
@@ -25,7 +26,7 @@ export const moveInvadersOnLadder = (gameInstance: GameInstance): void => {
                 newInvader.ladderStep = 0;
             }
 
-            assembledInvaders.forEach(invader => {
+            assembledInvaders.forEach((invader) => {
                 if (invader.assemblyArea !== null) {
                     invader.assemblyArea -= 1;
                 }
