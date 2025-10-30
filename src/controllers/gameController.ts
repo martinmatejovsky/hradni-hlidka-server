@@ -1,7 +1,7 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Stats } from '../constants/customTypes';
+import { PlayerData, Stats, GameState } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
@@ -16,7 +16,7 @@ let stats: Stats = {
 
 function createGame(req: Request, res: Response) {
     const id = Date.now().toString();
-    const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-4)}`;
+    const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-3)}`;
     const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
 
     gameSessions[id] = session;
@@ -53,10 +53,12 @@ const getGameInstance = (req: Request, res: Response) => {
 
 const getRunningGames = (req: Request, res: Response) => {
     const gameIds = Object.keys(gameSessions);
-    const gameNames = gameIds.map((id) => {
-        return { id: id, name: gameSessions[id].sessionName };
-    });
-
+    const gameNames = gameIds
+        .filter((id) => gameSessions[id].gameState === GameState.Ready)
+        .map((id) => ({
+            id,
+            name: gameSessions[id].sessionName,
+        }));
     return res.status(200).json(gameNames);
 };
 
