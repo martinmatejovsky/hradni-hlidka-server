@@ -14,7 +14,6 @@ export default {
         insideZone: '',
         strength: 2,
         perks: {
-            woodenWeapon: true,
             sharpSword: 0,
             boilingOil: false,
         },

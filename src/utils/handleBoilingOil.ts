@@ -1,4 +1,4 @@
-import { OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
+import { experienceValue, OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
 import { GameSession } from './gameSessionClass.js';
 
 export const handleBoilingOil = (gameInstance: GameSession) => {
@@ -55,9 +55,12 @@ export const handleSuccessfullyBoiledOil = (gameInstance: GameSession, oilPot: O
     const randomIndex = hasExtraKill ? Math.floor(Math.random() * 2) : -1;
 
     carryingPlayers.forEach((player, index) => {
+        let killsForPlayer = baseKill + (index === randomIndex ? 1 : 0);
+
         player.perks.boilingOil = false;
         player.canPourBoilingOil = false;
-        player.killScore.kills += baseKill + (index === randomIndex ? 1 : 0);
+        player.killScore.kills += killsForPlayer;
+        player.killScore.experience += killsForPlayer * experienceValue.invaderFinished;
     });
 
     gameInstance.carriedOilPots = gameInstance.carriedOilPots.filter((pot) => pot !== oilPot);

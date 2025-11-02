@@ -1,4 +1,4 @@
-import { BattleZone, Invader, PlayerData, Settings } from '../constants/customTypes';
+import { BattleZone, experienceValue, Invader, PlayerData, Settings } from '../constants/customTypes';
 import evaluateWeaponBroke from './evaluateWeaponBroke.js';
 
 export const weaponHit = {
@@ -18,7 +18,6 @@ export const weaponHit = {
             if (invader.type === 'captain' && !allDefendersAreInZone) return;
 
             let guardianStrength = guardian.strength;
-            if (guardian.perks.woodenWeapon) guardianStrength = Math.ceil(guardianStrength * 0.5);
             if (invader.type === 'shielded') guardianStrength = Math.ceil(guardianStrength * 0.5);
             if (guardian.perks.sharpSword > 0) {
                 guardianStrength += settings.perkSharpSwordBonus;
@@ -29,6 +28,7 @@ export const weaponHit = {
                 guardianStrength -= invader.health;
                 invader.health = 0;
                 guardian.killScore.kills += 1;
+                guardian.killScore.experience += experienceValue.invaderFinished;
 
                 const ladderInvaderIndex = zone.invaders.indexOf(invader);
                 zone.invaders.splice(ladderInvaderIndex, 1);
@@ -39,6 +39,7 @@ export const weaponHit = {
             if (!invader) break;
             if (guardianStrength > 0) {
                 invader.health -= guardianStrength;
+                guardian.killScore.experience += experienceValue.invaderDamaged;
             }
 
             swordsmen.shift();
@@ -56,21 +57,19 @@ export const weaponHit = {
 
             let guardianStrength = guardian.strength;
 
-            if (guardian.perks.woodenWeapon) {
-                guardianStrength = Math.ceil(guardianStrength * 0.5);
-            }
-
             // focus first on shielded invaders
             for (let inv of invadersOnLadder) {
                 if (inv.type === 'shielded') {
                     if (guardianStrength >= inv.feature.shieldEndurance) {
                         guardianStrength -= inv.feature.shieldEndurance;
+                        guardian.killScore.experience += experienceValue.invaderFinished;
                         guardian.killScore.brokenShields += 1;
                         inv.feature.shieldEndurance = 0;
                         inv.type = 'regular';
                     } else if (guardianStrength > 0) {
                         inv.feature.shieldEndurance -= guardianStrength;
                         guardianStrength = 0;
+                        guardian.killScore.experience += experienceValue.invaderDamaged;
                         break;
                     } else break;
                 }
@@ -81,6 +80,7 @@ export const weaponHit = {
                 guardianStrength -= invader.health;
                 invader.health = 0;
                 guardian.killScore.kills += 1;
+                guardian.killScore.experience += experienceValue.invaderFinished;
 
                 const ladderInvaderIndex = zone.invaders.indexOf(invader);
                 zone.invaders.splice(ladderInvaderIndex, 1);
@@ -92,6 +92,7 @@ export const weaponHit = {
 
             if (guardianStrength > 0) {
                 invader.health -= guardianStrength;
+                guardian.killScore.experience += experienceValue.invaderDamaged;
             }
 
             axemen.shift();
@@ -108,7 +109,6 @@ export const weaponHit = {
             let topInvaderLadderStep = invadersOnLadder[0].ladderStep || 0;
 
             let guardianStrength = guardian.strength;
-            if (guardian.perks.woodenWeapon) guardianStrength = Math.ceil(guardianStrength * 0.5);
 
             for (let depth = 0; depth < hitDepth; depth++) {
                 if (!invadersOnLadder[helperIterator]) break;
@@ -118,15 +118,21 @@ export const weaponHit = {
                     invadersOnLadder[helperIterator].type === 'shielded'
                 )
                     return;
+
                 if (invadersOnLadder[helperIterator].type === 'captain') {
                     invadersOnLadder[helperIterator].health -= Math.ceil(guardianStrength * 0.5);
                 } else invadersOnLadder[helperIterator].health -= guardianStrength;
 
                 if (invadersOnLadder[helperIterator].health <= 0) {
                     guardian.killScore.kills += 1;
+                    guardian.killScore.experience += experienceValue.invaderFinished;
+
                     zone.invaders.splice(zone.invaders.indexOf(invadersOnLadder[helperIterator]), 1);
                     invadersOnLadder.splice(helperIterator, 1);
-                } else helperIterator += 1;
+                } else {
+                    guardian.killScore.experience += experienceValue.invaderDamaged;
+                    helperIterator += 1;
+                }
             }
 
             spearmen.shift();

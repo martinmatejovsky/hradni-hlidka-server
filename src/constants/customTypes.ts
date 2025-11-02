@@ -12,19 +12,18 @@ export type PlayerData = {
     insideZone: string;
     strength: number;
     perks: {
-        woodenWeapon: boolean;
         sharpSword: number;
         boilingOil: boolean;
     };
     canPourBoilingOil: boolean;
     socketId: string;
     killScore: {
+        experience: number;
         kills: number;
         brokenShields: number;
     };
 };
 export enum Perks {
-    woodenWeapon = 'woodenWeapon',
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
@@ -170,12 +169,17 @@ export class Invader {
         this.ladderStep = null;
 
         if (type === 'captain') {
-            this.health = Math.ceil(amountOfPlayers * 1.25);
+            this.health = Math.ceil(amountOfPlayers * 12.5);
         } else if (type === 'shielded') {
             this.health = amountOfPlayers;
-            this.feature.shieldEndurance = Math.max(axesInGame * 2, 1);
+            this.feature.shieldEndurance = Math.max(axesInGame * 10, 5);
         } else {
-            this.health = amountOfPlayers;
+            this.health = amountOfPlayers * 10;
         }
     }
+}
+export enum experienceValue {
+    invaderDamaged = 5,
+    invaderFinished = 5,
+    arrowCatch = 1,
 }
