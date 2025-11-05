@@ -3,14 +3,30 @@ export type Coordinates = {
     lng: number | null;
 };
 export type PlayerCoordinates = Coordinates & { accuracy: number | null };
+export type WeaponDescription = {
+    requiredExperience: number;
+    name: string;
+    attackStrength: number;
+};
+export interface WeaponsCatalogue {
+    melee: {
+        [key in WeaponType]?: {
+            level: number;
+            requiredExperience: number;
+            name: string;
+            attackStrength: number;
+        }[];
+    };
+}
 export type PlayerData = {
     key: string;
     name: string;
     weaponType: WeaponType;
-    weaponDurability: number;
+    equippedWeapons: {
+        meleeWeapon: WeaponDescription;
+    };
     location: PlayerCoordinates;
     insideZone: string;
-    strength: number;
     perks: {
         sharpSword: number;
         boilingOil: boolean;
@@ -24,6 +40,7 @@ export type PlayerData = {
     };
 };
 export enum Perks {
+    weaponLevel = 'weaponLevel',
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
@@ -121,7 +138,6 @@ export type Settings = {
     assaultWaveVolume: number;
     assemblyCountdown: number;
     wavesMinDelay: number;
-    weaponsStrength: Record<WeaponType, number>;
     spearHitDepth: number;
     smithyUpgradeWaiting: number;
     smithyUpgradeStrength: number;

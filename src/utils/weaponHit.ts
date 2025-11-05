@@ -17,7 +17,7 @@ export const weaponHit = {
             // Captain je zranitelný šermířem jen pokud všichni šermíři jsou v zóně
             if (invader.type === 'captain' && !allDefendersAreInZone) return;
 
-            let guardianStrength = guardian.strength;
+            let guardianStrength = guardian.equippedWeapons.meleeWeapon.attackStrength;
             if (invader.type === 'shielded') guardianStrength = Math.ceil(guardianStrength * 0.5);
             if (guardian.perks.sharpSword > 0) {
                 guardianStrength += settings.perkSharpSwordBonus;
@@ -55,7 +55,7 @@ export const weaponHit = {
         while (axemen.length > 0) {
             const guardian = axemen[0];
 
-            let guardianStrength = guardian.strength;
+            let guardianStrength = guardian.equippedWeapons.meleeWeapon.attackStrength;
 
             // focus first on shielded invaders
             for (let inv of invadersOnLadder) {
@@ -108,7 +108,7 @@ export const weaponHit = {
             let helperIterator = 0;
             let topInvaderLadderStep = invadersOnLadder[0].ladderStep || 0;
 
-            let guardianStrength = guardian.strength;
+            let guardianStrength = guardian.equippedWeapons.meleeWeapon.attackStrength;
 
             for (let depth = 0; depth < hitDepth; depth++) {
                 if (!invadersOnLadder[helperIterator]) break;

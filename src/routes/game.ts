@@ -7,5 +7,6 @@ router.post('/createGame', gameController.createGame);
 router.get('/checkGameStatus', gameController.checkGameStatus);
 router.post('/start', gameController.startGame);
 router.get('/runningGames', gameController.getRunningGames);
+router.get('/weapons', gameController.getWeapons);
 
 export default router;

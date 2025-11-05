@@ -3,10 +3,6 @@ import { evaluateWeaponAbility } from './evaluateWeaponAbility';
 import { weaponHit } from './weaponHit';
 import { shuffleArray } from './shuffleArray.js';
 
-interface GuardianStrength extends PlayerData {
-    guardianStrength?: number;
-}
-
 export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[], settings: Settings): void => {
     zones.forEach((zone: BattleZone): void => {
         const invadersOnLadder = [...zone.invaders].filter((invader) => invader.ladderStep !== null);
@@ -24,7 +20,7 @@ export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[], s
         // dělit zkušenosti mezi obránce, než že se budou k pořadí na úder dostávat náhodně.
         // Aby hra byla těžší, tak sekerníci, kteří umí rozbíjet štíty, budou vyhodnoceni jako poslední; kopiníci
         // jako první.
-        const guardiansWithSword: GuardianStrength[] = guardiansCloseCombatInZone.filter(
+        const guardiansWithSword: PlayerData[] = guardiansCloseCombatInZone.filter(
             (g) => g.weaponType === WeaponType.SWORD,
         );
         const guardiansWithAxe = guardiansCloseCombatInZone.filter((g) => g.weaponType === WeaponType.AXE);

@@ -1,10 +1,11 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Stats, GameState } from '../constants/customTypes';
+import { PlayerData, Stats, GameState, WeaponDescription } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
+import { WEAPONS_CATALOGUE } from '../constants/projectConstants.js';
 
 export const gameSessions: Record<string, GameSession> = {};
 
@@ -62,6 +63,10 @@ const getRunningGames = (req: Request, res: Response) => {
     return res.status(200).json(gameNames);
 };
 
+const getWeapons = (req: Request, res: Response) => {
+    return res.json(WEAPONS_CATALOGUE);
+};
+
 const joinNewPlayer = (player: PlayerData, gameId: string): GameSession => {
     gameSessions[gameId].players.push(player);
     updateGuardians(player, gameSessions[gameId]);
@@ -93,17 +98,27 @@ const relocatePlayer = (player: PlayerData, gameId: string): GameSession => {
     return gameSessions[gameId];
 };
 
-const upgradeGuardian = (player: PlayerData, perk: Perks, perkValue: number | string, gameId: string): GameSession => {
+const upgradeGuardian = (
+    player: PlayerData,
+    perk: Perks,
+    perkValue: number | string | WeaponDescription,
+    gameId: string,
+): GameSession => {
     const session = gameSessions[gameId];
     const playerToUpdate = session.players.find((p) => p.key === player.key);
     if (!playerToUpdate) {
         return session;
     }
 
-    if (perk === Perks.boilingOil) {
-        pickUpBoilingOil(session, playerToUpdate, perkValue);
-    } else {
-        playerToUpdate.perks[perk] = perkValue;
+    switch (perk) {
+        case Perks.boilingOil:
+            pickUpBoilingOil(session, playerToUpdate, perkValue as string | number);
+            break;
+        case Perks.weaponLevel:
+            playerToUpdate.equippedWeapons.meleeWeapon = perkValue as WeaponDescription;
+            break;
+        default:
+            playerToUpdate.perks[perk] = perkValue as number;
     }
 
     return session;
@@ -137,4 +152,5 @@ export default {
     dropUnsupportedOilPot,
     findPlayerBySocketId,
     getRunningGames,
+    getWeapons,
 };
