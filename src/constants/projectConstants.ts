@@ -64,6 +64,13 @@ export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
                 attackStrength: 30,
             },
         ],
-        [WeaponType.CANNON]: [],
+        [WeaponType.CANNON]: [
+            {
+                level: 0,
+                requiredExperience: 0,
+                name: 'Kanon',
+                attackStrength: 0,
+            },
+        ],
     },
 };

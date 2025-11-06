@@ -1,4 +1,5 @@
 import type { OilPot, PlayerData } from '../constants/customTypes.js';
+import { experienceValue } from '../constants/customTypes.js';
 import { handleSuccessfullyBoiledOil } from '../utils/handleBoilingOil.js';
 import { gameSessions } from './gameController.js';
 import { Server } from 'socket.io';
@@ -30,7 +31,7 @@ const fireCannon = (targetZoneKey: string, firedBy: string, gameId: string): Gam
     affectedBattleZone.invaders = affectedBattleZone.invaders.filter((invader) => {
         if (typeof invader.ladderStep === 'number' || invader.type === 'captain') return true;
 
-        const randomKillThisOne = Math.random() < 0.5;
+        const randomKillThisOne = Math.random() < 0.4;
         if (randomKillThisOne) {
             killedAmount += 1;
             return false;
@@ -40,6 +41,7 @@ const fireCannon = (targetZoneKey: string, firedBy: string, gameId: string): Gam
     });
     const firingPlayer = gameInstance.players.find((player) => player.key === firedBy);
     if (firingPlayer) {
+        firingPlayer.killScore.experience += killedAmount * experienceValue.invaderFinished;
         firingPlayer.killScore.kills += killedAmount;
     }
 

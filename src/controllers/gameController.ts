@@ -103,6 +103,7 @@ const upgradeGuardian = (
     perk: Perks,
     perkValue: number | string | WeaponDescription,
     gameId: string,
+    perkCost?: number,
 ): GameSession => {
     const session = gameSessions[gameId];
     const playerToUpdate = session.players.find((p) => p.key === player.key);
@@ -120,6 +121,8 @@ const upgradeGuardian = (
         default:
             playerToUpdate.perks[perk] = perkValue as number;
     }
+
+    if (perkCost) playerToUpdate.killScore.experience -= perkCost;
 
     return session;
 };

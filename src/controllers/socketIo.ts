@@ -45,6 +45,7 @@ function initializeSocket(server: any) {
                 payload.perk,
                 payload.perkValue,
                 socket.data.gameId,
+                payload.perkCost,
             );
 
             io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers);

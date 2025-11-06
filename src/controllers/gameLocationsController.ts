@@ -105,7 +105,7 @@ const getGameLocations = (_: Request, res: Response) => {
                     boilingOilPotLocation: { lat: 50.1909119, lng: 12.7433344 },
                 },
             ],
-            speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
+            speedChoices: [2000, 5000, 30000, 60000],
             ladderLengthChoices: [10, 20, 30],
         },
         {
@@ -288,7 +288,7 @@ const getGameLocations = (_: Request, res: Response) => {
                     boilingOilPotLocation: { lat: 50.18643, lng: 12.7564731 },
                 },
             ],
-            speedChoices: [2000, 5000, 10000, 15000, 20000, 25000, 30000, 60000],
+            speedChoices: [2000, 5000, 30000, 60000],
             ladderLengthChoices: [20, 30, 40],
         },
     ]);
