@@ -187,7 +187,7 @@ export class Invader {
         if (type === 'captain') {
             this.health = Math.ceil(amountOfPlayers * 12.5);
         } else if (type === 'shielded') {
-            this.health = amountOfPlayers;
+            this.health = amountOfPlayers * 10;
             this.feature.shieldEndurance = Math.max(axesInGame * 10, 5);
         } else {
             this.health = amountOfPlayers * 10;

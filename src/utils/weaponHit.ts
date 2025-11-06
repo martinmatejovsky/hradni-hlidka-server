@@ -1,5 +1,4 @@
 import { BattleZone, experienceValue, Invader, PlayerData, Settings } from '../constants/customTypes';
-import evaluateWeaponBroke from './evaluateWeaponBroke.js';
 
 export const weaponHit = {
     swordHit: (
@@ -88,9 +87,7 @@ export const weaponHit = {
                 invader = invadersOnLadder[invaderIndex];
             }
 
-            evaluateWeaponBroke();
-
-            if (guardianStrength > 0) {
+            if (guardianStrength > 0 && invader) {
                 invader.health -= guardianStrength;
                 guardian.killScore.experience += experienceValue.invaderDamaged;
             }
