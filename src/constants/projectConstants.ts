@@ -13,15 +13,21 @@ export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
             },
             {
                 level: 1,
-                requiredExperience: 5,
+                requiredExperience: 30,
                 name: 'ocelový meč',
-                attackStrength: 20,
+                attackStrength: 15,
             },
             {
                 level: 2,
-                requiredExperience: 10,
+                requiredExperience: 80,
+                name: 'vyvážený meč',
+                attackStrength: 19,
+            },
+            {
+                level: 3,
+                requiredExperience: 180,
                 name: 'Severní ostří',
-                attackStrength: 30,
+                attackStrength: 22,
             },
         ],
         [WeaponType.AXE]: [
@@ -33,15 +39,21 @@ export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
             },
             {
                 level: 1,
-                requiredExperience: 5,
+                requiredExperience: 30,
                 name: 'dřevorubcova sekera',
-                attackStrength: 20,
+                attackStrength: 15,
             },
             {
                 level: 2,
-                requiredExperience: 10,
+                requiredExperience: 80,
                 name: 'bojová sekera',
-                attackStrength: 30,
+                attackStrength: 19,
+            },
+            {
+                level: 2,
+                requiredExperience: 180,
+                name: 'Zub trolla',
+                attackStrength: 22,
             },
         ],
         [WeaponType.SPEAR]: [
@@ -53,15 +65,21 @@ export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
             },
             {
                 level: 1,
-                requiredExperience: 5,
+                requiredExperience: 30,
                 name: 'farmářův šťouch',
-                attackStrength: 20,
+                attackStrength: 14,
             },
             {
                 level: 2,
-                requiredExperience: 10,
+                requiredExperience: 80,
                 name: 'strážné kopí',
-                attackStrength: 30,
+                attackStrength: 18,
+            },
+            {
+                level: 3,
+                requiredExperience: 180,
+                name: 'Špíz',
+                attackStrength: 21,
             },
         ],
         [WeaponType.CANNON]: [
