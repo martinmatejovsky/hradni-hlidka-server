@@ -1,12 +1,13 @@
-import type {BattleZone, Settings, GameInstance, Stats} from "../constants/customTypes";
-import {wipeLadderInvaders} from "./wipeLadderInvaders";
-import {moveInvadersOnLadder} from "./moveInvadersOnLadder";
-import {checkAnyAreaConquered} from "./checkAnyAreaConquered";
-import {assembleInvaders} from "./assembleInvaders";
-import {evaluateSuccessfulDefend} from "./evaluateSuccessfulDefend";
-import {handleBoilingOil} from "./handleBoilingOil";
+import type { BattleZone, Settings, Stats } from '../constants/customTypes';
+import { wipeLadderInvaders } from './wipeLadderInvaders';
+import { moveInvadersOnLadder } from './moveInvadersOnLadder';
+import { checkAnyAreaConquered } from './checkAnyAreaConquered';
+import { assembleInvaders } from './assembleInvaders';
+import { evaluateSuccessfulDefend } from './evaluateSuccessfulDefend';
+import { handleBoilingOil } from './handleBoilingOil';
+import { GameSession } from './gameSessionClass.js';
 
-export const runAttack = (gameInstance: GameInstance, settings: Settings, stats: Stats) => {
+export const runAttack = (gameInstance: GameSession, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
 
     if (stats.incrementingWaveId > settings.gameLength) {
@@ -16,7 +17,7 @@ export const runAttack = (gameInstance: GameInstance, settings: Settings, stats:
     }
 
     // calculate damage done by guardians and remove attackers from ladders
-    wipeLadderInvaders(battleZones, gameInstance.players);
+    wipeLadderInvaders(battleZones, gameInstance.players, settings);
 
     // move attackers up the ladder
     moveInvadersOnLadder(gameInstance);
@@ -25,4 +26,4 @@ export const runAttack = (gameInstance: GameInstance, settings: Settings, stats:
     checkAnyAreaConquered(gameInstance);
 
     handleBoilingOil(gameInstance);
-}
+};

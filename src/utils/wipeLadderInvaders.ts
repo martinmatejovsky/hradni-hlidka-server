@@ -1,62 +1,59 @@
-import type {BattleZone, PlayerData} from "../constants/customTypes";
-import {evaluateWeaponAbility} from "./evaluateWeaponAbility.js";
+import { BattleZone, PlayerData, Settings, WeaponType } from '../constants/customTypes';
+import { evaluateWeaponAbility } from './evaluateWeaponAbility';
+import { weaponHit } from './weaponHit';
+import { shuffleArray } from './shuffleArray.js';
 
-export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[]): void => {
+export const wipeLadderInvaders = (zones: BattleZone[], players: PlayerData[], settings: Settings): void => {
     zones.forEach((zone: BattleZone): void => {
+        const invadersOnLadder = [...zone.invaders].filter((invader) => invader.ladderStep !== null);
+        if (invadersOnLadder.length === 0) return;
+
+        const guardiansCloseCombatInZone: PlayerData[] = players
+            .filter((p) => zone.guardians.includes(p.key))
+            .filter((p) => {
+                return evaluateWeaponAbility(p.weaponType).canDefeatInvaders;
+            });
+
+        if (guardiansCloseCombatInZone.length === 0) return;
+
         // Zamíchej obránce, protože chci umožnit obráncům sbírat statistiky zabitých a nevím, jak jinak spravedlivě
-        // dělit zkušenosti mezi obránce, než že se budou k pořadí na úder dostávat náhodně
-        let shuffledGuardians = [...zone.guardians].sort(() => Math.random() - 0.5);
-        let invadersOnLadder = [...zone.invaders].filter(invader => invader.ladderStep !== null);
-        let guardiansAvailableToFight = players.filter(player => evaluateWeaponAbility(player.weaponType))
-        const allDefendersAreInZone = guardiansAvailableToFight.every(player => player.insideZone === zone.key);
+        // dělit zkušenosti mezi obránce, než že se budou k pořadí na úder dostávat náhodně.
+        // Aby hra byla těžší, tak sekerníci, kteří umí rozbíjet štíty, budou vyhodnoceni jako poslední; kopiníci
+        // jako první.
+        const guardiansWithSword: PlayerData[] = guardiansCloseCombatInZone.filter(
+            (g) => g.weaponType === WeaponType.SWORD,
+        );
+        const guardiansWithAxe = guardiansCloseCombatInZone.filter((g) => g.weaponType === WeaponType.AXE);
+        const guardiansWithSpear = guardiansCloseCombatInZone.filter((g) => g.weaponType === WeaponType.SPEAR);
 
-        if (invadersOnLadder.length > 0) {
-            const usedSmithyPerk = new Map<string, boolean>(); // Temporary state to track used perks
+        const allDefendersAgainstCaptain = players.filter((player) => player.weaponType === WeaponType.SWORD);
+        const allDefendersAreInZone = allDefendersAgainstCaptain.every((player) => player.insideZone === zone.key);
 
-            invadersOnLadder.forEach((invader, invaderIndex) => {
-                if (invader.type === "captain" && !allDefendersAreInZone) {
-                    return;
-                }
+        invadersOnLadder.forEach((invader, invaderIndex) => {
+            if (guardiansWithSword.length > 0) {
+                shuffleArray(guardiansWithSword);
+                weaponHit.swordHit(
+                    guardiansWithSword,
+                    invader,
+                    zone,
+                    invaderIndex,
+                    invadersOnLadder,
+                    allDefendersAreInZone,
+                    settings,
+                );
+            }
+        });
 
-                while (shuffledGuardians.length > 0 && invader.health > 0) {
-                    let guardian = players.find(player => player.key === shuffledGuardians[0]) ;
+        invadersOnLadder.forEach((invader, invaderIndex) => {
+            if (guardiansWithAxe.length > 0) {
+                shuffleArray(guardiansWithAxe);
+                weaponHit.axeHit(guardiansWithAxe, invader, zone, invaderIndex, invadersOnLadder);
+            }
+        });
 
-                    // if guardian has no ability to defeat invaders, skip him
-                    if (!guardian || !evaluateWeaponAbility(guardian.weaponType).canDefeatInvaders) return
-
-                    let guardianStrength = guardian.strength;
-
-                    // Pokud má guardian perk sharpSword, zvýší se jeho síla a opotřebuje se výdrž perku
-                    if (guardian.perks.sharpSword > 0 && !usedSmithyPerk.get(guardian.key)) {
-                        guardianStrength += 1;
-                        guardian.perks.sharpSword -= 1;
-                        usedSmithyPerk.set(guardian.key, true);
-                    }
-
-                    // Aplikuj sílu obránce na nájezdníka
-                    if (guardianStrength >= invader.health) {
-                        guardianStrength -= invader.health;
-                        invader.health = 0;
-                        guardian.killScore += 1;
-
-                        const ladderInvaderIndex = zone.invaders.indexOf(invader);
-                        zone.invaders.splice(ladderInvaderIndex, 1);
-                        invadersOnLadder.splice(invaderIndex, 1);
-
-                        // Pokud zbyla nějaká síla, použij ji na dalšího nájezdníka
-                        if (guardianStrength > 0 && invaderIndex < invadersOnLadder.length) {
-                            invader = invadersOnLadder[invaderIndex];
-
-                        } else {
-                            shuffledGuardians.shift(); // Síla spotřebována, odstranit obránce
-                        }
-                    } else {
-                        // Pokud obráncova síla nestačí k zabití nájezdníka
-                        invader.health -= guardianStrength;
-                        shuffledGuardians.shift(); // Síla spotřebována, odstranit obránce
-                    }
-                }
-            })
+        if (invadersOnLadder.length > 0 && guardiansWithSpear.length > 0) {
+            shuffleArray(guardiansWithSpear);
+            weaponHit.spearHit(guardiansWithSpear, zone, invadersOnLadder, settings);
         }
     });
-}
+};

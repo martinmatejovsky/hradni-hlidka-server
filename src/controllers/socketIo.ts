@@ -1,67 +1,96 @@
-import {Server} from "socket.io";
+import { Server } from 'socket.io';
 import gameController from './gameController';
-import weaponsController from "./weaponsController.js";
-import {cannonBallSpeed} from "../constants/projectConstants.js";
+import weaponsController from './weaponsController.js';
+import { cannonBallSpeed } from '../constants/projectConstants.js';
+import { gameSessions } from './gameController.js';
 
 function initializeSocket(server: any) {
-    const io = new Server(
-        server, { cors: { origin: process.env.CORS_ORIGIN || 'http://localhost:3000' } });
+    const io = new Server(server, { cors: { origin: process.env.CORS_ORIGIN || 'http://localhost:3000' } });
 
     io.on('connection', (socket) => {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
+            socket.data.gameId = payload.gameId;
 
             const playerWithSocketId = { ...payload.player, socketId: socket.id };
-            const gameWithNewPlayer = gameController.joinNewPlayer(playerWithSocketId);
-            io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer)
+            const gameWithNewPlayer = gameController.joinNewPlayer(playerWithSocketId, payload.gameId);
+            io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer);
         });
 
         socket.on('leaveGame', (payload, callback) => {
-            const gameWithoutPlayer = gameController.removePlayer(payload.player);
+            if (!gameSessions[payload.gameId]) return;
+
+            const gameWithoutPlayer = gameController.removePlayer(payload.player, payload.gameId);
             socket.leave(payload.gameId);
-            io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer)
+
+            if (gameWithoutPlayer.players.length === 0) {
+                gameWithoutPlayer.stop();
+                delete gameSessions[payload.gameId];
+            } else {
+                io.to(payload.gameId).emit('playerLeftGame', gameWithoutPlayer);
+            }
 
             callback(); // This will trigger the resolve in the client's promise
         });
 
         socket.on('playerRelocatedToZone', (payload) => {
-            const gameWithRelocatedPlayers = gameController.relocatePlayer(payload.player);
+            const gameWithRelocatedPlayers = gameController.relocatePlayer(payload.player, socket.data.gameId);
 
-            io.to(payload.gameId).emit('gameUpdated', gameWithRelocatedPlayers)
+            io.to(socket.data.gameId).emit('gameUpdated', gameWithRelocatedPlayers);
         });
 
         socket.on('smithyUpgradeAchieved', (payload) => {
-            const gameWithUpgradedPlayers = gameController.upgradeGuardian(payload.player, payload.perk, payload.perkValue);
+            const gameWithUpgradedPlayers = gameController.upgradeGuardian(
+                payload.player,
+                payload.perk,
+                payload.perkValue,
+                socket.data.gameId,
+                payload.perkCost,
+            );
 
-            io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers)
-        })
+            io.to(payload.gameId).emit('gameUpdated', gameWithUpgradedPlayers);
+        });
 
         socket.on('dropUnsupportedOilPot', (payload) => {
-            const gameWithDroppedPot = gameController.dropUnsupportedOilPot(payload.player);
+            const gameWithDroppedPot = gameController.dropUnsupportedOilPot(payload.player, socket.data.gameId);
             io.emit('gameUpdated', gameWithDroppedPot);
-        })
+        });
 
         socket.on('oilIsPouredOff', (payload) => {
-            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player, io);
-            io.emit('gameUpdated', gameWithUpdatedOilPots);
-        })
+            const { gameId } = socket.data;
+            const gameWithUpdatedOilPots = weaponsController.setPouredOffOilPots(payload.player, gameId, io);
+            io.to(gameId).emit('gameUpdated', gameWithUpdatedOilPots);
+        });
 
         socket.on('fireCannon', (payload) => {
+            const { gameId } = socket.data;
+
             // emit event to all players, that cannonball is fired, so each player can show the cannonball flight animation
-            io.emit('cannonIsFired', payload.targetZoneKey, payload.firedBy);
+            io.to(gameId).emit('cannonIsFired', payload.targetZoneKey, payload.firedBy);
 
             // set timeout, because cannonball is traveling
             setTimeout(() => {
-                const gameWithUpdatedAfterFiring =
-                    weaponsController.fireCannon(payload.targetZoneKey, payload.firedBy);
-                    io.emit('gameUpdated', gameWithUpdatedAfterFiring);
-              }, cannonBallSpeed);
-        })
+                const gameWithUpdatedAfterFiring = weaponsController.fireCannon(
+                    payload.targetZoneKey,
+                    payload.firedBy,
+                    gameId,
+                );
+                io.to(gameId).emit('gameUpdated', gameWithUpdatedAfterFiring);
+            }, cannonBallSpeed);
+        });
 
         socket.on('disconnect', () => {
-            const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id);
+            if (!gameSessions[socket.data.gameId]) return;
+
+            const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id, socket.data.gameId);
+
             if (disconnectedPlayer) {
-                gameController.removePlayer(disconnectedPlayer);
+                gameController.removePlayer(disconnectedPlayer, socket.data.gameId);
+
+                if (gameSessions[socket.data.gameId].players.length === 0) {
+                    gameSessions[socket.data.gameId].stop();
+                    delete gameSessions[socket.data.gameId];
+                }
             }
         });
     });
