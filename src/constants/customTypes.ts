@@ -44,6 +44,11 @@ export enum Perks {
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
+export enum ShootingPhases {
+    reloading,
+    aiming,
+    shooting,
+}
 export enum GameState {
     None,
     Ready,
@@ -58,9 +63,11 @@ export interface BasePolygon {
     polygonType: PolygonType;
     areaOfAcceptedPresence: Coordinates[];
     areaPresentational: Coordinates[];
-    assemblyArea?: Coordinates[]; // can be set manually for specific places, but generally is calculated by randomizer
     assaultLadder?: AssaultLadder;
     assemblyAreaCenter?: Coordinates;
+    assemblyArea?: Coordinates[]; // can be set manually for specific places, but generally is calculated by randomizer
+    assemblyCountdown: number;
+    archersPositionCenter: Coordinates;
     boilingOilPotLocation?: Coordinates;
 }
 export interface PolygonsMatchingPlayers {
@@ -96,6 +103,10 @@ export interface BattleZone {
     assemblyArea: Coordinates[];
     assemblyAreaCenter: Coordinates;
     assemblyCountdown: number;
+    archers: {
+        shootingPhase: ShootingPhases;
+        archersPositionCenter: Coordinates;
+    };
     assaultLadder: AssaultLadder;
     waveCooldown: number;
 }
