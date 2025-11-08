@@ -9,6 +9,7 @@ import {
     Stats,
     Settings,
     WeaponType,
+    ShootingPhases,
 } from '../constants/customTypes.js';
 import { runAttack } from './runAttack.js';
 import { generatePointsAroundCenter } from './generatePointsAroundCenter.js';
@@ -133,6 +134,10 @@ export class GameSession {
                     assaultLadder: {
                         location: polygon.assaultLadder!.location!,
                         steps: calculateLadderSteps(polygon.assaultLadder!, this.ladderLength),
+                    },
+                    archers: {
+                        shootingPhase: ShootingPhases.reloading,
+                        archersPositionCenter: polygon.archersPositionCenter,
                     },
                     waveCooldown: 0,
                 });

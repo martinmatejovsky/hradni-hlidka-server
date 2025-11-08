@@ -30,13 +30,14 @@ const getGameLocations = (_: Request, res: Response) => {
                         { lat: 50.1910528, lng: 12.743295 },
                         { lat: 50.1911431, lng: 12.7429128 },
                     ],
-                    assemblyAreaCenter: { lat: 50.1914425, lng: 12.7434172 },
                     assaultLadder: {
                         location: {
                             start: { lat: 50.1913958, lng: 12.7433683 },
                             end: { lat: 50.1912017, lng: 12.7431569 },
                         },
                     },
+                    assemblyAreaCenter: { lat: 50.1914425, lng: 12.7434172 },
+                    archersPositonCenter: { lat: 50.1912783, lng: 12.7430758 },
                 },
                 {
                     polygonName: 'U Stašků',
@@ -54,13 +55,14 @@ const getGameLocations = (_: Request, res: Response) => {
                         { lat: 50.1909264, lng: 12.7437878 },
                         { lat: 50.1910069, lng: 12.7435381 },
                     ],
-                    assemblyAreaCenter: { lat: 50.1912708, lng: 12.7439428 },
                     assaultLadder: {
                         location: {
                             start: { lat: 50.1912553, lng: 12.7439131 },
                             end: { lat: 50.1910533, lng: 12.7437153 },
                         },
                     },
+                    assemblyAreaCenter: { lat: 50.1912708, lng: 12.7439428 },
+                    archersPositonCenter: { lat: 50.1913094, lng: 12.7436847 },
                 },
                 {
                     polygonName: 'Baráček',
@@ -78,13 +80,14 @@ const getGameLocations = (_: Request, res: Response) => {
                         { lat: 50.1907103, lng: 12.744425 },
                         { lat: 50.1908658, lng: 12.7439169 },
                     ],
-                    assemblyAreaCenter: { lat: 50.1910528, lng: 12.7444283 },
                     assaultLadder: {
                         location: {
                             start: { lat: 50.1910169, lng: 12.7443422 },
                             end: { lat: 50.1908794, lng: 12.7442031 },
                         },
                     },
+                    assemblyAreaCenter: { lat: 50.1910528, lng: 12.7444283 },
+                    archersPositonCenter: { lat: 50.1910828, lng: 12.7447281 },
                 },
                 {
                     polygonName: 'Kovárna',
@@ -146,6 +149,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1869142, lng: 12.75669 },
+                    archersPositionCenter: { lat: 50.1869475, lng: 12.7564922 },
                 },
                 {
                     polygonName: 'Fortna',
@@ -170,6 +174,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1867775, lng: 12.7566764 },
+                    archersPositionCenter: { lat: 50.1867189, lng: 12.7566183 },
                 },
                 {
                     polygonName: 'Parkán',
@@ -194,6 +199,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1866236, lng: 12.7567814 },
+                    archersPositionCenter: { lat: 50.1866158, lng: 12.7566397 },
                 },
                 {
                     polygonName: 'Sv. Václava',
@@ -218,6 +224,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1863506, lng: 12.7567706 },
+                    archersPositionCenter: { lat: 50.186305, lng: 12.7567175 },
                 },
                 {
                     polygonName: 'U Purkrabího',
@@ -242,6 +249,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1862431, lng: 12.7567028 },
+                    archersPositionCenter: { lat: 50.186185, lng: 12.7567631 },
                 },
                 {
                     polygonName: 'Pozorovatelna',
@@ -266,6 +274,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1860019, lng: 12.7567517 },
+                    archersPositionCenter: { lat: 50.1860253, lng: 12.7566719 },
                 },
                 {
                     polygonName: 'Kovárna',
