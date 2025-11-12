@@ -38,16 +38,27 @@ export type PlayerData = {
         kills: number;
         brokenShields: number;
     };
+    underArrowAttack?: boolean;
+    arrowDefendTarget?: {
+        horizontal: number;
+        vertical: number;
+    };
 };
 export enum Perks {
     weaponLevel = 'weaponLevel',
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
-export enum ShootingPhases {
+export enum ArcherPhases {
     reloading,
     aiming,
     shooting,
+}
+export interface ArcherOutpost {
+    phase: ArcherPhases;
+    archersPositionCenter: Coordinates;
+    phaseTimer: number; // countdown for current phase
+    cooldownTicks: number; // random cooldown for reloading
 }
 export enum GameState {
     None,
@@ -103,10 +114,7 @@ export interface BattleZone {
     assemblyArea: Coordinates[];
     assemblyAreaCenter: Coordinates;
     assemblyCountdown: number;
-    archers: {
-        shootingPhase: ShootingPhases;
-        archersPositionCenter: Coordinates;
-    };
+    archers: ArcherOutpost;
     assaultLadder: AssaultLadder;
     waveCooldown: number;
 }
@@ -156,6 +164,7 @@ export type Settings = {
     perkSharpSwordBonus: number;
     oilBoilingTime: number;
     cannonLoadingTime: number;
+    arrowFlyingTime: number;
 };
 export type Stats = {
     incrementingInvaderId: number;

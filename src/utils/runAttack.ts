@@ -6,7 +6,7 @@ import { assembleInvaders } from './assembleInvaders';
 import { evaluateSuccessfulDefend } from './evaluateSuccessfulDefend';
 import { handleBoilingOil } from './handleBoilingOil';
 import { GameSession } from './gameSessionClass.js';
-import archersShoot from './archersShoot.js';
+import manageArcherOutpost from './manageArcherOutpost.js';
 
 export const runAttack = (gameInstance: GameSession, settings: Settings, stats: Stats) => {
     let battleZones: BattleZone[] = gameInstance.battleZones;
@@ -21,7 +21,7 @@ export const runAttack = (gameInstance: GameSession, settings: Settings, stats: 
     wipeLadderInvaders(battleZones, gameInstance.players, settings);
 
     // archers
-    archersShoot(battleZones);
+    manageArcherOutpost(battleZones, gameInstance.players);
 
     // move attackers up the ladder
     moveInvadersOnLadder(gameInstance);

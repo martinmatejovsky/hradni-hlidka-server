@@ -16,16 +16,20 @@ let stats: Stats = {
 };
 
 function createGame(req: Request, res: Response) {
-    const id = Date.now().toString();
-    const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-3)}`;
-    const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
+    if (!req.body.gameLocation) {
+        res.status(400).send('Invalid game location');
+    } else {
+        const id = Date.now().toString();
+        const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-3)}`;
+        const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
 
-    gameSessions[id] = session;
+        gameSessions[id] = session;
 
-    stats.incrementingInvaderId = 1;
-    stats.incrementingWaveId = 1;
+        stats.incrementingInvaderId = 1;
+        stats.incrementingWaveId = 1;
 
-    res.status(201).json(session.toJSON());
+        res.status(201).json(session.toJSON());
+    }
 }
 
 function startGame(req: Request) {
