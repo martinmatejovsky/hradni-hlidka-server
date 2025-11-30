@@ -3,7 +3,7 @@ import { BattleZone, ArcherPhases, PlayerData } from '../constants/customTypes.j
 const randomCooldown = (): number => Math.floor(Math.random() * 1) + 1;
 const randomOrientation = () => ({
     horizontal: Math.round(Math.random() * 360), // alpha
-    vertical: Math.round(10 + Math.random() * 70), // beta limited to 10–80
+    vertical: Math.round(10 + Math.random() * 70), // beta limited to 90–170
 });
 
 export default function manageArcherOutpost(zones: BattleZone[], players: PlayerData[]): void {
