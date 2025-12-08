@@ -8,6 +8,12 @@ export type WeaponDescription = {
     name: string;
     attackStrength: number;
 };
+export type ShieldDescription = {
+    level: number;
+    requiredExperience: number;
+    name: string;
+    arrowCapacity: number;
+};
 export interface WeaponsCatalogue {
     melee: {
         [key in WeaponType]?: {
@@ -17,6 +23,7 @@ export interface WeaponsCatalogue {
             attackStrength: number;
         }[];
     };
+    shield: ShieldDescription[];
 }
 export type PlayerData = {
     key: string;
@@ -213,9 +220,4 @@ export class Invader {
             this.health = amountOfPlayers * 10;
         }
     }
-}
-export enum experienceValue {
-    invaderDamaged = 5,
-    invaderFinished = 5,
-    arrowCatch = 1,
 }

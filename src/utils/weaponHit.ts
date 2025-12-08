@@ -1,4 +1,5 @@
-import { BattleZone, experienceValue, Invader, PlayerData, Settings } from '../constants/customTypes';
+import { BattleZone, Invader, PlayerData, Settings } from '../constants/customTypes';
+import { experienceValue } from '../constants/projectConstants';
 
 export const weaponHit = {
     swordHit: (

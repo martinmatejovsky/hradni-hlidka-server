@@ -1,4 +1,5 @@
-import { experienceValue, OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
+import { experienceValue } from '../constants/projectConstants';
+import { OilPot, PlayerData, UtilityZone } from '../constants/customTypes.js';
 import { GameSession } from './gameSessionClass.js';
 
 export const handleBoilingOil = (gameInstance: GameSession) => {

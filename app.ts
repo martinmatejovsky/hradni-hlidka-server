@@ -17,6 +17,7 @@ const port = process.env.PORT || 8080;
 const frontendPath = process.env.FRONTEND_PATH || '../hradni-hlidka/dist';
 import initializeSocket from './src/controllers/socketIo.js';
 import { Request, Response, NextFunction } from 'express';
+import { hostname } from 'node:os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,5 +41,5 @@ app.use(express.static(path.join(__dirname, frontendPath)));
 // to see IP of localhost computer run IPCONFIG and instead of 0.0.0.0 put local ipv4 address
 // to run server on PROD environment I probably have to use hostname '0.0.0.0'
 server.listen(8080, '0.0.0.0', () => {
-    console.log('HTTPS Backend running...');
+    console.log('HTTPS Backend running at', hostname(), port);
 });

@@ -97,6 +97,8 @@ function initializeSocket(server: any) {
         });
 
         socket.on('shieldDefenceResult', (payload) => {
+            if (!payload.caughtArrows || payload.caughtArrows == 0) return;
+
             const { gameId } = socket.data;
             const newExperienceValue = weaponsController.awardCaughtArrows(
                 payload.playerKey,

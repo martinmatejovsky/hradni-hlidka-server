@@ -1,5 +1,5 @@
 import type { OilPot, PlayerData } from '../constants/customTypes.js';
-import { experienceValue } from '../constants/customTypes.js';
+import { experienceValue } from '../constants/projectConstants';
 import { handleSuccessfullyBoiledOil } from '../utils/handleBoilingOil.js';
 import { gameSessions } from './gameController.js';
 import { Server } from 'socket.io';
@@ -63,7 +63,7 @@ export function awardCaughtArrows(playerKey: string, caughtArrows: number, gameI
         return 0;
     }
 
-    const expGained = caughtArrows * experienceValue.arrowCatch;
+    const expGained = experienceValue.arrowCatch[caughtArrows - 1];
     player.killScore.experience += expGained;
 
     return expGained;

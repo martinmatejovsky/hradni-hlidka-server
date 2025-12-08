@@ -2,6 +2,11 @@ import { WeaponsCatalogue, WeaponType } from './customTypes';
 
 export const GAME_UPDATE_INTERVAL: number = 2000; // should not be longer than GameSessionClass.gameTempo
 export const cannonBallSpeed: number = 2000;
+export const experienceValue = {
+    invaderDamaged: 5,
+    invaderFinished: 5,
+    arrowCatch: [1, 3, 6, 10],
+};
 export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
     melee: {
         [WeaponType.SWORD]: [
@@ -91,4 +96,10 @@ export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
             },
         ],
     },
+    shield: [
+        { level: 0, requiredExperience: 0, name: 'cvičný štít', arrowCapacity: 1 },
+        { level: 1, requiredExperience: 10, name: 'potlučený štít', arrowCapacity: 2 },
+        { level: 2, requiredExperience: 25, name: 'štít zpevněný', arrowCapacity: 3 },
+        { level: 3, requiredExperience: 45, name: 'Jilm', arrowCapacity: 4 },
+    ],
 };
