@@ -10,8 +10,8 @@ import gameLocationsRouter from './src/routes/game-locations.js';
 
 import gameRouter from './src/routes/game.js';
 
-const key = fs.readFileSync('./certificates/192.168.1.101-key.pem');
-const cert = fs.readFileSync('./certificates/192.168.1.101.pem');
+const key = fs.readFileSync(process.env.CERT_PATH_KEY as string);
+const cert = fs.readFileSync(process.env.CERT_PATH as string);
 // const key = fs.readFileSync('./certificates/localhost+2-key.pem');
 // const cert = fs.readFileSync('./certificates/localhost+2.pem');
 const server = https.createServer({ key, cert }, app);
