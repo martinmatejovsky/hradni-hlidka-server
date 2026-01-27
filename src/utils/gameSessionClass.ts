@@ -16,6 +16,8 @@ import { generatePointsAroundCenter } from './generatePointsAroundCenter.js';
 import { calculateLadderSteps } from './calculateLadderSteps.js';
 import { LastWaveNotice } from '../constants/customTypes.js';
 import { GAME_UPDATE_INTERVAL } from '../constants/projectConstants.js';
+import rectangleCenter from './rectangleCenter.js';
+
 export class GameSession {
     public id: string;
     public sessionName: string;
@@ -125,6 +127,7 @@ export class GameSession {
                     polygonType: polygon.polygonType,
                     areaOfAcceptedPresence: polygon.areaOfAcceptedPresence,
                     areaPresentational: polygon.areaPresentational,
+                    areaPresentationalCenter: rectangleCenter(polygon.areaPresentational),
                     conquered: false,
                     guardians: [],
                     invaders: [],

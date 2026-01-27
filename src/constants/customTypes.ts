@@ -60,6 +60,7 @@ export enum ArcherPhases {
     reloading,
     aiming,
     shooting,
+    covered,
 }
 export interface ArcherOutpost {
     phase: ArcherPhases;
@@ -115,6 +116,7 @@ export interface BattleZone {
     polygonType: PolygonType;
     areaOfAcceptedPresence: Coordinates[];
     areaPresentational: Coordinates[];
+    areaPresentationalCenter: Coordinates;
     conquered: boolean;
     guardians: string[];
     invaders: Invader[];

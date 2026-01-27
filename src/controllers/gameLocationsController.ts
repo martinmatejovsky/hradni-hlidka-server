@@ -9,7 +9,7 @@ const getGameLocations = (_: Request, res: Response) => {
             mapCenter: { lat: 50.1910833, lng: 12.7438483 },
             polygonsToPlayersTotal: [
                 {
-                    upTo: Infinity,
+                    upTo: 999,
                     locations: ['panelak', 'uStasku', 'baracek', 'smithy'],
                 },
             ],
@@ -121,7 +121,7 @@ const getGameLocations = (_: Request, res: Response) => {
                 { upTo: 4, locations: ['fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'smithy'] },
                 { upTo: 9, locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'smithy'] },
                 {
-                    upTo: Infinity,
+                    upTo: 999,
                     locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'pozorovatelna', 'smithy'],
                 },
             ],
@@ -149,7 +149,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1869142, lng: 12.75669 },
-                    archersPositionCenter: { lat: 50.1869475, lng: 12.7564922 },
+                    archersPositionCenter: { lat: 50.1870092, lng: 12.7568533 },
                 },
                 {
                     polygonName: 'Fortna',
@@ -174,7 +174,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1867775, lng: 12.7566764 },
-                    archersPositionCenter: { lat: 50.1867189, lng: 12.7566183 },
+                    archersPositionCenter: { lat: 50.1868478, lng: 12.7569625 },
                 },
                 {
                     polygonName: 'Parkán',
@@ -199,7 +199,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1866236, lng: 12.7567814 },
-                    archersPositionCenter: { lat: 50.1866158, lng: 12.7566397 },
+                    archersPositionCenter: { lat: 50.1866453, lng: 12.75706 },
                 },
                 {
                     polygonName: 'Sv. Václava',
@@ -224,7 +224,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1863506, lng: 12.7567706 },
-                    archersPositionCenter: { lat: 50.186305, lng: 12.7567175 },
+                    archersPositionCenter: { lat: 50.1863211, lng: 12.7571003 },
                 },
                 {
                     polygonName: 'U Purkrabího',
@@ -249,7 +249,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1862431, lng: 12.7567028 },
-                    archersPositionCenter: { lat: 50.186185, lng: 12.7567631 },
+                    archersPositionCenter: { lat: 50.1861711, lng: 12.7570064 },
                 },
                 {
                     polygonName: 'Pozorovatelna',
@@ -274,7 +274,7 @@ const getGameLocations = (_: Request, res: Response) => {
                         },
                     },
                     assemblyAreaCenter: { lat: 50.1860019, lng: 12.7567517 },
-                    archersPositionCenter: { lat: 50.1860253, lng: 12.7566719 },
+                    archersPositionCenter: { lat: 50.1860556, lng: 12.7569831 },
                 },
                 {
                     polygonName: 'Kovárna',
