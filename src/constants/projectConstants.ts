@@ -1,7 +1,7 @@
 import { WeaponsCatalogue, WeaponType } from './customTypes';
 
 export const GAME_UPDATE_INTERVAL: number = 2000; // should not be longer than GameSessionClass.gameTempo
-export const cannonBallSpeed: number = 2000;
+export const cannonBallSpeed: number = 3000;
 export const WEAPONS_CATALOGUE: WeaponsCatalogue = {
     melee: {
         [WeaponType.SWORD]: [
