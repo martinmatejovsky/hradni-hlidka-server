@@ -10,6 +10,7 @@ import {
     Settings,
     WeaponType,
     ArcherPhases,
+    ExperienceTable,
 } from '../constants/customTypes.js';
 import { runAttack } from './runAttack.js';
 import { generatePointsAroundCenter } from './generatePointsAroundCenter.js';
@@ -17,6 +18,7 @@ import { calculateLadderSteps } from './calculateLadderSteps.js';
 import { LastWaveNotice } from '../constants/customTypes.js';
 import { GAME_UPDATE_INTERVAL } from '../constants/projectConstants.js';
 import rectangleCenter from './rectangleCenter.js';
+import { experienceValue } from '../constants/projectConstants.js';
 
 export class GameSession {
     public id: string;
@@ -30,6 +32,7 @@ export class GameSession {
     public ladderLength: number;
     public carriedOilPots: OilPot[] = [];
     public settings: Settings;
+    public experienceTable: ExperienceTable;
 
     private gameUpdateIntervalId: NodeJS.Timeout | null = null;
     private gameCalculationIntervalId: NodeJS.Timeout | null = null;
@@ -42,6 +45,7 @@ export class GameSession {
         this.gameTempo = settings.gameTempo;
         this.ladderLength = settings.ladderLength;
         this.settings = settings;
+        this.experienceTable = experienceValue;
     }
 
     start(io: Server, stats: Stats) {
@@ -141,6 +145,7 @@ export class GameSession {
                     archers: {
                         phase: ArcherPhases.reloading,
                         archersPositionCenter: polygon.archersPositionCenter,
+                        arrowIncomingDirection: { horizontal: 0, vertical: 100 },
                         phaseTimer: Math.floor(Math.random()),
                         cooldownTicks: 0,
                     },

@@ -1,7 +1,7 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Stats, GameState, WeaponDescription } from '../constants/customTypes';
+import { PlayerData, Stats, GameState, WeaponDescription, ShieldDescription } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
@@ -105,7 +105,13 @@ const relocatePlayer = (player: PlayerData, gameId: string): GameSession => {
 const upgradeGuardian = (
     player: PlayerData,
     perk: Perks,
-    perkValue: number | string | WeaponDescription,
+    perkValue:
+        | number
+        | string
+        | {
+              meleeWeapon: WeaponDescription;
+              shield: ShieldDescription;
+          },
     gameId: string,
     perkCost?: number,
 ): GameSession => {
@@ -120,7 +126,10 @@ const upgradeGuardian = (
             pickUpBoilingOil(session, playerToUpdate, perkValue as string | number);
             break;
         case Perks.weaponLevel:
-            playerToUpdate.equippedWeapons.meleeWeapon = perkValue as WeaponDescription;
+            playerToUpdate.equippedWeapons = perkValue as {
+                meleeWeapon: WeaponDescription;
+                shield: ShieldDescription;
+            };
             break;
         default:
             playerToUpdate.perks[perk] = perkValue as number;

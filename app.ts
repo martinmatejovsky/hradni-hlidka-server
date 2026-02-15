@@ -12,8 +12,6 @@ import gameRouter from './src/routes/game.js';
 
 const key = fs.readFileSync(process.env.CERT_PATH_KEY as string);
 const cert = fs.readFileSync(process.env.CERT_PATH as string);
-// const key = fs.readFileSync('./certificates/localhost+2-key.pem');
-// const cert = fs.readFileSync('./certificates/localhost+2.pem');
 const server = https.createServer({ key, cert }, app);
 const port = process.env.PORT;
 const frontendPath = process.env.FRONTEND_PATH as string;
@@ -26,7 +24,7 @@ const __dirname = path.dirname(__filename);
 // Middleware
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN, // or 'https://localhost:3000' when just on one own computer
+        origin: process.env.CORS_ORIGIN,
     }),
 );
 app.use(express.json());

@@ -31,7 +31,7 @@ export const assembleInvaders = (gameInstance: GameSession, settings: Settings, 
             // in first wave all zones are invaded. So to make it easier for players, we do not add for these first attacks any captains.
             const amountOfZones = gameInstance.battleZones.length;
 
-            // Some sets of wawes (bands) have different effect
+            // Some sets of waves (bands) have different effect
             const waveBandIndex = Math.floor((stats.incrementingWaveId - 1) / 2);
 
             // Even band = fewer shields, odd band = more shields

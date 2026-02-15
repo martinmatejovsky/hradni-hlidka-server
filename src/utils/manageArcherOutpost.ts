@@ -1,4 +1,4 @@
-import { BattleZone, ArcherPhases, PlayerData } from '../constants/customTypes.js';
+import { BattleZone, ArcherPhases, PlayerData, ArcherOutpost } from '../constants/customTypes.js';
 
 const randomCooldown = (): number => Math.floor(Math.random() * 3) + 1;
 const randomOrientation = () => ({
@@ -15,7 +15,7 @@ export default function manageArcherOutpost(zones: BattleZone[], players: Player
     });
 
     zones.forEach((zone: BattleZone): void => {
-        const archers = zone.archers;
+        const archers: ArcherOutpost = zone.archers;
 
         switch (archers.phase) {
             case ArcherPhases.reloading:
@@ -31,21 +31,13 @@ export default function manageArcherOutpost(zones: BattleZone[], players: Player
                 if (archers.phaseTimer > 0) {
                     archers.phaseTimer--;
                 } else {
-                    archers.phase = ArcherPhases.covered;
-                    archers.phaseTimer = 1;
-
-                    // Mark affected guardians as attacked
-                    zone.guardians.forEach((playerId) => {
-                        const player: PlayerData | undefined = players.find((p) => p.key === playerId);
-                        if (player) {
-                            player.underArrowAttack = true;
-                            player.arrowDefendTarget = randomOrientation();
-                        }
-                    });
+                    archers.phase = ArcherPhases.shooting;
+                    archers.phaseTimer = 0; // should be just for one game tick
+                    archers.arrowIncomingDirection = randomOrientation();
                 }
                 break;
 
-            case ArcherPhases.covered:
+            case ArcherPhases.shooting:
                 if (archers.phaseTimer > 0) {
                     archers.phaseTimer--;
                 } else {

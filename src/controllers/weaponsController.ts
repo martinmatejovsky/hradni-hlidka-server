@@ -63,7 +63,7 @@ export function awardCaughtArrows(playerKey: string, caughtArrows: number, gameI
         return 0;
     }
 
-    const expGained = experienceValue.arrowCatch[caughtArrows - 1];
+    const expGained = experienceValue.arrowCatch.slice(0, caughtArrows).reduce((sum, value) => sum + value, 0);
     player.killScore.experience += expGained;
 
     return expGained;

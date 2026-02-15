@@ -31,6 +31,7 @@ export type PlayerData = {
     weaponType: WeaponType;
     equippedWeapons: {
         meleeWeapon: WeaponDescription;
+        shield: ShieldDescription;
     };
     location: PlayerCoordinates;
     insideZone: string;
@@ -60,11 +61,11 @@ export enum ArcherPhases {
     reloading,
     aiming,
     shooting,
-    covered,
 }
 export interface ArcherOutpost {
     phase: ArcherPhases;
     archersPositionCenter: Coordinates;
+    arrowIncomingDirection: { horizontal: number; vertical: number };
     phaseTimer: number; // countdown for current phase
     cooldownTicks: number; // random cooldown for reloading
 }
@@ -174,7 +175,9 @@ export type Settings = {
     oilBoilingTime: number;
     cannonLoadingTime: number;
     arrowFlyingTime: number;
+    experienceTable: ExperienceTable;
 };
+export type ExperienceTable = { invaderDamaged: number; invaderFinished: number; arrowCatch: number[] };
 export type Stats = {
     incrementingInvaderId: number;
     incrementingWaveId: number;
