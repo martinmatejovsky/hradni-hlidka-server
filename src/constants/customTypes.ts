@@ -86,8 +86,8 @@ export interface BasePolygon {
     assaultLadder?: AssaultLadder;
     assemblyAreaCenter?: Coordinates;
     assemblyArea?: Coordinates[]; // can be set manually for specific places, but generally is calculated by randomizer
-    assemblyCountdown: number;
-    archersPositionCenter: Coordinates;
+    assemblyCountdown?: number;
+    archersPositionCenter?: Coordinates;
     boilingOilPotLocation?: Coordinates;
 }
 export interface PolygonsMatchingPlayers {

@@ -1,0 +1,460 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743226,
+              50.191062
+            ],
+            [
+              12.74329,
+              50.191182
+            ],
+            [
+              12.74351,
+              50.191124
+            ],
+            [
+              12.743422,
+              50.191012
+            ],
+            [
+              12.743226,
+              50.191062
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone U Stašků - accepted presence"
+      },
+      "id": "RlD67"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.742896,
+          50.191425
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone U Stašků - archers position center"
+      },
+      "id": "DMSDf"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            12.74318,
+            50.191231
+          ],
+          [
+            12.743347,
+            50.191105
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "name": "assaultZone U Stašků - assault ladder"
+      },
+      "id": "mzGYJ"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.743124,
+          50.191318
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone U Stašků - assembly area center"
+      },
+      "id": "nCaKH"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743333,
+              50.191121
+            ],
+            [
+              12.743433,
+              50.191091
+            ],
+            [
+              12.743392,
+              50.19105
+            ],
+            [
+              12.743304,
+              50.191069
+            ],
+            [
+              12.743333,
+              50.191121
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone U Stašků - presentational"
+      },
+      "id": "k0BPX"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743757,
+              50.191071
+            ],
+            [
+              12.744052,
+              50.19099
+            ],
+            [
+              12.743915,
+              50.190856
+            ],
+            [
+              12.743669,
+              50.190933
+            ],
+            [
+              12.743757,
+              50.191071
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone Křižovatka - accepted presence"
+      },
+      "id": "bD7fK"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.744583,
+          50.191165
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone Křižovatka - archers position center"
+      },
+      "id": "26H53"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            12.744114,
+            50.191078
+          ],
+          [
+            12.743867,
+            50.190969
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "name": "assaultZone Křižovatka - assault ladder"
+      },
+      "id": "Ur5Pj"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.744167,
+          50.191182
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone Křižovatka - assembly area center"
+      },
+      "id": "k31se"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743787,
+              50.190997
+            ],
+            [
+              12.743921,
+              50.190951
+            ],
+            [
+              12.74388,
+              50.190906
+            ],
+            [
+              12.743749,
+              50.190949
+            ],
+            [
+              12.743787,
+              50.190997
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone Křižovatka - presentational"
+      },
+      "id": "Rw9Fh"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743492,
+              50.190853
+            ],
+            [
+              12.743682,
+              50.19088
+            ],
+            [
+              12.743792,
+              50.190839
+            ],
+            [
+              12.743827,
+              50.190758
+            ],
+            [
+              12.743575,
+              50.19072
+            ],
+            [
+              12.743492,
+              50.190853
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone Parkoviště - accepted presence"
+      },
+      "id": "W45Ul"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.744106,
+          50.190461
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone Parkoviště - archers position center"
+      },
+      "id": "DgF7L"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            12.743824,
+            50.190647
+          ],
+          [
+            12.743655,
+            50.190798
+          ]
+        ],
+        "type": "LineString"
+      },
+      "properties": {
+        "name": "assaultZone Parkoviště - assault laddet"
+      },
+      "id": "tPU6u"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.744041,
+          50.190629
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "assaultZone Parkoviště - assembly area center"
+      },
+      "id": "akJcI"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743572,
+              50.190825
+            ],
+            [
+              12.743687,
+              50.190846
+            ],
+            [
+              12.743711,
+              50.190799
+            ],
+            [
+              12.743596,
+              50.190777
+            ],
+            [
+              12.743572,
+              50.190825
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "assaultZone Parkoviště - presentational"
+      },
+      "id": "y9FWW"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743244,
+              50.190966
+            ],
+            [
+              12.743349,
+              50.190956
+            ],
+            [
+              12.743325,
+              50.190846
+            ],
+            [
+              12.74322,
+              50.19086
+            ],
+            [
+              12.743244,
+              50.190966
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "smithy - presentational"
+      },
+      "id": "iST1X"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              12.743172,
+              50.191014
+            ],
+            [
+              12.743357,
+              50.19099
+            ],
+            [
+              12.743416,
+              50.190971
+            ],
+            [
+              12.743368,
+              50.190798
+            ],
+            [
+              12.743108,
+              50.190839
+            ],
+            [
+              12.743172,
+              50.191014
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "name": "smithy - Accepted presence"
+      },
+      "id": "bArFj"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.743239,
+          50.190889
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "smithy - Boiling oil"
+      },
+      "id": "b1KiF"
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          12.743567,
+          50.190947
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "_umap_options": {
+          "color": "DodgerBlue"
+        },
+        "name": "mapCenter"
+      },
+      "id": "ZCXyi"
+    }
+  ]
+}

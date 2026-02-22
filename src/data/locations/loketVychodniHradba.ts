@@ -179,7 +179,7 @@ export const loketVychodniHradba: GameLocation = {
         },
         {
             polygonName: 'Kovárna',
-            key: 'smithy',
+            key: 'kovarna',
             polygonType: 'smithy',
             areaPresentational: [
                 { lat: 50.186514, lng: 12.756396 },
@@ -196,8 +196,6 @@ export const loketVychodniHradba: GameLocation = {
                 { lat: 50.18637, lng: 12.756366 },
             ],
             boilingOilPotLocation: { lat: 50.18643, lng: 12.7564731 },
-            archersPositionCenter: { lat: 0, lng: 0 },
-            assemblyCountdown: 0,
         },
     ],
     speedChoices: [2000, 5000, 30000, 60000],
