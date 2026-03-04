@@ -170,7 +170,6 @@ export type Settings = {
     spearHitDepth: number;
     smithyUpgradeWaiting: number;
     smithyUpgradeStrength: number;
-    fragsToUpgradeSword: number;
     perkSharpSwordBonus: number;
     oilBoilingTime: number;
     cannonLoadingTime: number;

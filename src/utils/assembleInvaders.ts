@@ -47,7 +47,7 @@ export const assembleInvaders = (gameInstance: GameSession, settings: Settings, 
                 ? Math.floor(Math.random() * (lowMax - lowMin + 1)) + lowMin // 10–20%
                 : Math.floor(Math.random() * (highMax - highMin + 1)) + highMin; // 10–48%
 
-            // Adjust for axe users — if none, probability is half
+            // Adjust for axe users — if none, the probability is half
             const shieldProb = stats.axesInGame === 0 ? Math.floor(baseShieldProb / 2) : baseShieldProb;
 
             // Determine types of invaders

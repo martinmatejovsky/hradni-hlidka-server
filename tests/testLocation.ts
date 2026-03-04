@@ -236,7 +236,6 @@ const testLocation = {
         spearHitDepth: 3,
         smithyUpgradeWaiting: 2000,
         smithyUpgradeStrength: 2,
-        fragsToUpgradeSword: 3,
         perkSharpSwordBonus: 2,
         oilBoilingTime: 1,
         cannonLoadingTime: 80,
