@@ -173,6 +173,7 @@ export type Settings = {
     perkSharpSwordBonus: number;
     oilBoilingTime: number;
     cannonLoadingTime: number;
+    invaderHealthModifier: number;
     arrowFlyingTime: number;
     experienceTable: ExperienceTable;
 };
@@ -209,6 +210,7 @@ export class Invader {
         assemblyArea: number | null,
         amountOfPlayers: number,
         axesInGame: number = 0,
+        invaderHealthModifier: number = 1,
     ) {
         this.id = id;
         this.type = type;
@@ -216,12 +218,12 @@ export class Invader {
         this.ladderStep = null;
 
         if (type === 'captain') {
-            this.health = Math.ceil(amountOfPlayers * 12.5);
+            this.health = Math.round(amountOfPlayers * 12.5 * invaderHealthModifier);
         } else if (type === 'shielded') {
-            this.health = amountOfPlayers * 10;
+            this.health = Math.round(amountOfPlayers * 10 * invaderHealthModifier);
             this.feature.shieldEndurance = Math.max(axesInGame * 10, 5);
         } else {
-            this.health = amountOfPlayers * 10;
+            this.health = Math.round(amountOfPlayers * 10 * invaderHealthModifier);
         }
     }
 }

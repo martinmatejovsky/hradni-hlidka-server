@@ -56,7 +56,14 @@ export const assembleInvaders = (gameInstance: GameSession, settings: Settings, 
                 const randomInvaderType = Math.floor(Math.random() * 100) + 1;
 
                 if (stats.incrementingWaveId > amountOfZones && randomInvaderType < 10) {
-                    newInvader = new Invader(stats.incrementingInvaderId, 'captain', i, amountOfPlayers);
+                    newInvader = new Invader(
+                        stats.incrementingInvaderId,
+                        'captain',
+                        i,
+                        amountOfPlayers,
+                        stats.axesInGame,
+                        settings.invaderHealthModifier,
+                    );
                 } else if (randomInvaderType < shieldProb) {
                     newInvader = new Invader(
                         stats.incrementingInvaderId,
@@ -64,9 +71,17 @@ export const assembleInvaders = (gameInstance: GameSession, settings: Settings, 
                         i,
                         amountOfPlayers,
                         stats.axesInGame,
+                        settings.invaderHealthModifier,
                     );
                 } else {
-                    newInvader = new Invader(stats.incrementingInvaderId, 'regular', i, amountOfPlayers);
+                    newInvader = new Invader(
+                        stats.incrementingInvaderId,
+                        'regular',
+                        i,
+                        amountOfPlayers,
+                        stats.axesInGame,
+                        settings.invaderHealthModifier,
+                    );
                 }
 
                 zone.invaders.push(newInvader);
