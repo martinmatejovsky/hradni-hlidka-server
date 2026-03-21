@@ -1,5 +1,5 @@
 import type { OilPot, PlayerData } from '../constants/customTypes.js';
-import { experienceValue } from '../constants/customTypes.js';
+import { experienceValue } from '../constants/projectConstants';
 import { handleSuccessfullyBoiledOil } from '../utils/handleBoilingOil.js';
 import { gameSessions } from './gameController.js';
 import { Server } from 'socket.io';
@@ -48,4 +48,24 @@ const fireCannon = (targetZoneKey: string, firedBy: string, gameId: string): Gam
     return gameInstance;
 };
 
-export default { setPouredOffOilPots, fireCannon };
+export function awardCaughtArrows(playerKey: string, caughtArrows: number, gameId: string): number {
+    const gameInstance: GameSession = gameSessions[gameId];
+
+    if (!gameInstance) {
+        console.warn(`awardCaughtArrows: No game session for ID ${gameId}`);
+        return 0;
+    }
+
+    const player: PlayerData | undefined = gameInstance.players.find((p) => p.key === playerKey);
+
+    if (!player) {
+        console.warn(`awardCaughtArrows: No player with key ${playerKey} in game ${gameId}`);
+        return 0;
+    }
+
+    const expGained = experienceValue.arrowCatch.slice(0, caughtArrows).reduce((sum, value) => sum + value, 0);
+    player.killScore.experience += expGained;
+
+    return expGained;
+}
+export default { setPouredOffOilPots, fireCannon, awardCaughtArrows };

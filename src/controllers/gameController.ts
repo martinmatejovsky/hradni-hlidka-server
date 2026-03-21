@@ -1,7 +1,7 @@
 import { updateGuardians } from '../utils/updateGuardians';
 
 import { Request, Response } from 'express';
-import { PlayerData, Stats, GameState, WeaponDescription } from '../constants/customTypes';
+import { PlayerData, Stats, GameState, WeaponDescription, ShieldDescription } from '../constants/customTypes';
 import { Perks } from '../constants/customTypes.js'; // to enable enum to be defined at runtime it must be imported without "type" prefix
 import { pickUpBoilingOil } from '../utils/handleBoilingOil.js';
 import { GameSession } from '../utils/gameSessionClass.js';
@@ -16,16 +16,20 @@ let stats: Stats = {
 };
 
 function createGame(req: Request, res: Response) {
-    const id = Date.now().toString();
-    const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-3)}`;
-    const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
+    if (!req.body.gameLocation) {
+        res.status(400).send('Invalid game location');
+    } else {
+        const id = Date.now().toString();
+        const sessionName = `${req.body.gameLocation.sessionNamePrefix} - ${id.slice(-3)}`;
+        const session = new GameSession(id, sessionName, req.body.gameLocation, req.body.settings);
 
-    gameSessions[id] = session;
+        gameSessions[id] = session;
 
-    stats.incrementingInvaderId = 1;
-    stats.incrementingWaveId = 1;
+        stats.incrementingInvaderId = 1;
+        stats.incrementingWaveId = 1;
 
-    res.status(201).json(session.toJSON());
+        res.status(201).json(session.toJSON());
+    }
 }
 
 function startGame(req: Request) {
@@ -101,7 +105,13 @@ const relocatePlayer = (player: PlayerData, gameId: string): GameSession => {
 const upgradeGuardian = (
     player: PlayerData,
     perk: Perks,
-    perkValue: number | string | WeaponDescription,
+    perkValue:
+        | number
+        | string
+        | {
+              meleeWeapon: WeaponDescription;
+              shield: ShieldDescription;
+          },
     gameId: string,
     perkCost?: number,
 ): GameSession => {
@@ -116,7 +126,10 @@ const upgradeGuardian = (
             pickUpBoilingOil(session, playerToUpdate, perkValue as string | number);
             break;
         case Perks.weaponLevel:
-            playerToUpdate.equippedWeapons.meleeWeapon = perkValue as WeaponDescription;
+            playerToUpdate.equippedWeapons = perkValue as {
+                meleeWeapon: WeaponDescription;
+                shield: ShieldDescription;
+            };
             break;
         default:
             playerToUpdate.perks[perk] = perkValue as number;

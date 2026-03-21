@@ -5,7 +5,7 @@ import { cannonBallSpeed } from '../constants/projectConstants.js';
 import { gameSessions } from './gameController.js';
 
 function initializeSocket(server: any) {
-    const io = new Server(server, { cors: { origin: process.env.CORS_ORIGIN || 'http://localhost:3000' } });
+    const io = new Server(server, { cors: { origin: process.env.CORS_ORIGIN } });
 
     io.on('connection', (socket) => {
         socket.on('joinGame', (payload) => {
@@ -53,7 +53,8 @@ function initializeSocket(server: any) {
 
         socket.on('dropUnsupportedOilPot', (payload) => {
             const gameWithDroppedPot = gameController.dropUnsupportedOilPot(payload.player, socket.data.gameId);
-            io.emit('gameUpdated', gameWithDroppedPot);
+            // TODO: this could probably go just to player that dropped oil pot by using socket.emit()
+            io.to(socket.data.gameId).emit('gameUpdated', gameWithDroppedPot);
         });
 
         socket.on('oilIsPouredOff', (payload) => {
@@ -92,6 +93,22 @@ function initializeSocket(server: any) {
                     delete gameSessions[socket.data.gameId];
                 }
             }
+        });
+
+        socket.on('shieldDefenceResult', (payload) => {
+            if (!payload.caughtArrows || payload.caughtArrows == 0) return;
+
+            const { gameId } = socket.data;
+            const newExperienceValue = weaponsController.awardCaughtArrows(
+                payload.playerKey,
+                payload.caughtArrows,
+                gameId,
+            );
+
+            // to single player only
+            socket.emit('xpUpdated', {
+                experience: newExperienceValue,
+            });
         });
     });
 

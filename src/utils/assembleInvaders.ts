@@ -31,27 +31,60 @@ export const assembleInvaders = (gameInstance: GameSession, settings: Settings, 
             // in first wave all zones are invaded. So to make it easier for players, we do not add for these first attacks any captains.
             const amountOfZones = gameInstance.battleZones.length;
 
+            // Some sets of waves (bands) have different effect
+            const waveBandIndex = Math.floor((stats.incrementingWaveId - 1) / 2);
+
+            // Even band = fewer shields, odd band = more shields
+            const isLowBand = waveBandIndex % 2 === 0;
+
+            // Random probability for the band
+            const lowMin = 10,
+                lowMax = 20;
+            const highMin = 10,
+                highMax = 48;
+
+            const baseShieldProb = isLowBand
+                ? Math.floor(Math.random() * (lowMax - lowMin + 1)) + lowMin // 10–20%
+                : Math.floor(Math.random() * (highMax - highMin + 1)) + highMin; // 10–48%
+
+            // Adjust for axe users — if none, the probability is half
+            const shieldProb = stats.axesInGame === 0 ? Math.floor(baseShieldProb / 2) : baseShieldProb;
+
+            // Determine types of invaders
             for (let i = 0; i < randomInvadersAmount; i++) {
                 let newInvader: Invader;
                 const randomInvaderType = Math.floor(Math.random() * 100) + 1;
 
-                // 0 - 9 = captain, 10 - 34 = shielded, 35 - 100 = regular
                 if (stats.incrementingWaveId > amountOfZones && randomInvaderType < 10) {
-                    newInvader = new Invader(stats.incrementingInvaderId, 'captain', i, amountOfPlayers);
-                } else if (stats.axesInGame === 0 ? randomInvaderType < 20 : randomInvaderType < 35) {
+                    newInvader = new Invader(
+                        stats.incrementingInvaderId,
+                        'captain',
+                        i,
+                        amountOfPlayers,
+                        stats.axesInGame,
+                        settings.invaderHealthModifier,
+                    );
+                } else if (randomInvaderType < shieldProb) {
                     newInvader = new Invader(
                         stats.incrementingInvaderId,
                         'shielded',
                         i,
                         amountOfPlayers,
                         stats.axesInGame,
+                        settings.invaderHealthModifier,
                     );
                 } else {
-                    newInvader = new Invader(stats.incrementingInvaderId, 'regular', i, amountOfPlayers);
+                    newInvader = new Invader(
+                        stats.incrementingInvaderId,
+                        'regular',
+                        i,
+                        amountOfPlayers,
+                        stats.axesInGame,
+                        settings.invaderHealthModifier,
+                    );
                 }
 
                 zone.invaders.push(newInvader);
-
                 stats.incrementingInvaderId++;
             }
 

@@ -8,6 +8,12 @@ export type WeaponDescription = {
     name: string;
     attackStrength: number;
 };
+export type ShieldDescription = {
+    level: number;
+    requiredExperience: number;
+    name: string;
+    arrowCapacity: number;
+};
 export interface WeaponsCatalogue {
     melee: {
         [key in WeaponType]?: {
@@ -17,6 +23,7 @@ export interface WeaponsCatalogue {
             attackStrength: number;
         }[];
     };
+    shield: ShieldDescription[];
 }
 export type PlayerData = {
     key: string;
@@ -24,6 +31,7 @@ export type PlayerData = {
     weaponType: WeaponType;
     equippedWeapons: {
         meleeWeapon: WeaponDescription;
+        shield: ShieldDescription;
     };
     location: PlayerCoordinates;
     insideZone: string;
@@ -38,16 +46,28 @@ export type PlayerData = {
         kills: number;
         brokenShields: number;
     };
+    underArrowAttack?: boolean;
+    arrowDefendTarget?: {
+        horizontal: number;
+        vertical: number;
+    };
 };
 export enum Perks {
     weaponLevel = 'weaponLevel',
     sharpSword = 'sharpSword',
     boilingOil = 'boilingOil',
 }
-export enum ShootingPhases {
+export enum ArcherPhases {
     reloading,
     aiming,
     shooting,
+}
+export interface ArcherOutpost {
+    phase: ArcherPhases;
+    archersPositionCenter: Coordinates;
+    arrowIncomingDirection: { horizontal: number; vertical: number };
+    phaseTimer: number; // countdown for current phase
+    cooldownTicks: number; // random cooldown for reloading
 }
 export enum GameState {
     None,
@@ -66,8 +86,8 @@ export interface BasePolygon {
     assaultLadder?: AssaultLadder;
     assemblyAreaCenter?: Coordinates;
     assemblyArea?: Coordinates[]; // can be set manually for specific places, but generally is calculated by randomizer
-    assemblyCountdown: number;
-    archersPositionCenter: Coordinates;
+    assemblyCountdown?: number;
+    archersPositionCenter?: Coordinates;
     boilingOilPotLocation?: Coordinates;
 }
 export interface PolygonsMatchingPlayers {
@@ -97,16 +117,14 @@ export interface BattleZone {
     polygonType: PolygonType;
     areaOfAcceptedPresence: Coordinates[];
     areaPresentational: Coordinates[];
+    areaPresentationalCenter: Coordinates;
     conquered: boolean;
     guardians: string[];
     invaders: Invader[];
     assemblyArea: Coordinates[];
     assemblyAreaCenter: Coordinates;
     assemblyCountdown: number;
-    archers: {
-        shootingPhase: ShootingPhases;
-        archersPositionCenter: Coordinates;
-    };
+    archers: ArcherOutpost;
     assaultLadder: AssaultLadder;
     waveCooldown: number;
 }
@@ -152,11 +170,14 @@ export type Settings = {
     spearHitDepth: number;
     smithyUpgradeWaiting: number;
     smithyUpgradeStrength: number;
-    fragsToUpgradeSword: number;
     perkSharpSwordBonus: number;
     oilBoilingTime: number;
     cannonLoadingTime: number;
+    invaderHealthModifier: number;
+    arrowFlyingTime: number;
+    experienceTable: ExperienceTable;
 };
+export type ExperienceTable = { invaderDamaged: number; invaderFinished: number; arrowCatch: number[] };
 export type Stats = {
     incrementingInvaderId: number;
     incrementingWaveId: number;
@@ -189,6 +210,7 @@ export class Invader {
         assemblyArea: number | null,
         amountOfPlayers: number,
         axesInGame: number = 0,
+        invaderHealthModifier: number = 1,
     ) {
         this.id = id;
         this.type = type;
@@ -196,17 +218,12 @@ export class Invader {
         this.ladderStep = null;
 
         if (type === 'captain') {
-            this.health = Math.ceil(amountOfPlayers * 12.5);
+            this.health = Math.round(amountOfPlayers * 12.5 * invaderHealthModifier);
         } else if (type === 'shielded') {
-            this.health = amountOfPlayers * 10;
+            this.health = Math.round(amountOfPlayers * 10 * invaderHealthModifier);
             this.feature.shieldEndurance = Math.max(axesInGame * 10, 5);
         } else {
-            this.health = amountOfPlayers * 10;
+            this.health = Math.round(amountOfPlayers * 10 * invaderHealthModifier);
         }
     }
-}
-export enum experienceValue {
-    invaderDamaged = 5,
-    invaderFinished = 5,
-    arrowCatch = 1,
 }
