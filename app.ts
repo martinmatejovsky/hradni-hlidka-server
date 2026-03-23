@@ -2,6 +2,7 @@ import 'dotenv/config'; // must be the very first line
 import express from 'express';
 const app = express();
 import fs from 'fs';
+import * as http from 'node:http';
 import https from 'https';
 import cors from 'cors';
 import path from 'path';
@@ -10,10 +11,17 @@ import gameLocationsRouter from './src/routes/game-locations.js';
 
 import gameRouter from './src/routes/game.js';
 
-const key = fs.readFileSync(process.env.CERT_PATH_KEY as string);
-const cert = fs.readFileSync(process.env.CERT_PATH as string);
-const server = https.createServer({ key, cert }, app);
-const port = process.env.PORT;
+let server;
+
+if (process.env.CERT_PATH && process.env.CERT_PATH_KEY) {
+    const key = fs.readFileSync(process.env.CERT_PATH_KEY);
+    const cert = fs.readFileSync(process.env.CERT_PATH);
+    server = https.createServer({ key, cert }, app);
+} else {
+    server = http.createServer(app);
+}
+
+const port = process.env.PORT || 3000;
 const frontendPath = process.env.FRONTEND_PATH as string;
 import initializeSocket from './src/controllers/socketIo.js';
 import { Request, Response, NextFunction } from 'express';
