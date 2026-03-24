@@ -8,3 +8,4 @@ Deploy on server:
 3. make sure that on local computer runs "npm start" without errors 
 4. upload files to Evennode.com (without "node_modules", "idea" folder, but yes "dist")
 5. on evennode.com run new deploy. Evennode will automatically install all dependencies and start server.
+6. If I need to configure .env variables, Evennode have special tab for that.
