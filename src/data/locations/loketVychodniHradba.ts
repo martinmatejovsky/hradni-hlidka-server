@@ -6,12 +6,12 @@ export const loketVychodniHradba: GameLocation = {
     key: 'loketVychodniHradba',
     mapCenter: { lat: 50.1864258, lng: 12.7563469 },
     polygonsToPlayersTotal: [
-        { upTo: 2, locations: ['fortna', 'parkan', 'svVaclava', 'smithy'] },
-        { upTo: 4, locations: ['fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'smithy'] },
-        { upTo: 9, locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'smithy'] },
+        { upTo: 2, locations: ['fortna', 'parkan', 'svVaclava', 'kovarna'] },
+        { upTo: 4, locations: ['fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'kovarna'] },
+        { upTo: 9, locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'kovarna'] },
         {
             upTo: 999,
-            locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'pozorovatelna', 'smithy'],
+            locations: ['prevet', 'fortna', 'parkan', 'svVaclava', 'uPurkrabiho', 'pozorovatelna', 'kovarna'],
         },
     ],
     polygons: [
