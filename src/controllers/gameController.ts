@@ -153,7 +153,11 @@ const dropUnsupportedOilPot = (player: PlayerData, gameId: string): GameSession 
 };
 
 const findPlayerBySocketId = (socketId: string, gameId: string): PlayerData | undefined => {
-    return gameSessions[gameId].players.find((p) => p.socketId === socketId);
+    return gameSessions[gameId]?.players.find((p) => p.socketId === socketId);
+};
+
+const findPlayerByKey = (playerKey: string, gameId: string): PlayerData | undefined => {
+    return gameSessions[gameId]?.players.find((p) => p.key === playerKey);
 };
 
 export default {
@@ -167,6 +171,7 @@ export default {
     upgradeGuardian,
     dropUnsupportedOilPot,
     findPlayerBySocketId,
+    findPlayerByKey,
     getRunningGames,
     getWeapons,
 };

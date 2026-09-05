@@ -4,20 +4,50 @@ import weaponsController from './weaponsController.js';
 import { cannonBallSpeed } from '../constants/projectConstants.js';
 import { gameSessions } from './gameController.js';
 
+const disconnectTimers = new Map<string, NodeJS.Timeout>();
+
 function initializeSocket(server: any) {
-    const io = new Server(server, { cors: { origin: process.env.CORS_ORIGIN } });
+    const io = new Server(server, {
+        cors: { origin: process.env.CORS_ORIGIN },
+        connectionStateRecovery: {
+            maxDisconnectionDuration: 2 * 60 * 1000,
+            skipMiddlewares: true,
+        },
+        pingInterval: 10000,
+        pingTimeout: 15000,
+    });
 
     io.on('connection', (socket) => {
         socket.on('joinGame', (payload) => {
             socket.join(payload.gameId);
             socket.data.gameId = payload.gameId;
 
-            const playerWithSocketId = { ...payload.player, socketId: socket.id };
-            const gameWithNewPlayer = gameController.joinNewPlayer(playerWithSocketId, payload.gameId);
-            io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer);
+            if (payload.player?.key && disconnectTimers.has(payload.player.key)) {
+                clearTimeout(disconnectTimers.get(payload.player.key));
+                disconnectTimers.delete(payload.player.key);
+            }
+
+            const existingPlayer = payload.player?.key
+                ? gameController.findPlayerByKey(payload.player.key, payload.gameId)
+                : undefined;
+
+            if (existingPlayer) {
+                existingPlayer.socketId = socket.id;
+                // Re-sync full game state to the reconnected player
+                socket.emit('gameUpdated', gameSessions[payload.gameId]);
+            } else {
+                const playerWithSocketId = { ...payload.player, socketId: socket.id };
+                const gameWithNewPlayer = gameController.joinNewPlayer(playerWithSocketId, payload.gameId);
+                io.to(payload.gameId).emit('newPlayerJoined', gameWithNewPlayer);
+            }
         });
 
         socket.on('leaveGame', (payload, callback) => {
+            if (payload.player?.key && disconnectTimers.has(payload.player.key)) {
+                clearTimeout(disconnectTimers.get(payload.player.key));
+                disconnectTimers.delete(payload.player.key);
+            }
+
             if (!gameSessions[payload.gameId]) return;
 
             const gameWithoutPlayer = gameController.removePlayer(payload.player, payload.gameId);
@@ -81,17 +111,40 @@ function initializeSocket(server: any) {
         });
 
         socket.on('disconnect', () => {
-            if (!gameSessions[socket.data.gameId]) return;
+            const { gameId } = socket.data;
+            if (!gameId || !gameSessions[gameId]) return;
 
-            const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id, socket.data.gameId);
+            const disconnectedPlayer = gameController.findPlayerBySocketId(socket.id, gameId);
 
             if (disconnectedPlayer) {
-                gameController.removePlayer(disconnectedPlayer, socket.data.gameId);
-
-                if (gameSessions[socket.data.gameId].players.length === 0) {
-                    gameSessions[socket.data.gameId].stop();
-                    delete gameSessions[socket.data.gameId];
+                // Clear any existing timer for this player key
+                if (disconnectTimers.has(disconnectedPlayer.key)) {
+                    clearTimeout(disconnectTimers.get(disconnectedPlayer.key));
                 }
+
+                // Set grace period before removing player completely
+                const timer = setTimeout(() => {
+                    if (!gameSessions[gameId]) {
+                        disconnectTimers.delete(disconnectedPlayer.key);
+                        return;
+                    }
+
+                    // Only remove if the player hasn't reconnected with a new socketId
+                    const currentPlayerInSession = gameController.findPlayerByKey(disconnectedPlayer.key, gameId);
+                    if (currentPlayerInSession && currentPlayerInSession.socketId === socket.id) {
+                        const gameWithoutPlayer = gameController.removePlayer(disconnectedPlayer, gameId);
+
+                        if (gameWithoutPlayer.players.length === 0) {
+                            gameWithoutPlayer.stop();
+                            delete gameSessions[gameId];
+                        } else {
+                            io.to(gameId).emit('playerLeftGame', gameWithoutPlayer);
+                        }
+                    }
+                    disconnectTimers.delete(disconnectedPlayer.key);
+                }, 45000);
+
+                disconnectTimers.set(disconnectedPlayer.key, timer);
             }
         });
 
